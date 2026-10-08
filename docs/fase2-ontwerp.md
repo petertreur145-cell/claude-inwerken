@@ -1,28 +1,17 @@
 # Fase 2: ontwerp
 
-Preview: [`design/preview.html`](../design/preview.html). Dubbelklik om te openen; werkt via `file://`, zonder internet.
+## Tweede ronde: Apple-stijl (definitief)
 
-## Stijlrichting: "de technische tekening"
+Na feedback op de eerste preview (“meer Apple style”) is het ontwerp omgezet. De eerste preview, “de technische tekening”, staat nog in de git-geschiedenis (commit `bc368cb`).
 
-Numafa bouwt machines, dus de app leent de taal van de werkvoorbereiding.
+- **Typografie:** het systeemlettertype, net als bij Apple: San Francisco op de Mac, Segoe UI Variable op Windows 11. Grote, strakke koppen met een punt erachter (“Claude basics.”), lopende tekst op 17 tot 19 px.
+- **Kleur:** lichtgrijze achtergrond (#F5F5F7) met witte kaarten; in donkere modus zwart met donkergrijze kaarten. Eén accentkleur (Apple-blauw, te vervangen door de Numafa-kleur) en een eigen kleur per niveau: blauw, groen en oranje.
+- **Navigatie:** een doorschijnende balk met vervaging, zoekveld in iOS-stijl, pil-vormige knoppen.
+- **Tegels:** witte kaarten met ronde hoeken en een gekleurd app-icoon (squircle), zoals in Instellingen op de iPhone. Op de telefoon worden het rijen.
+- **Toegangspas:** een kaart in de stijl van Apple Wallet, met drie voortgangsringen (één per niveau, zoals de activiteitsringen) en een medaille “Ingewerkt” per afgerond niveau. Zo blijft de rode draad (het toegangspasje) zichtbaar.
+- **Tegeldetail:** één leeskolom zoals een artikel op apple.com, met een brede “stage” voor de animatie, voorbeelden als kaarten, de quiz als iOS-lijst met vinkjes.
+- **Overgangen:** korte crossfade tussen schermen en een morph van het tegelicoon naar het detailscherm (View Transitions, alleen waar de browser het kan en zonder *reduced motion*). Alle overgangen duren minder dan 0,4 seconde.
 
-- **Elke tegel is een tekenblad** met een titelhoek: bladnummer (1.4), niveau, leestijd en *stand per* (de revisiedatum). Op het detailscherm staat de titelhoek rechtsboven, net als op een tekening.
-- **De toegangspas is je voortgang.** Per niveau een strookje dat volloopt; rond je een niveau af, dan landt er een stempel *Ingewerkt*.
-- **Lettertypen zitten al op Windows:** Bahnschrift (DIN, de Duitse industrienorm) voor koppen, Segoe UI voor tekst, Cascadia Mono / Consolas voor labels en commando's. Er wordt niets gedownload.
-- **Kleur:** papierwit en grafiet met één merkkleur (technisch blauw) en één signaalkleur (oranje) voor valkuilen, de 80%-grens en de stempel. Geen gradients.
-- **Licht en donker** volgen het systeem; de knop rechtsboven wisselt systeem / licht / donker.
+## Huiskleuren
 
-## Huiskleuren aanpassen
-
-Bovenin `<style>` staan `--brand` en `--signal`. Pas die twee aan (en hun donkere varianten in de blokken eronder), dan kleurt de hele app mee. Het logo is nu een placeholder (`N` in een blokje).
-
-## Wat de preview laat zien
-
-- **Startscherm:** hero, toegangspas met voorbeeldvoortgang, zoeken (toets `/`), drie niveaus met voortgangsbalk per niveau, alle 35 tegels. De voortgang is een voorbeeld; "Begin met een lege pas" wist hem.
-- **Tegeldetail 1.4 Context window:** alle negen onderdelen, met *het bureau dat volloopt*. Start bij openen, stopt vanzelf, knop "Opnieuw afspelen", en zelf documenten neerleggen, `/compact` en "Nieuwe chat". Op de telefoon krijgt het bureau een eigen indeling; met *reduced motion* staat het meteen stil op "bijna vol", met de uitleg in stappen.
-- **Doorspelen:** lees 1.4 tot onderaan en ga terug naar het overzicht: niveau 1 is af en de stempel landt op de pas.
-- **Toetsenbord:** Tab door alles, `/` zoeken, `←` `→` vorige/volgende tegel, `Esc` terug.
-
-## Getest
-
-Headless Chromium via `file://`, op 1440 px en 375 px, licht en donker, en met *reduced motion*: geen consolefouten, geen externe aanvragen, geen horizontaal scrollen.
+Bovenaan `src/styles.css` staan `--accent` en de niveaukleuren `--lvl-1` tot en met `--lvl-3`. Pas die aan (plus hun donkere tegenhangers in de blokken eronder) en de hele app kleurt mee. Het logo is een placeholder (de letter N); zie de README.
