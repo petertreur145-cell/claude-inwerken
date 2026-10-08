@@ -13,7 +13,7 @@ Per tegel staat hier: titel, one-liner, metafoor, kernfeiten (met bron), praktij
 3. **Claude in Chrome werkt alleen in Google Chrome**, niet in Edge en niet op mobiel. Als Numafa vooral Edge gebruikt, moet die tegel dat eerlijk zeggen.
 4. **Claude Code op het web heeft geen terminal nodig, wel GitHub.** Het draait in de cloud van Anthropic, maar werkt met een GitHub-repository (voor een nieuw project maak je een lege repository aan).
 5. **Outlook kan op twee manieren:** de Microsoft 365-connector in Claude (lezen, en schrijven als de beheerder dat aanzet) en de add-in *Claude for Outlook* (onderdeel van Claude for Microsoft 365), die nooit zelf mailt: elk concept blijft onverzonden staan tot jij op Verzenden drukt. Beide vragen eenmalige toestemming van een Microsoft-beheerder (Entra Global Admin).
-6. **Het menu "Stijlen" lijkt uitgefaseerd.** Volgens Claude Academy doe je schrijfstijl nu via instructies of een skill. Staat bij *te checken*.
+6. **Het menu "Stijlen" lijkt uitgefaseerd.** De tegel laat daarom zien hoe je een stijl vastlegt in een `.md`-bestand (projectkennis) of een skill (afgesproken na fase 1).
 7. **Fast mode bestaat alleen in Claude Code** (en het modelmenu op claude.ai/code), alleen voor Opus, en wordt betaald uit usage credits. In de gewone chat niet.
 
 Kleine nuance bij de rode draad: Anthropic zegt letterlijk *"Think of Claude as a brilliant but new employee who lacks context on your norms and workflows"*. Het geheugenverlies komt uit hun artikel over lang lopende agents: elke nieuwe sessie is als een collega in een ploegendienst die niets weet van de vorige dienst. De metafoor klopt dus, alleen staat het geheugenverlies-deel in een ander stuk.
@@ -184,17 +184,22 @@ Legenda bij de voorbeelden: **Echt** = gedocumenteerde toepassing met bron. **Nu
 
 ### 2.1 Voorkeuren en stijl
 
-- **One-liner:** Vertel één keer wie je bent en hoe je het wilt hebben; Claude houdt zich er in elke chat aan.
+- **One-liner:** Vertel één keer wie je bent en hoe je het wilt hebben; Claude houdt zich er in elke chat aan. Een vaste schrijfstijl leg je vast in een `.md`-bestand of een skill.
 - **Metafoor:** het inwerkgesprek op dag één: "Ik ben Sanne van inkoop, hou het kort en zakelijk."
 - **Kernfeiten:**
   - Settings > General > *Instructions for Claude* geldt voor elk gesprek. ([support](https://support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features))
   - Team en Enterprise: de Owner kan **organisatie-instructies** zetten. Bij een conflict wint de organisatie: staat daar "Always respond in formal English" en bij jou "casual", dan wordt het formeel. ([support](https://support.claude.com/en/articles/14546867-set-organization-instructions))
   - Weergave: licht, donker of systeem, en een dyslexievriendelijk lettertype. ([support](https://support.claude.com/en/articles/8887527-customizing-your-appearance-settings))
-  - Het oude menu "Stijlen" is volgens Claude Academy uitgefaseerd; een vaste schrijfstijl regel je nu met instructies of een skill (*te checken*). In Claude Code bestaan "output styles" (Concise, Explanatory, Learning, Proactive). ([output styles](https://code.claude.com/docs/en/output-styles))
+  - **Stijl vastleggen zonder stijlenmenu.** Het oude menu "Stijlen" is volgens Claude Academy uitgefaseerd. Twee manieren die wel werken:
+    1. **Stijl als `.md`-bestand:** zet een `schrijfstijl.md` (toon, woordkeus, opbouw, een goed en een fout voorbeeld) in de kennis van een project. Elke chat in dat project schrijft dan zo. ([projects](https://support.claude.com/en/articles/9517075-what-are-projects))
+    2. **Stijl als skill:** vraag Claude in een chat "maak een skill van onze schrijfstijl" en upload een paar goede voorbeelden. Claude maakt daar met de ingebouwde *skill-creator* een `SKILL.md` van, die je met één klik bewaart. Daarna pakt hij die stijl overal waar de klus erom vraagt, ook buiten projects. ([Academy: skill maken via gesprek](https://academy.claude.com/tutorials/how-to-create-a-skill-with-claude-through-conversation), [Academy: huisstijl in een skill](https://academy.claude.com/use-cases/package-your-brand-guidelines-in-a-skill))
+  - Vuistregel: korte voorkeuren ("kort", "Nederlands") in de instellingen; een uitgewerkte stijl met voorbeelden in een `.md` of skill.
+  - In Claude Code bestaan "output styles" (Concise, Explanatory, Learning, Proactive): ook gewoon `.md`-bestanden in `.claude/output-styles/`. ([output styles](https://code.claude.com/docs/en/output-styles))
 - **Echt:** het voorbeeld hierboven (formeel Engels wint van casual) komt uit de officiële handleiding voor organisatie-instructies.
 - **Numafa (magazijn):** "Ik werk bij Numafa, machinebouw, afdeling magazijn. Antwoord in het Nederlands, kort, met opsommingen, metrische eenheden, datums als dd-mm-jjjj" → vanaf nu is elk antwoord zo.
 - **Thuis:** "Ik kook vegetarisch voor vier personen" → recepten komen voortaan al omgerekend.
-- **Visual:** voorkeur-chips aanklikken ("kort", "Nederlands", "opsomming", "jij-vorm") en hetzelfde antwoord herschikt zich live.
+- **Numafa (stijl-skill):** vijf goede klantmails van de serviceafdeling erin → "maak hier een skill *Numafa-servicetoon* van" → `SKILL.md` met toon, vaste opbouw en voorbeelden → voortaan klinkt elke servicemail hetzelfde, wie hem ook laat schrijven.
+- **Visual:** voorkeur-chips aanklikken ("kort", "Nederlands", "opsomming", "jij-vorm") en hetzelfde antwoord herschikt zich live. Tweede stap: een `schrijfstijl.md`-kaartje schuift in de projectmap of de kast, en de toon van het antwoord verandert mee.
 
 ### 2.2 Instructies
 
@@ -604,7 +609,7 @@ Bron: [commands](https://code.claude.com/docs/en/commands). **Visual:** een filt
 
 ## Te checken (niet bevestigd, komt pas in de app na bevestiging)
 
-1. **Stijlen in de Claude-app.** Claude Academy zegt dat het menu "Use style" is uitgefaseerd en dat skills die rol overnemen. Een officieel supportartikel daarover vond ik niet.
+1. **Stijlen in de Claude-app.** Claude Academy zegt dat het menu "Use style" is uitgefaseerd. De tegel leunt daarom op een `.md`-bestand of een skill (werkt hoe dan ook); alleen de zin over het uitfaseren hangt nog aan deze check.
 2. **Wanneer memory geladen wordt.** De supportpagina zegt niet of de geheugennotities altijd geladen worden of op aanvraag. Daarom heb ik de bouwstenen-tabel voorzichtig geformuleerd. (Voor Claude Code is het wel bevestigd: de eerste 200 regels van `MEMORY.md` altijd, details op aanvraag.)
 3. **1M context op Free.** Het supportartikel noemt alleen de betaalde abonnementen.
 4. **Claude Design per abonnement.** Bronnen spreken elkaar tegen: "bèta op betaalde abonnementen" tegenover "Design, Slides en Docs op alle abonnementen, ook Free". Ook ">1 miljoen gebruikers in de eerste week" komt alleen uit een zoekresultaat.
