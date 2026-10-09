@@ -95,6 +95,12 @@ Geen computer met Node? Laat Claude Code op het web (claude.ai/code) het voor je
 
 Snel een tikfout verbeteren kan ook direct in `dist/claude-inwerken.html`: de inhoud staat daar als JSON in het blok `<script type="application/json" id="tegels">`. Neem de wijziging daarna ook over in `src/tegels.json`, anders is hij bij de volgende build weg.
 
+## Vergelijken: origineel of nieuw
+
+`dist/vergelijken.html` zet per onderwerp het origineel (versie 1) en de nieuwe versie naast elkaar. Klik per onderwerp welke beter is, eventueel met een opmerking, en download onderaan je keuzes als `keuzes-claude-inwerken.md`. Je keuzes blijven bewaard in de browser tot je klaar bent.
+
+Opnieuw bouwen: `node vergelijken/build.js` (gebruikt `vergelijken/origineel.html` en `vergelijken/nieuw.html`).
+
 ## Huiskleuren en logo
 
 - Kleuren: bovenaan `src/styles.css`, het blok `:root`. `--accent` is de hoofdkleur (knoppen, pas, ringen); `--lvl-1`, `--lvl-2`, `--lvl-3` zijn de niveaukleuren. De donkere varianten staan in de twee blokken eronder.

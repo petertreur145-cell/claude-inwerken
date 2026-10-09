@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; frame-src 'self' data: blob: about:; child-src 'self' data: blob: about:; base-uri 'none'; form-action 'none'">
+<title>Vergelijken: origineel of nieuw</title>
+<style>
+:root {
+  --accent: #0071E3; --bg: #F5F5F7; --surface: #FFFFFF; --fill: #E8E8ED; --fill-2: #F0F0F3;
+  --text: #1D1D1F; --text-2: #6E6E73; --separator: #D2D2D7;
+  --a: #B64400; --a-fill: #FFF0E3; --b: #0071E3; --b-fill: #E6F0FB; --ok: #1E7A3C; --ok-fill: #E4F4E8;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", system-ui, Roboto, Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #000000; --surface: #1C1C1E; --fill: #2C2C2E; --fill-2: #232325; --text: #F5F5F7; --text-2: #A1A1A6; --separator: #38383A;
+    --a: #FF9F0A; --a-fill: #2E1F09; --b: #2997FF; --b-fill: #0B2A4A; --ok: #30D158; --ok-fill: #10291A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #000000; --surface: #1C1C1E; --fill: #2C2C2E; --fill-2: #232325; --text: #F5F5F7; --text-2: #A1A1A6; --separator: #38383A;
+  --a: #FF9F0A; --a-fill: #2E1F09; --b: #2997FF; --b-fill: #0B2A4A; --ok: #30D158; --ok-fill: #10291A; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.4 var(--font); display: flex; flex-direction: column; overflow: hidden; }
+button, select, textarea, input { font: inherit; color: inherit; }
+.btn { border: 0; border-radius: 980px; min-height: 34px; padding: 6px 14px; background: var(--fill); cursor: pointer; font-weight: 600; white-space: nowrap; }
+.btn:hover { filter: brightness(0.96); }
+.btn[disabled] { opacity: 0.4; cursor: default; }
+.btn.primary { background: var(--accent); color: #FFFFFF; }
+
+/* Bovenbalk */
+.top { flex: none; display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--separator); flex-wrap: wrap; }
+.top h1 { margin: 0 8px 0 0; font-size: 17px; letter-spacing: -0.01em; }
+.top select { min-height: 34px; max-width: 360px; border: 1px solid var(--separator); border-radius: 10px; padding: 4px 8px; background: var(--surface); }
+.prog { font-size: 13px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.spacer { flex: 1; }
+.zoom { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-2); }
+
+/* Twee kolommen */
+.cols { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px 10px 0; }
+.col { min-width: 0; min-height: 0; display: flex; flex-direction: column; border-radius: 14px; overflow: hidden; background: var(--surface); box-shadow: 0 0 0 2px var(--separator); }
+.col.a.picked { box-shadow: 0 0 0 3px var(--a); }
+.col.b.picked { box-shadow: 0 0 0 3px var(--b); }
+.col-head { flex: none; display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--separator); }
+.tag { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 980px; font-size: 12.5px; font-weight: 700; }
+.a .tag { background: var(--a-fill); color: var(--a); }
+.b .tag { background: var(--b-fill); color: var(--b); }
+.col-head .where { font-size: 13px; color: var(--text-2); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.col-head .btn { margin-left: auto; min-height: 28px; padding: 3px 10px; font-size: 12.5px; }
+.frame-box { flex: 1; min-height: 0; position: relative; overflow: hidden; background: var(--bg); }
+.frame-box iframe { position: absolute; left: 0; top: 0; border: 0; transform-origin: 0 0; background: var(--bg); }
+.none { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--text-2); font-size: 16px; }
+
+/* Keuzebalk */
+.choose { flex: none; display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center; padding: 10px 16px 12px; }
+.choose .q { grid-column: 1 / -1; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.choose .q strong { font-size: 16px; }
+.choose .q span { color: var(--text-2); font-size: 13.5px; }
+.pick { min-height: 48px; border-radius: 14px; font-size: 16px; border: 2px solid transparent; }
+.pick.a { background: var(--a-fill); color: var(--a); justify-self: stretch; }
+.pick.b { background: var(--b-fill); color: var(--b); justify-self: stretch; }
+.pick.eq { background: var(--fill-2); }
+.pick[aria-pressed="true"].a { border-color: var(--a); }
+.pick[aria-pressed="true"].b { border-color: var(--b); }
+.pick[aria-pressed="true"].eq { border-color: var(--text-2); }
+.note { grid-column: 1 / -1; display: flex; gap: 8px; align-items: center; }
+.note input { flex: 1; min-height: 36px; border: 1px solid var(--separator); border-radius: 10px; padding: 6px 10px; background: var(--surface); }
+.keys { font-size: 12.5px; color: var(--text-2); white-space: nowrap; }
+
+/* Overzicht en downloaden */
+dialog { width: min(920px, calc(100vw - 32px)); max-height: calc(100vh - 32px); border: 0; border-radius: 18px; padding: 0; background: var(--surface); color: var(--text); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+dialog::backdrop { background: rgba(0,0,0,0.4); }
+.dlg { display: flex; flex-direction: column; max-height: calc(100vh - 32px); }
+.dlg header { padding: 16px 20px; border-bottom: 1px solid var(--separator); display: flex; align-items: center; gap: 10px; }
+.dlg header h2 { margin: 0; font-size: 20px; }
+.dlg .body { overflow: auto; padding: 12px 20px; }
+.dlg footer { padding: 12px 20px; border-top: 1px solid var(--separator); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--separator); vertical-align: top; }
+th { font-size: 12.5px; color: var(--text-2); font-weight: 600; }
+td.k-a { color: var(--a); font-weight: 600; }
+td.k-b { color: var(--b); font-weight: 600; }
+td.k-0 { color: var(--text-2); }
+tr.open td { color: var(--text-2); }
+tr.go { cursor: pointer; }
+tr.go:hover td { background: var(--fill-2); }
+.dlg textarea { width: 100%; min-height: 80px; border: 1px solid var(--separator); border-radius: 10px; padding: 8px 10px; background: var(--surface); margin-top: 6px; }
+.status { font-size: 13px; color: var(--ok); }
+.bulk { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 10px 0; font-size: 13.5px; color: var(--text-2); }
+
+/* Smal scherm: één kolom tegelijk */
+.tabs { display: none; }
+@media (max-width: 900px) {
+  .tabs { display: flex; gap: 6px; padding: 8px 10px 0; }
+  .tabs .btn[aria-pressed="true"] { background: var(--text); color: var(--bg); }
+  .cols { grid-template-columns: 1fr; }
+  .cols[data-show="a"] .col.b, .cols[data-show="b"] .col.a { display: none; }
+  .zoom, .keys { display: none; }
+  .choose { grid-template-columns: 1fr 1fr 1fr; }
+  .pick { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>Origineel of nieuw?</h1>
+  <button class="btn" type="button" id="prev" aria-label="Vorig onderwerp">‹</button>
+  <select id="pick-topic" aria-label="Kies een onderwerp"></select>
+  <button class="btn" type="button" id="next" aria-label="Volgend onderwerp">›</button>
+  <span class="prog" id="prog"></span>
+  <span class="spacer"></span>
+  <label class="zoom">Zoom <select id="zoom"><option value="1">100%</option><option value="0.85">85%</option><option value="0.75" selected>75%</option><option value="0.65">65%</option></select></label>
+  <button class="btn primary" type="button" id="done">Klaar: download keuzes</button>
+</div>
+<div class="tabs" role="group" aria-label="Welke versie tonen"><button class="btn" type="button" data-show="a" aria-pressed="true">Origineel</button><button class="btn" type="button" data-show="b" aria-pressed="false">Nieuw</button></div>
+<div class="cols" id="cols" data-show="a">
+  <section class="col a" aria-label="Origineel"><div class="col-head"><span class="tag">Origineel</span><span class="where" id="where-a"></span><button class="btn" type="button" data-reset="a" title="Terug naar dit onderwerp als je in de app bent doorgeklikt">↺ Terug</button></div><div class="frame-box" id="box-a"><iframe id="fa" title="Origineel"></iframe><div class="none" id="none-a" hidden></div></div></section>
+  <section class="col b" aria-label="Nieuw"><div class="col-head"><span class="tag">Nieuw</span><span class="where" id="where-b"></span><button class="btn" type="button" data-reset="b" title="Terug naar dit onderwerp als je in de app bent doorgeklikt">↺ Terug</button></div><div class="frame-box" id="box-b"><iframe id="fb" title="Nieuw"></iframe><div class="none" id="none-b" hidden></div></div></section>
+</div>
+<div class="choose">
+  <div class="q"><strong id="q-title"></strong><span id="q-hint"></span></div>
+  <button class="btn pick a" type="button" data-pick="a">◀ Origineel is beter</button>
+  <button class="btn pick eq" type="button" data-pick="0">Maakt niet uit</button>
+  <button class="btn pick b" type="button" data-pick="b">Nieuw is beter ▶</button>
+  <div class="note"><input id="note" type="text" placeholder="Opmerking (optioneel), bijvoorbeeld: visual van het origineel, tekst van nieuw" aria-label="Opmerking bij dit onderwerp"><span class="keys">Toetsen: 1 origineel · 2 maakt niet uit · 3 nieuw · ← →</span></div>
+</div>
+
+<dialog id="dlg">
+  <div class="dlg">
+    <header><h2>Je keuzes</h2><span class="prog" id="dlg-prog"></span><span class="spacer"></span><button class="btn" type="button" id="dlg-close">Sluiten</button></header>
+    <div class="body">
+      <div class="bulk">Niveau 3 is bijzaak. Alle nog open tegels van niveau 3 in één keer:
+        <button class="btn" type="button" data-bulk="a">Origineel</button><button class="btn" type="button" data-bulk="0">Maakt niet uit</button><button class="btn" type="button" data-bulk="b">Nieuw</button></div>
+      <table><thead><tr><th>Onderwerp</th><th>Origineel</th><th>Nieuw</th><th>Keuze</th><th>Opmerking</th></tr></thead><tbody id="sum"></tbody></table>
+      <p style="margin:16px 0 0"><label for="general"><strong>Algemene opmerkingen</strong> (optioneel)</label></p>
+      <textarea id="general" placeholder="Bijvoorbeeld over het startscherm, de volgorde, de stijl of het tempo"></textarea>
+    </div>
+    <footer><button class="btn primary" type="button" id="download">Download keuzes (.md)</button><button class="btn" type="button" id="copy">Kopieer als tekst</button><span class="status" id="status" aria-live="polite"></span></footer>
+  </div>
+</dialog>
+
+<script type="application/json" id="topics">/*{{TOPICS}}*/</script>
+<script type="text/plain" id="app-a">/*{{ORIG}}*/</script>
+<script type="text/plain" id="app-b">/*{{NIEUW}}*/</script>
+<script>
+(function () {
+  "use strict";
+  var TOPICS = JSON.parse(document.getElementById("topics").textContent);
+  var KEY = "claude-inwerken:vergelijken";
+  var state = { picks: {}, notes: {}, general: "" };
+  try { var raw = localStorage.getItem(KEY); if (raw) { var p = JSON.parse(raw); if (p && p.picks) state = { picks: p.picks, notes: p.notes || {}, general: p.general || "" }; } } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+
+  // De twee apps staan als base64 in dit bestand; ze draaien elk in hun eigen iframe.
+  function decode(id) {
+    var bin = atob(document.getElementById(id).textContent.trim()), bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder("utf-8").decode(bytes);
+  }
+  var fa = $("fa"), fb = $("fb"), ready = { a: false, b: false }, cur = 0;
+  fa.addEventListener("load", function () { ready.a = true; go(cur); });
+  fb.addEventListener("load", function () { ready.b = true; go(cur); });
+  fa.srcdoc = decode("app-a");
+  fb.srcdoc = decode("app-b");
+
+  var sel = $("pick-topic");
+  function label(t, i) { var p = state.picks[t.key]; return (p ? "✓ " : "· ") + (i + 1) + ". " + t.naam; }
+  function fillSelect() { sel.innerHTML = TOPICS.map(function (t, i) { return '<option value="' + i + '">' + esc(label(t, i)) + '</option>'; }).join(""); sel.value = String(cur); }
+  function hashFor(t, side) { var h = side === "a" ? t.a : t.b; return h == null ? null : h; }
+  function show(side) {
+    var t = TOPICS[cur], h = hashFor(t, side), f = side === "a" ? fa : fb, none = $("none-" + side);
+    $("where-" + side).textContent = h == null ? "" : (t[side + "Label"] || "");
+    if (h == null) { f.style.visibility = "hidden"; none.hidden = false; none.textContent = side === "a" ? "Dit onderwerp bestond nog niet in het origineel. Kies rechts of je het wilt houden." : "Bestaat niet in de nieuwe versie."; return; }
+    f.style.visibility = ""; none.hidden = true;
+    if (!ready[side]) return;
+    try {
+      var w = f.contentWindow;
+      if (w.location.hash !== h) w.location.hash = h; else w.dispatchEvent(new HashChangeEvent("hashchange"));
+      w.scrollTo(0, 0);
+    } catch (e) {}
+  }
+  function go(k) {
+    cur = Math.max(0, Math.min(TOPICS.length - 1, k));
+    var t = TOPICS[cur];
+    show("a"); show("b");
+    $("q-title").textContent = (cur + 1) + "/" + TOPICS.length + " · " + t.naam;
+    $("q-hint").textContent = t.hint || "";
+    var p = state.picks[t.key];
+    var onlyNew = t.a == null;
+    document.querySelector('[data-pick="a"]').textContent = onlyNew ? "◀ Weglaten" : "◀ Origineel is beter";
+    document.querySelector('[data-pick="b"]').textContent = onlyNew ? "Houden ▶" : "Nieuw is beter ▶";
+    Array.prototype.forEach.call(document.querySelectorAll("[data-pick]"), function (b) { b.setAttribute("aria-pressed", String(p === b.getAttribute("data-pick"))); });
+    document.querySelector(".col.a").classList.toggle("picked", p === "a");
+    document.querySelector(".col.b").classList.toggle("picked", p === "b");
+    $("note").value = state.notes[t.key] || "";
+    $("prev").disabled = cur === 0; $("next").disabled = cur === TOPICS.length - 1;
+    fillSelect(); progress();
+  }
+  function progress() {
+    var n = TOPICS.filter(function (t) { return state.picks[t.key]; }).length;
+    $("prog").textContent = n + " van " + TOPICS.length + " gekozen";
+    $("dlg-prog").textContent = $("prog").textContent;
+  }
+  function pick(v) {
+    var t = TOPICS[cur];
+    state.picks[t.key] = v; state.notes[t.key] = $("note").value.trim(); save();
+    go(cur);
+    if (cur < TOPICS.length - 1) setTimeout(function () { go(cur + 1); }, 350);
+    else openSummary();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("[data-pick]"), function (b) { b.addEventListener("click", function () { pick(b.getAttribute("data-pick")); }); });
+  $("note").addEventListener("input", function () { state.notes[TOPICS[cur].key] = $("note").value.trim(); save(); });
+  $("prev").addEventListener("click", function () { go(cur - 1); });
+  $("next").addEventListener("click", function () { go(cur + 1); });
+  sel.addEventListener("change", function () { go(+sel.value); });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-reset]"), function (b) { b.addEventListener("click", function () { show(b.getAttribute("data-reset")); }); });
+  document.addEventListener("keydown", function (e) {
+    var tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea" || tag === "select" || $("dlg").open) return;
+    if (e.key === "1") pick("a"); else if (e.key === "2") pick("0"); else if (e.key === "3") pick("b");
+    else if (e.key === "ArrowLeft") go(cur - 1); else if (e.key === "ArrowRight") go(cur + 1);
+  });
+
+  // Zoom: de apps tonen hun brede opmaak, verkleind
+  function zoom() {
+    var z = +$("zoom").value;
+    [fa, fb].forEach(function (f) { f.style.width = (100 / z) + "%"; f.style.height = (100 / z) + "%"; f.style.transform = "scale(" + z + ")"; });
+    try { localStorage.setItem(KEY + ":zoom", String(z)); } catch (e) {}
+  }
+  try { var z0 = localStorage.getItem(KEY + ":zoom"); if (z0) $("zoom").value = z0; } catch (e) {}
+  $("zoom").addEventListener("change", zoom); zoom();
+
+  // Smal scherm: tabs
+  Array.prototype.forEach.call(document.querySelectorAll(".tabs [data-show]"), function (b) {
+    b.addEventListener("click", function () {
+      $("cols").setAttribute("data-show", b.getAttribute("data-show"));
+      Array.prototype.forEach.call(document.querySelectorAll(".tabs [data-show]"), function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+    });
+  });
+
+  // Overzicht en export
+  var WORD = { a: "Origineel", b: "Nieuw", "0": "Maakt niet uit" };
+  function word(t, p) { if (!p) return "nog niet gekozen"; if (t.a == null) return p === "b" ? "Houden" : p === "a" ? "Weglaten" : "Maakt niet uit"; return WORD[p]; }
+  function openSummary() {
+    $("sum").innerHTML = TOPICS.map(function (t, i) {
+      var p = state.picks[t.key];
+      return '<tr class="go' + (p ? "" : " open") + '" data-i="' + i + '"><td>' + esc(t.naam) + '</td><td>' + esc(t.aLabel || "–") + '</td><td>' + esc(t.bLabel || "–") + '</td><td class="k-' + (p || "x") + '">' + esc(word(t, p)) + '</td><td>' + esc(state.notes[t.key] || "") + '</td></tr>';
+    }).join("");
+    $("general").value = state.general || "";
+    progress();
+    if (!$("dlg").open) $("dlg").showModal();
+  }
+  $("sum").addEventListener("click", function (e) { var tr = e.target.closest("tr[data-i]"); if (!tr) return; $("dlg").close(); go(+tr.getAttribute("data-i")); });
+  $("done").addEventListener("click", openSummary);
+  $("dlg-close").addEventListener("click", function () { $("dlg").close(); });
+  $("general").addEventListener("input", function () { state.general = $("general").value; save(); });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-bulk]"), function (b) {
+    b.addEventListener("click", function () {
+      TOPICS.forEach(function (t) { if (t.niveau === 3 && !state.picks[t.key]) state.picks[t.key] = b.getAttribute("data-bulk"); });
+      save(); openSummary(); go(cur);
+    });
+  });
+  function cell(s) { return String(s || "").replace(/\|/g, "/").replace(/\s+/g, " ").trim(); }
+  function markdown() {
+    var d = new Date(), n = TOPICS.filter(function (t) { return state.picks[t.key]; }).length;
+    var md = "# Keuzes Claude inwerken: origineel of nieuw\n\n" +
+      "Ingevuld op " + d.toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" }) + ". " + n + " van " + TOPICS.length + " onderwerpen gekozen.\n\n" +
+      "Origineel = versie 1 (35 tegels, 8 oktober 2026). Nieuw = versie 3-preview (37 tegels, 9 oktober 2026).\n\n" +
+      "| Onderwerp | Origineel | Nieuw | Keuze | Opmerking |\n|---|---|---|---|---|\n" +
+      TOPICS.map(function (t) { return "| " + cell(t.naam) + " | " + cell(t.aLabel || "–") + " | " + cell(t.bLabel || "–") + " | " + cell(word(t, state.picks[t.key])) + " | " + cell(state.notes[t.key]) + " |"; }).join("\n") +
+      "\n\n## Algemene opmerkingen\n\n" + (state.general.trim() || "Geen.") + "\n\n" +
+      "## Voor Claude\n\n```json\n" + JSON.stringify({ versies: { a: "origineel (commit fc475e7)", b: "nieuw (versie 3-preview)" }, keuzes: TOPICS.map(function (t) { return { onderwerp: t.naam, origineel: t.aLabel || null, nieuw: t.bLabel || null, keuze: state.picks[t.key] || null, opmerking: state.notes[t.key] || "" }; }), algemeen: state.general }, null, 2) + "\n```\n";
+    return md;
+  }
+  $("download").addEventListener("click", function () {
+    var blob = new Blob([markdown()], { type: "text/markdown;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "keuzes-claude-inwerken.md";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+    $("status").textContent = "Gedownload: keuzes-claude-inwerken.md. Stuur dat bestand naar Claude.";
+  });
+  $("copy").addEventListener("click", function () {
+    var text = markdown();
+    function fallback() {
+      var ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      ta.remove(); $("status").textContent = ok ? "Gekopieerd. Plak het in je bericht aan Claude." : "Kopiëren lukte niet; gebruik Download.";
+    }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(function () { $("status").textContent = "Gekopieerd. Plak het in je bericht aan Claude."; }, fallback);
+    else fallback();
+  });
+
+  go(0);
+})();
+</script>
+</body>
+</html>
