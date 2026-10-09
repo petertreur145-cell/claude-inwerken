@@ -17,7 +17,7 @@ Stand per 9 oktober 2026.
 
 | Map of bestand | Wat |
 |---|---|
-| `dist/claude-inwerken.html` | Het gebundelde bestand (±370 kB). Dit deel je. |
+| `dist/claude-inwerken.html` | Het gebundelde bestand (±380 kB). Dit deel je. |
 | `src/tegels.json` | **Alle inhoud**: tegels, niveaus, teksten van de pagina Over. |
 | `src/index.html` | Het sjabloon van de pagina. |
 | `src/styles.css` | De stijl. Kleuren staan bovenaan. |
@@ -42,7 +42,7 @@ Velden van een tegel:
 |---|---|
 | `id` | Nummer, bijvoorbeeld `"2.12"`. Uniek. |
 | `niveau` | `1`, `2` of `3`. |
-| `groep` | Optioneel: `"agentic"` of `"extra"` (subsectie binnen niveau 3). |
+| `groep` | Optioneel: subsectie binnen een niveau, bijvoorbeeld `"kennen"` (niveau 2) of `"agentic"` (niveau 3). De groepen staan bovenaan `tegels.json` onder `groepen`. |
 | `titel`, `kort` | Titel en de zin op de voorkant van de tegel. |
 | `icoon` | Naam van een icoon uit `src/icons.js`, bijvoorbeeld `"folder"`. |
 | `minuten` | Leestijd. |
@@ -70,7 +70,10 @@ Opmaak in teksten: `**vet**`, `*schuin*`, `` `code` `` en `[linktekst](https://�
   - Een venster (`pane`) heeft `title`, `model`, optioneel `label` (kopje erboven), `chips` (bijvoorbeeld een connector), `side` (zijpaneel met `title` en `items`, zoals memory of skills), `meter` (`sec` en `usage` van 0 tot 1, plus `extra`) en `verdict` (`tone` `ok`, `warn` of `bad`, en `text`).
   - `events` speelt het gesprek af, in volgorde. Soorten (`t`): `user` (met optioneel `files`), `thinking` (`lines`, `secs`), `tool`, `answer` (regels gescheiden door `\n`), `file`, `diff` (`lines` als `["+", "tekst"]`), `code`, `approve`, `card`, `note`, `memory`, `status`, `side-add` en `side-mark` (`index` van een item in het zijpaneel).
   - Met `ms` bij een gebeurtenis bepaal je zelf hoe lang die duurt.
-- `{ "type": "desk" }`: het bureau dat volloopt (tegel 1.4).
+  - In plaats van `panes` kan een scenario een `explain` hebben: een klikbare uitlegkaart, bijvoorbeeld de vijf effort-standen. Velden: `title`, `items` (elk met `name`, en optioneel `sub`, `text`, `bars`, `example`, `use`), `bars` (namen van de balkjes, zoals `["Nadenken", "Tijd", "Verbruik"]`), `foot`. Zet zo'n kaart vóór de vergelijkingen: eerst uitleggen, dan laten zien.
+- Niets speelt vanzelf af. Een gesprek start pas na een klik op **Afspelen**; **Volgende** gaat naar het volgende scenario of de volgende stap.
+- **Meetingmodus** (knop bij elk gesprek): elke klik toont het volgende bericht, zodat je er rustig bij kunt vertellen. De keuze blijft bewaard in de browser.
+- `{ "type": "desk" }`: het bureau dat volloopt (tegel 1.5).
 - `{ "type": "table", "kolommen": [...], "rijen": [{ "cellen": [...], "tags": [...], "uitleg": "..." }], "filters": [{ "label": "...", "tag": "..." }] }`: interactieve tabel.
 - `{ "type": "scene", "items": [...], "steps": [...], "choices": [...] }`: animatie in stappen op een canvas van 420 × 260.
   - `items`: elementen met `id`, `type` (`card`, `icon`, `glyph`, `text`, `bar`, `dot`, `zone`, `line`), positie `x`, `y`, maat `w`, `h` (of `size`, `r`), en `label`, `text`, `icon`, `tone` (`accent`, `soft`, `ok`, `warn`, `bad`, `muted`, `ghost`, `dark`), `opacity`, `scale`.

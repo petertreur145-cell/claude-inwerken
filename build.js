@@ -72,6 +72,15 @@ for (const t of data.tegels) {
     (v.scenarios || []).forEach((s, i) => {
       const sw = where + " scenario " + (i + 1);
       if (!s.label || !s.caption) errors.push(sw + ": label en caption nodig");
+      if (s.explain) {
+        const x = s.explain;
+        if (!Array.isArray(x.items) || x.items.length < 2) errors.push(sw + ": uitlegkaart heeft minstens twee items nodig");
+        (x.items || []).forEach((o) => {
+          if (!o.name) errors.push(sw + ": uitlegitem zonder naam");
+          if (o.bars && (!Array.isArray(x.bars) || o.bars.length !== x.bars.length)) errors.push(sw + ": balkjes van '" + o.name + "' passen niet bij explain.bars");
+        });
+        return;
+      }
       if (!Array.isArray(s.panes) || s.panes.length < 1 || s.panes.length > 2) errors.push(sw + ": 1 of 2 vensters (panes) nodig");
       (s.panes || []).forEach((p) => {
         const icons = (p.chips || []).map((c) => c.icon).concat((p.events || []).map((e) => e.icon));

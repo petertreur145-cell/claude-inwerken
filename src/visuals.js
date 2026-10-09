@@ -4,7 +4,8 @@
    - "desk":  het bureau dat volloopt (tegel 1.4)
    - "table": interactieve tabel met filters en uitleg per rij
    - "chat":  een nagespeeld gesprek in een Claude-venster, eventueel twee naast elkaar om te vergelijken
-   Alle animaties lopen één keer, hebben "Opnieuw afspelen" en staan stil bij prefers-reduced-motion. */
+   Niets speelt vanzelf af: elke stap gaat op klik (ook handig bij een presentatie).
+   Bij prefers-reduced-motion verschijnt alles zonder beweging. */
 (function () {
   "use strict";
   var NS = "http://www.w3.org/2000/svg";
@@ -12,12 +13,23 @@
   var md = function (s) { return window.mdInline ? window.mdInline(s) : String(s); };
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
 
-  function controlsHTML(withSteps) {
+  // kind "scene": Volgende stap is de hoofdknop; kind "chat": Afspelen speelt het gekozen gesprek af
+  function controlsHTML(kind) {
+    var prev = '<button class="btn btn-small" type="button" data-act="prev">‹ Vorige</button>';
+    if (kind === "scene") return '<div class="stage-controls">' + prev +
+      '<button class="btn btn-primary btn-small" type="button" data-act="next">Volgende stap ›</button>' +
+      '<span class="spacer"></span><span class="dots" aria-hidden="true"></span>' +
+      '<button class="btn btn-small" type="button" data-act="play">Opnieuw</button></div>';
     return '<div class="stage-controls">' +
-      '<button class="btn btn-primary btn-small" type="button" data-act="play">Afspelen</button>' +
-      (withSteps ? '<button class="btn btn-small" type="button" data-act="prev" aria-label="Vorige stap">‹ Stap</button><button class="btn btn-small" type="button" data-act="next" aria-label="Volgende stap">Stap ›</button>' : '') +
-      '<span class="spacer"></span><span class="dots" aria-hidden="true"></span></div>';
+      '<button class="btn btn-primary btn-small" type="button" data-act="play">▶ Afspelen</button>' + prev +
+      '<button class="btn btn-small" type="button" data-act="next">Volgende ›</button>' +
+      '<span class="spacer"></span><span class="dots" aria-hidden="true"></span>' +
+      '<button class="btn btn-small meet-toggle" type="button" data-act="meet" aria-pressed="false">Meetingmodus</button></div>';
   }
+  // Meetingmodus: gesprekken meteen helemaal tonen. Onthouden in de browser (als dat mag).
+  var MEET_KEY = "claude-inwerken:meeting";
+  function getMeet() { try { return window.localStorage.getItem(MEET_KEY) === "1"; } catch (e) { return false; } }
+  function setMeet(on) { try { window.localStorage.setItem(MEET_KEY, on ? "1" : "0"); } catch (e) {} }
 
   /* ================= Scene ================= */
   function mountScene(root, def) {
@@ -30,7 +42,7 @@
       (choices ? '<div class="stage-choices" role="group" aria-label="Kies een situatie">' + choices.map(function (c, i) { return '<button type="button" class="choice" data-choice="' + i + '" aria-pressed="false">' + esc(c.label) + '</button>'; }).join("") + '</div>' : '') +
       '<div class="stage-caption"><span class="stage-step"></span><p class="stage-text" aria-live="polite"></p></div>' +
       '<ol class="stage-steps" hidden>' + steps.map(function (s) { return '<li>' + md(s.caption || "") + '</li>'; }).join("") + '</ol>' +
-      controlsHTML(true);
+      controlsHTML("scene");
     var box = root.querySelector(".stage-box"), stage = root.querySelector(".stage");
     var svg = document.createElementNS(NS, "svg");
     svg.setAttribute("class", "s-svg"); svg.setAttribute("width", W); svg.setAttribute("height", H); svg.setAttribute("viewBox", "0 0 " + W + " " + H);
@@ -137,27 +149,14 @@
       setLabel();
     }
     function stop() { if (timer) { clearTimeout(timer); timer = null; } }
-    function setLabel() { playBtn.textContent = (cur > 0 || timer) ? "Opnieuw afspelen" : "Afspelen"; }
-    function play() {
-      stop();
-      show(0, true);
-      if (reduced()) { show(steps.length - 1, true); return; }
-      var i = 0;
-      function tick() {
-        i++;
-        timer = null;
-        show(i);
-        if (i < steps.length - 1) { timer = setTimeout(tick, steps[i].dur || 2600); setLabel(); }
-      }
-      timer = setTimeout(tick, steps[0].dur || 2400);
-      setLabel();
-    }
-    playBtn.addEventListener("click", play);
-    prevBtn.addEventListener("click", function () { stop(); show(cur - 1); });
-    nextBtn.addEventListener("click", function () { stop(); show(cur + 1); });
+    function setLabel() { playBtn.disabled = cur === 0; }
+    var inst = reduced();
+    playBtn.addEventListener("click", function () { show(0, true); });
+    prevBtn.addEventListener("click", function () { show(cur - 1, inst); });
+    nextBtn.addEventListener("click", function () { show(cur + 1, inst); });
     if (choices) root.querySelector(".stage-choices").addEventListener("click", function (e) {
       var b = e.target.closest(".choice"); if (!b) return;
-      stop(); show(choices[+b.getAttribute("data-choice")].step);
+      show(choices[+b.getAttribute("data-choice")].step, inst);
     });
     // schalen naar de breedte, tekst blijft leesbaar
     function fit() {
@@ -170,13 +169,8 @@
     fit();
     var ro = null;
     if (window.ResizeObserver) { ro = new ResizeObserver(fit); ro.observe(box); } else window.addEventListener("resize", fit);
-    if (reduced()) {
-      root.querySelector(".stage-steps").hidden = false;
-      show(steps.length - 1, true);
-    } else {
-      show(0, true);
-      if (def.autoplay !== false) timer = setTimeout(play, 600);
-    }
+    if (reduced()) root.querySelector(".stage-steps").hidden = false;
+    show(0, true);
     return { stop: function () { stop(); if (ro) ro.disconnect(); else window.removeEventListener("resize", fit); } };
   }
 
@@ -186,8 +180,8 @@
       '<div class="stage-wrap"><div class="stage-box" style="max-width:720px"><svg class="desk-svg" role="img" aria-label="Documenten vallen op het bureau van Claude; een meter toont hoeveel tokens het gesprek gebruikt, van 0 tot 1 miljoen." style="display:block;width:100%;height:auto"></svg></div></div>' +
       '<div class="stage-caption"><span class="stage-step">Stap 0</span><p class="stage-text" aria-live="polite">Een leeg bureau.</p></div>' +
       '<ol class="stage-steps" hidden><li>Elk bericht en elk bestand komt op het bureau en vult de meter.</li><li>Rond 80% worden de oudste stukken vaag: dat heet context rot.</li><li>Claude vat de oudste stukken samen in één map en er is weer ruimte.</li><li>Een nieuwe chat is een schoon bureau.</li></ol>' +
-      '<div class="stage-controls"><button class="btn btn-primary btn-small" type="button" data-act="play">Afspelen</button>' +
-      '<button class="btn btn-small" type="button" data-act="add">Leg document neer</button>' +
+      '<div class="stage-controls"><button class="btn btn-primary btn-small" type="button" data-act="add">Leg document neer</button>' +
+      '<button class="btn btn-small" type="button" data-act="play">Alles afspelen</button>' +
       '<button class="btn btn-small" type="button" data-act="compact"><span class="mono">/compact</span></button>' +
       '<span class="spacer"></span><button class="btn btn-small" type="button" data-act="clear">Nieuwe chat</button></div>';
     var svg = root.querySelector("svg");
@@ -251,7 +245,7 @@
       capStep.textContent = "Stap " + step;
       root.querySelector('[data-act="add"]').disabled = placed >= DOCS.length;
       root.querySelector('[data-act="compact"]').disabled = items.length < 3;
-      root.querySelector('[data-act="play"]').textContent = step > 0 ? "Opnieuw afspelen" : "Afspelen";
+      root.querySelector('[data-act="play"]').textContent = step > 0 ? "Alles opnieuw" : "Alles afspelen";
     }
     function addDoc() {
       if (placed >= DOCS.length) return false;
@@ -297,7 +291,7 @@
       items.forEach(function (d) { if (d.g.parentNode) d.g.parentNode.removeChild(d.g); });
       items = []; summary = 0; placed = 0; step = 0;
       folder.setAttribute("opacity", 0); rot.setAttribute("opacity", 0);
-      update(caption || "Een leeg bureau. Druk op Afspelen.");
+      update(caption || "Een leeg bureau. Leg er een document op.");
     }
     function play() {
       clearAll("Afspelen…");
@@ -308,12 +302,15 @@
       (function next() { if (i >= seq.length) { timer = null; return; } var s = seq[i++]; s[0](); timer = setTimeout(next, s[1]); })();
     }
     root.querySelector('[data-act="play"]').addEventListener("click", play);
-    root.querySelector('[data-act="add"]').addEventListener("click", function () { stop(); addDoc(); if (total() / CAP >= 0.8 && rot.getAttribute("opacity") !== "1") rotOld(); });
+    root.querySelector('[data-act="add"]').addEventListener("click", function () {
+      stop();
+      if (!addDoc()) { update("Alle documenten liggen er. Klik op /compact: Claude vat de oudste stukken samen."); return; }
+      if (total() / CAP >= 0.8 && rot.getAttribute("opacity") !== "1") rotOld();
+    });
     root.querySelector('[data-act="compact"]').addEventListener("click", function () { stop(); compact(); });
     root.querySelector('[data-act="clear"]').addEventListener("click", function () { clearAll("Nieuwe chat: een schoon bureau. Zijn notitieboekje en de projectmap neemt hij wel mee."); });
-    update("Een leeg bureau. Druk op Afspelen.");
-    if (reduced()) { root.querySelector(".stage-steps").hidden = false; while (addDoc()) {} rotOld(); }
-    else timer = setTimeout(play, 600);
+    update("Een leeg bureau. Klik op Leg document neer, steeds één document erbij.");
+    if (reduced()) root.querySelector(".stage-steps").hidden = false;
     return { stop: stop };
   }
 
@@ -366,21 +363,22 @@
   }
   var FILEICON = { doc: "doc", sheet: "sheet", slides: "slides", pdf: "doc", md: "doc", code: "terminal", img: "camera", mail: "mail", artifact: "artifact", web: "globe" };
   var TICK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+  function dot(s) { return /[.?!:]$/.test(s) ? s : s + "."; }
   function mountChat(root, def) {
     var scen = def.scenarios || [];
     root.innerHTML =
       '<div class="cw-wrap"></div>' +
       (scen.length > 1 ? '<div class="stage-choices" role="group" aria-label="Kies een situatie">' + scen.map(function (s, i) { return '<button type="button" class="choice" data-choice="' + i + '" aria-pressed="false">' + esc(s.label) + '</button>'; }).join("") + '</div>' : '') +
       '<div class="stage-caption"><span class="stage-step"></span><p class="stage-text" aria-live="polite"></p></div>' +
-      '<ol class="stage-steps" hidden>' + scen.map(function (s) { return '<li><strong>' + esc(s.label) + '.</strong> ' + md(s.caption || "") + '</li>'; }).join("") + '</ol>' +
-      controlsHTML(true) +
+      '<ol class="stage-steps" hidden>' + scen.map(function (s) { return '<li><strong>' + esc(dot(s.label)) + '</strong> ' + md(s.caption || "") + '</li>'; }).join("") + '</ol>' +
+      controlsHTML("chat") +
       '<p class="cw-foot">Nagespeeld voorbeeld. Tijden en verbruik zijn een indicatie.</p>';
     var host = root.querySelector(".cw-wrap");
     var capStep = root.querySelector(".stage-step"), capText = root.querySelector(".stage-text");
     var playBtn = root.querySelector('[data-act="play"]'), prevBtn = root.querySelector('[data-act="prev"]'), nextBtn = root.querySelector('[data-act="next"]');
     var dots = root.querySelector(".dots");
     dots.innerHTML = scen.map(function () { return "<i></i>"; }).join("");
-    var cur = -1, timers = [], chain = false;
+    var cur = -1, timers = [];
     function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
     function clearTimers() { timers.forEach(clearTimeout); timers = []; }
 
@@ -439,8 +437,9 @@
         (p.verdict ? '<div class="cw-verdict cw-el cw-hide t-' + (p.verdict.tone || "ok") + '">' + window.iconSVG(p.verdict.tone === "warn" || p.verdict.tone === "bad" ? "warn" : "check") + '<span>' + md(p.verdict.text) + '</span></div>' : '') +
       '</div>';
     }
-    function dur(e) {
-      if (e.ms) return e.ms;
+    var PACE = 1.3; // rustig tempo: >1 is trager
+    function dur(e) { return Math.round((e.ms || baseDur(e)) * PACE); }
+    function baseDur(e) {
       switch (e.t) {
         case "user": return 900;
         case "thinking": return 500 + 800 * (e.lines || []).length;
@@ -454,8 +453,11 @@
       }
     }
     function show(el) { if (el) el.classList.remove("cw-hide"); }
-    function runPane(paneEl, p, instant) {
+    // speelt events from..to af (standaard alles); instant = zonder wachttijden
+    function runPane(paneEl, p, instant, from, to) {
       var evs = p.events || [], t = 0, total = 0;
+      if (from == null) from = 0;
+      if (to == null || to > evs.length - 1) to = evs.length - 1;
       evs.forEach(function (e) { total += dur(e); });
       var timeEl = paneEl.querySelector(".cw-time"), useEl = paneEl.querySelector(".cw-use > i");
       function meterAt(frac) {
@@ -466,6 +468,7 @@
       var at = instant ? function (fn) { fn(); } : function (fn, ms) { later(fn, ms); };
       evs.forEach(function (e, k) {
         var d = dur(e), start = t;
+        if (k < from || k > to) { t += d; return; }
         var el = paneEl.querySelector('[data-k="' + k + '"]');
         at(function () {
           show(el);
@@ -478,11 +481,11 @@
         }, start);
         if (e.t === "thinking") {
           var lines = el.querySelectorAll(".cw-think-line"), head = el.querySelector(".cw-think-head span");
-          Array.prototype.forEach.call(lines, function (ln, i) { at(function () { show(ln); }, start + 400 + i * 800); });
+          Array.prototype.forEach.call(lines, function (ln, i) { at(function () { show(ln); }, start + (400 + i * 800) * PACE); });
           at(function () { head.textContent = "Dacht " + (e.label || fmtDur(e.secs || 2)) + " na"; el.classList.add("done"); }, start + d - 200);
         }
         if (e.t === "answer") {
-          Array.prototype.forEach.call(el.querySelectorAll("p"), function (ln, i) { at(function () { show(ln); }, start + 250 + i * 420); });
+          Array.prototype.forEach.call(el.querySelectorAll("p"), function (ln, i) { at(function () { show(ln); }, start + (250 + i * 420) * PACE); });
         }
         if (e.t === "tool") at(function () { el.classList.add("done"); }, start + d * 0.75);
         if (e.t === "approve" || e.t === "card") at(function () {
@@ -492,6 +495,7 @@
         }, start + d * 0.7);
         t += d;
       });
+      if (to < evs.length - 1) { if (instant) meterAt(evs.length ? (to + 1) / evs.length : 0); return total; }
       at(function () {
         meterAt(1);
         show(paneEl.querySelector(".cw-extra"));
@@ -499,34 +503,117 @@
       }, total);
       return total;
     }
+    function explainHTML(x) {
+      var it = x.items || [];
+      return '<div class="ex">' + (x.title ? '<p class="ex-title">' + md(x.title) + '</p>' : '') +
+        '<div class="ex-seg" role="group" aria-label="' + esc(x.title || "Kies") + '">' + it.map(function (o, i) {
+          return '<button type="button" data-ex="' + i + '" aria-pressed="false"><span>' + esc(o.name) + '</span>' + (o.bars ? '<i><b style="width:' + Math.round(o.bars[0] * 100) + '%"></b></i>' : '') + '</button>';
+        }).join("") + '</div><div class="ex-card" aria-live="polite"></div>' + (x.foot ? '<p class="ex-foot">' + md(x.foot) + '</p>' : '') + '</div>';
+    }
+    function explainShow(x, i) {
+      var o = x.items[i], card = host.querySelector(".ex-card");
+      Array.prototype.forEach.call(host.querySelectorAll(".ex-seg button"), function (b) { b.setAttribute("aria-pressed", String(+b.getAttribute("data-ex") === i)); });
+      card.innerHTML = '<div class="ex-head"><strong class="ex-name">' + esc(o.name) + '</strong>' + (o.sub ? '<span class="ex-sub">' + md(o.sub) + '</span>' : '') + '</div>' +
+        (o.text ? '<p class="ex-text">' + md(o.text) + '</p>' : '') +
+        (o.bars ? '<div class="ex-bars">' + (x.bars || []).map(function (lbl, j) { return '<div><span>' + esc(lbl) + '</span><span class="ex-track"><span class="ex-fill" style="width:0"></span></span></div>'; }).join("") + '</div>' : '') +
+        (o.code ? '<div class="ex-code"><span>' + esc(x.codeLabel || "Zo ziet het eruit") + '</span><pre>' + esc(o.code) + '</pre></div>' : '') +
+        (o.example ? '<p class="ex-box"><strong>' + esc(x.exampleLabel || "Voorbeeld") + ':</strong> ' + md(o.example) + '</p>' : '') +
+        (o.use ? '<p class="ex-box"><strong>' + esc(x.useLabel || "Gebruik het voor") + ':</strong> ' + md(o.use) + '</p>' : '');
+      var fills = card.querySelectorAll(".ex-fill");
+      card.getBoundingClientRect();
+      Array.prototype.forEach.call(fills, function (f, j) { f.style.width = Math.round((o.bars[j] || 0) * 100) + "%"; });
+    }
+    // idle: toon alleen het begin (tot en met de eerste vraag); play: speel het gesprek af; instant: alles meteen
     function render(k, opts) {
       opts = opts || {};
       clearTimers();
       cur = Math.max(0, Math.min(scen.length - 1, k));
       var s = scen[cur];
-      host.className = "cw-wrap" + (s.panes.length > 1 ? " compare" : "") + (opts.instant ? " cw-instant" : "");
-      host.innerHTML = s.panes.map(paneHTML).join("");
       capStep.textContent = (cur + 1) + "/" + scen.length;
-      capText.innerHTML = "<strong>" + esc(s.label) + ".</strong> " + md(s.caption || "");
+      capText.innerHTML = "<strong>" + esc(dot(s.label)) + "</strong> " + md(s.caption || "");
       prevBtn.disabled = cur === 0;
       nextBtn.disabled = cur === scen.length - 1;
       Array.prototype.forEach.call(dots.children, function (d, i) { d.className = i < cur ? "on" : (i === cur ? "now" : ""); });
       Array.prototype.forEach.call(root.querySelectorAll(".choice"), function (b) { b.setAttribute("aria-pressed", String(+b.getAttribute("data-choice") === cur)); });
-      var paneEls = host.querySelectorAll(".cw-pane"), end = 0;
-      if (!opts.idle) s.panes.forEach(function (p, i) { end = Math.max(end, runPane(paneEls[i], p, !!opts.instant)); });
-      playBtn.textContent = (chain || cur > 0) ? "Opnieuw afspelen" : "Afspelen";
-      if (opts.chain && cur < scen.length - 1) later(function () { render(cur + 1, { chain: true }); }, end + 2800);
-      else if (opts.chain) later(function () { chain = false; playBtn.textContent = "Opnieuw afspelen"; }, end);
+      if (s.explain) {
+        host.className = "cw-wrap";
+        host.innerHTML = explainHTML(s.explain);
+        explainShow(s.explain, s.explain.start || 0);
+        playBtn.hidden = true;
+        return;
+      }
+      playBtn.hidden = !!opts.meet;
+      var instant = opts.instant || reduced();
+      host.className = "cw-wrap" + (s.panes.length > 1 ? " compare" : "") + (instant ? " cw-instant" : "");
+      host.innerHTML = s.panes.map(paneHTML).join("");
+      var paneEls = host.querySelectorAll(".cw-pane");
+      // beginstand: tot en met de eerste vraag (of alleen het eerste bericht)
+      var starts = s.panes.map(function (p) { var u = (p.events || []).map(function (e) { return e.t; }).indexOf("user"); return u < 0 ? 0 : u; });
+      if (opts.meet) {
+        mstep = 0;
+        mgroups = s.panes.map(function (p, i) { return meetGroups(p, starts[i]); });
+        mmax = Math.max.apply(null, mgroups.map(function (g) { return g.length; }).concat([0]));
+        s.panes.forEach(function (p, i) { runPane(paneEls[i], p, true, 0, starts[i]); });
+        syncNext();
+        return;
+      }
+      if (opts.idle && !instant) {
+        s.panes.forEach(function (p, i) { runPane(paneEls[i], p, true, 0, starts[i]); });
+        host.insertAdjacentHTML("beforeend", '<button class="cw-bigplay" type="button" data-act="bigplay">▶ Afspelen</button>');
+        playBtn.innerHTML = "▶ Afspelen";
+        return;
+      }
+      var end = 0;
+      s.panes.forEach(function (p, i) { end = Math.max(end, runPane(paneEls[i], p, instant)); });
+      playBtn.innerHTML = opts.played ? "↻ Opnieuw afspelen" : "▶ Afspelen";
     }
-    function play() { chain = !reduced(); render(0, { chain: chain, instant: reduced() }); }
-    playBtn.addEventListener("click", play);
-    prevBtn.addEventListener("click", function () { chain = false; render(cur - 1, { instant: reduced() }); });
-    nextBtn.addEventListener("click", function () { chain = false; render(cur + 1, { instant: reduced() }); });
+    // Meetingmodus: elke klik toont het volgende bericht; na het laatste bericht gaat een klik naar de volgende situatie
+    var inst = reduced(), meet = getMeet(), meetBtn = root.querySelector('[data-act="meet"]'), mstep = 0, mmax = 0, mgroups = [];
+    // per klik één bericht; zijpaneel-effecten (side-add, side-mark) horen bij het bericht erna
+    function meetGroups(p, start) {
+      var evs = p.events || [], g = [], from = start + 1;
+      for (var k = start + 1; k < evs.length; k++) {
+        if (evs[k].t === "side-mark" || evs[k].t === "side-add") continue;
+        g.push([from, k]); from = k + 1;
+      }
+      if (from <= evs.length - 1) g.push([from, evs.length - 1]);
+      return g;
+    }
+    function go(k) { render(k, meet ? { meet: true } : { idle: true, instant: inst }); syncNext(); }
+    function syncNext() {
+      var more = meet && !scen[cur].explain && mstep < mmax;
+      nextBtn.classList.toggle("btn-primary", meet);
+      nextBtn.textContent = !meet ? "Volgende ›" : more ? "Volgend bericht ›" : "Volgende situatie ›";
+      nextBtn.disabled = !more && cur === scen.length - 1;
+    }
+    function stepMeet() {
+      var s = scen[cur], paneEls = host.querySelectorAll(".cw-pane");
+      if (s.explain || mstep >= mmax) { go(cur + 1); return; }
+      mstep++;
+      s.panes.forEach(function (p, i) {
+        var g = mgroups[i][mstep - 1];
+        if (g) runPane(paneEls[i], p, true, g[0], g[1]);
+      });
+      syncNext();
+    }
+    function syncMeet() { meetBtn.setAttribute("aria-pressed", String(meet)); meetBtn.innerHTML = (meet ? "✓ " : "") + "Meetingmodus"; }
+    syncMeet();
+    meetBtn.addEventListener("click", function () { meet = !meet; setMeet(meet); syncMeet(); go(cur); });
+    meetBtn.title = "Elke klik toont het volgende bericht, zodat jij het tempo bepaalt";
+    playBtn.addEventListener("click", function () { render(cur, { instant: inst, played: true }); });
+    prevBtn.addEventListener("click", function () { go(cur - 1); });
+    nextBtn.addEventListener("click", function () { if (meet) stepMeet(); else go(cur + 1); });
     var ch = root.querySelector(".stage-choices");
-    if (ch) ch.addEventListener("click", function (e) { var b = e.target.closest(".choice"); if (!b) return; chain = false; render(+b.getAttribute("data-choice"), { instant: reduced() }); });
-    if (reduced()) { root.querySelector(".stage-steps").hidden = false; render(0, { instant: true }); }
-    else { render(0, { idle: true }); timers.push(setTimeout(play, 500)); }
-    return { stop: function () { clearTimers(); chain = false; } };
+    if (ch) ch.addEventListener("click", function (e) { var b = e.target.closest(".choice"); if (!b) return; go(+b.getAttribute("data-choice")); });
+    host.addEventListener("click", function (e) {
+      if (e.target.closest(".cw-bigplay")) { render(cur, { instant: inst, played: true }); return; }
+      var b = e.target.closest(".ex-seg button");
+      if (!b) { if (meet && !scen[cur].explain && mstep < mmax) stepMeet(); return; }
+      explainShow(scen[cur].explain, +b.getAttribute("data-ex"));
+    });
+    if (inst) root.querySelector(".stage-steps").hidden = false;
+    go(0);
+    return { stop: clearTimers };
   }
 
   window.Visuals = {

@@ -73,7 +73,7 @@ const runs = [
       await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
       await page.waitForTimeout(80);
       await check(`tegel ${id}`);
-      if (SHOTS && ["1.1", "1.2", "1.4", "1.6", "2.9", "3.3", "3.7.3", "3.7.10"].includes(id)) {
+      if (SHOTS && ["1.1", "1.4", "1.5", "2.1", "2.6", "2.13", "3.3", "3.7.10"].includes(id)) {
         await page.evaluate(() => window.scrollTo(0, 0));
         await page.screenshot({ path: path.join(SHOTS, `${r.name}-tegel-${id}.png`), fullPage: true });
       }
@@ -93,7 +93,7 @@ const runs = [
     // voortgang terug op het startscherm
     await page.evaluate(() => { location.hash = "#/"; });
     await page.waitForTimeout(400);
-    const read = await page.evaluate(() => JSON.parse(localStorage.getItem("claude-inwerken:v1") || "{}").read || []);
+    const read = await page.evaluate(() => JSON.parse(localStorage.getItem("claude-inwerken:v2") || "{}").read || []);
     if (read.length !== ids.length) problems.push(`${r.name}: ${read.length} van ${ids.length} tegels als gelezen gemarkeerd`);
     const medals = await page.evaluate(() => document.querySelectorAll(".medal").length);
     if (medals !== data.niveaus.length) problems.push(`${r.name}: ${medals} stempels zichtbaar, verwacht ${data.niveaus.length}`);

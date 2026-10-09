@@ -39,7 +39,7 @@
   function tint(t) { return t.groep === "extra" ? "var(--lvl-x)" : "var(--lvl-" + t.niveau + ")"; }
 
   /* ---------- Voortgang (localStorage, mag mislukken) ---------- */
-  var KEY = "claude-inwerken:v1";
+  var KEY = "claude-inwerken:v2"; // v2: nieuwe nummering (9 oktober 2026)
   var state = { read: [], quiz: {}, medals: [] };
   var storageOk = true;
   try { var raw = localStorage.getItem(KEY); if (raw) { var p = JSON.parse(raw); if (p && p.read) state = { read: p.read || [], quiz: p.quiz || {}, medals: p.medals || [] }; } }
