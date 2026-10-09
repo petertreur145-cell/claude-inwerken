@@ -59,7 +59,7 @@
       "De app werkt helemaal lokaal. Er gaat niets naar internet, behalve als jij zelf op een bronlink klikt."
     ],
     "stand": [
-      "AI verandert per maand. Alle feiten over Claude zijn op 8 oktober 2026 opgezocht in de officiële bronnen van Anthropic: platform.claude.com, code.claude.com/docs, support.claude.com, claude.com en anthropic.com. Elke tegel noemt zijn eigen bronnen en datum.",
+      "AI verandert per maand. Alle feiten over Claude zijn op 8 oktober 2026 opgezocht in de officiële bronnen van Anthropic: platform.claude.com, code.claude.com/docs, support.claude.com, claude.com en anthropic.com. De bronnen per tegel staan in het bronbestand van de app (`src/tegels.json`).",
       "Klantcijfers in de voorbeelden (zoals ‘een dag werd een uur’) zijn eigen opgaven van die bedrijven, gepubliceerd door Anthropic.",
       "Wat niet bevestigd kon worden, staat er niet in, of staat er met ‘volgens bronnen’ bij. Twijfel je over iets? Check de bron, en laat het de beheerder van deze app weten."
     ],
@@ -135,13 +135,6 @@
             ]
           }
         ]
-      },
-      "metafoor": "Claude is een briljante nieuwe collega die elke ochtend zijn eerste werkdag heeft: hij kan veel, maar jij moet hem bijpraten.",
-      "voorbeeld": {
-        "titel": "Engelse leveranciersmail",
-        "erin": "Een mail van een Deense leverancier: de motor komt als 60 Hz-uitvoering.",
-        "claude": "Legt in één zin uit wat dat betekent en schrijft een antwoord in het Engels.",
-        "eruit": "Een korte mail: wij hebben 50 Hz nodig, graag een aangepaste OB."
       },
       "valkuil": "Een vraag van vijf woorden stellen en dan denken dat Claude het niet kan; meestal ontbrak alleen de uitleg.",
       "quiz": [
@@ -257,13 +250,6 @@
             ]
           }
         ]
-      },
-      "metafoor": "Zeg je tegen een nieuwe collega alleen “check even die OB”, dan weet hij niet waar hij op moet letten; Claude ook niet.",
-      "voorbeeld": {
-        "titel": "MOQ of overvoorraad",
-        "erin": "Context erbij: MOQ 500 stuks, verbruik zo'n 120 per jaar, en je wilt geen voorraad voor meer dan twee jaar.",
-        "claude": "Zet de MOQ naast 1, 2 en 3 jaar verbruik en de transportkosten.",
-        "eruit": "Een advies in drie zinnen: wel of niet bestellen, en hoeveel jaar voorraad je dan hebt."
       },
       "valkuil": "Alles in één vraag proppen; liever één taak per bericht, en daarna bijsturen met “korter” of “alleen regel 1 tot 20”.",
       "quiz": [
@@ -634,38 +620,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Vier ervaringsniveaus op de werkvloer. Haiku is de snelle junior die in een uur een stapel sorteert. Sonnet is de ervaren allrounder. Opus is de senior specialist voor het lastige werk. Fable is de topexpert, met extra veiligheidsregels.",
-        "Mythos is diezelfde topexpert zonder die regels. Die werkt alleen achter een beveiligde deur, voor wie een pasje heeft gekregen."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Een fout van 27 jaar oud",
-          "tekst": "Mythos Preview vond een 27 jaar oude fout in OpenBSD, een van de best beveiligde besturingssystemen ter wereld. Daarmee kon je elke OpenBSD-server via het netwerk laten crashen. De fout is inmiddels gedicht. Precies daarom is dit model niet voor iedereen.",
-          "bron": {
-            "label": "Anthropic red team: Mythos Preview",
-            "url": "https://red.anthropic.com/2026/mythos-preview/"
-          }
-        },
-        {
-          "soort": "echt",
-          "titel": "38 uur doorwerken",
-          "tekst": "Volgens Ramp werkte Fable 5.1 38 uur zonder toezicht door. Hij ontdekte dat een eerder resultaat op een labelfout berustte en draaide ’s nachts zes experimenten tegelijk.",
-          "bron": {
-            "label": "Anthropic: Claude Fable 5.1 en Mythos 5.1",
-            "url": "https://www.anthropic.com/claude-fable-and-mythos-5-1"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "magazijn",
-          "titel": "Rommelige artikelomschrijvingen",
-          "erin": "400 rommelige artikelomschrijvingen uit het ERP.",
-          "claude": "Haiku deelt ze in per productgroep.",
-          "eruit": "Een nieuwe kolom voor Excel, in een paar minuten."
-        }
-      ],
       "probeer": {
         "prompt": "Schrijf een korte, vriendelijke mail aan een leverancier: de levering van week 42 is te laat en we willen vóór vrijdag een nieuwe datum. Maximaal 100 woorden.",
         "tip": "Stuur deze prompt één keer met Haiku en één keer met Opus (kies het model naast de verzendknop). Voor zo'n mail is de snelle versie vaak al prima."
@@ -1097,34 +1051,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Vraag je de nieuwe collega iets, dan kan hij direct antwoorden of eerst even nadenken. Effort is hoeveel tijd hij daarvoor neemt: een snelle reactie bij de koffieautomaat, of een middag met de tekeningen op tafel.",
-        "Fast mode is dezelfde collega met de turbo aan. Hij denkt even goed na, maar typt sneller. Dat kost wel extra."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Robothond in negen minuten",
-          "tekst": "Collega's van Anthropic zonder robotica-ervaring programmeerden een robothond. Zeven maanden later deed Opus 4.7 in Claude Code, met effort op max, dezelfde taken in 9,5 minuut. Het snelste mensenteam had 181 minuten nodig.",
-          "bron": {
-            "label": "Anthropic: Project Fetch, fase 2",
-            "url": "https://www.anthropic.com/research/project-fetch-phase-two"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "service",
-          "titel": "Vertalen of analyseren",
-          "erin": "Een klantmail in het Duits, en later de logs en het schema van een pomp die na 20 minuten afslaat.",
-          "claude": "Vertaalt op Low; analyseert de storing op High of Extra high.",
-          "eruit": "Een vertaling binnen seconden, en een onderbouwde lijst met mogelijke oorzaken plus een meetplan."
-        },
-        {
-          "soort": "thuis",
-          "titel": "Snel of grondig",
-          "tekst": "Low: “Hoeveel gram is 3 cups bloem?” High: “Plan een moestuin met wisselteelt voor vier jaar.”"
-        }
-      ],
       "probeer": {
         "prompt": "Bedenk drie mogelijke oorzaken waarom een transportband af en toe stilvalt terwijl de motor gewoon draait, en zet ze op volgorde van waarschijnlijkheid.",
         "tip": "Stuur deze vraag op Low en daarna op High (klik op het model naast de verzendknop, dan Effort). Klap de denkstappen uit en vergelijk."
@@ -1199,36 +1125,6 @@
       "visual": {
         "type": "desk"
       },
-      "metafoor": [
-        "Zie het als zijn bureau. Wat erop ligt, ziet hij meteen. Leg je er een handleiding van 300 pagina's, drie mailthreads en een Excel-export bij, dan ligt alles er nog wel, maar zoekt hij zich suf naar dat ene briefje van vanochtend.",
-        "Een nieuwe chat is een schoon bureau. Zijn notitieboekje (memory) en de projectmap neemt hij wel mee."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Claude speelt Pokémon",
-          "tekst": "Een potje Pokémon duurt veel langer dan in één context past. Claude begon uit zichzelf notities bij te houden: kaarten van verkende gebieden, behaalde mijlpalen, welke aanval tegen welke tegenstander werkt. Niemand had erom gevraagd.",
-          "bron": {
-            "label": "Anthropic: Effective context engineering",
-            "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering",
-          "titel": "De handleiding van 300 pagina's",
-          "erin": "De machinehandleiding (pdf) en de vraag: “Welk aanhaalmoment geldt voor de pompflens?”",
-          "claude": "Zoekt het juiste hoofdstuk op het volle bureau.",
-          "eruit": "De waarde mét paginanummer, zodat je het zelf nakijkt."
-        },
-        {
-          "soort": "thuis",
-          "titel": "De vakantiechat van twee weken",
-          "erin": "Twee weken heen-en-weer over de zomervakantie.",
-          "claude": "Begint te vergeten dat de hond mee moet.",
-          "eruit": "Laat een samenvatting maken, plak die in een nieuwe chat, en hij is weer scherp."
-        }
-      ],
       "probeer": {
         "prompt": "Vat ons gesprek tot nu toe samen in maximaal 10 punten: wat is besloten, wat staat nog open, en welke getallen en namen zijn belangrijk. Schrijf het zo dat ik het in een nieuwe chat kan plakken en daar meteen verder kan.",
         "tip": "Plak dit aan het eind van een lang gesprek. Open daarna een nieuwe chat en plak de samenvatting erin. In Claude Code doet `/compact` iets vergelijkbaars."
@@ -1526,34 +1422,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Vraag je een nieuwe collega elke week mondeling “maak even dat overzicht”, dan krijg je elke week iets anders. Geef je hem één keer een werkinstructie met een voorbeeld, dan is het elke week hetzelfde.",
-        "En soms is het slimmer om hem één keer een machine te laten bouwen die het werk daarna zelf doet. Dan heb je hem voor dat klusje niet meer nodig."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Van losse vraag naar vaste tool",
-          "tekst": "De juristen van Anthropic beantwoordden marketingvragen eerst één voor één. Nu staat hun beoordelingskader in een skill en krijgen marketeers binnen 24 uur antwoord in plaats van na twee tot drie dagen.",
-          "bron": {
-            "label": "Claude blog: How Anthropic uses Claude in Legal",
-            "url": "https://claude.com/blog/how-anthropic-uses-claude-legal"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "planning",
-          "titel": "Het weekoverzicht",
-          "erin": "Elke maandag de export van de servicebezoeken.",
-          "claude": "Eén keer: een project met richtlijnen, een sjabloon en een voorbeeld van een goed overzicht.",
-          "eruit": "Elke week hetzelfde overzicht in een paar minuten, met een waarschuwing als er gegevens ontbreken."
-        },
-        {
-          "soort": "thuis",
-          "titel": "De boodschappenlijst",
-          "tekst": "Elke week opnieuw bedenken wat je nodig hebt, of een vaste basislijst die je alleen aanvult. Het tweede is sneller, en je vergeet minder."
-        }
-      ],
       "valkuil": "Elke week dezelfde korte vraag in een nieuwe chat, en dan elke week de verschillen verbeteren. Dat kost meer tijd dan één keer de richtlijnen vastleggen.",
       "quiz": [
         {
@@ -1788,29 +1656,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Het hele inwerktraject op één A4: het inwerkgesprek, het personeelshandboek, zijn notitieboekje, de projectmap, de werkinstructies in de kast, de gereedschapskist, de toegangspas, het opgeleverde werk en zijn agenda.",
-        "Een goede leidinggevende weet wat de nieuwe collega altijd moet weten, en wat hij pas hoeft te pakken als de klus erom vraagt."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "De juristen van Anthropic",
-          "tekst": "Ze combineren bouwstenen: een skill met hun beoordelingskader, een koppeling (MCP) met een Drive-map vol eerdere analyses, en Slack als ingang. Marketingteksten zijn nu binnen 24 uur beoordeeld in plaats van na twee tot drie dagen.",
-          "bron": {
-            "label": "Claude blog: How Anthropic uses Claude in Legal",
-            "url": "https://claude.com/blog/how-anthropic-uses-claude-legal"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "service",
-          "titel": "De servicecollega in vijf stenen",
-          "erin": "Voorkeur (kort, Nederlands), project “Service” met handleidingen, skill “servicerapport”, de Outlook-connector en een geplande taak op maandag.",
-          "claude": "Pakt per klus de juiste steen erbij.",
-          "eruit": "Rapporten in vaste vorm, antwoorden met artikelnummer, en maandag om 7:30 een lijst met open tickets."
-        }
-      ],
       "valkuil": "Alles in je voorkeuren proppen. Die liggen in elke chat op zijn bureau, ook als ze niet relevant zijn. Een lange werkwijze voor één taak hoort in een skill.",
       "quiz": [
         {
@@ -2064,43 +1909,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Het inwerkgesprek op dag één: “Ik ben Sanne van inkoop. Hou het kort en zakelijk, en altijd in het Nederlands.” Dat hoef je daarna niet elke ochtend te herhalen.",
-        "De uitgebreide schrijfstijl van de afdeling, met voorbeelden, geef je hem als werkinstructie mee: een .md-bestand in de projectmap of een skill in de kast."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Formeel wint",
-          "tekst": "Uit de officiële handleiding: zet de organisatie “Always respond in formal English” en jij “casual”, dan antwoordt Claude formeel. De huisregels van het bedrijf gaan voor.",
-          "bron": {
-            "label": "Claude Help Center: Set organization instructions",
-            "url": "https://support.claude.com/en/articles/14546867-set-organization-instructions"
-          }
-        },
-        {
-          "soort": "echt",
-          "titel": "Huisstijl in een skill",
-          "tekst": "Claude Academy laat zien hoe je merkrichtlijnen in een skill verpakt, zodat Claude ze overal toepast waar het past.",
-          "bron": {
-            "label": "Claude Academy: Package your brand guidelines in a skill",
-            "url": "https://academy.claude.com/use-cases/package-your-brand-guidelines-in-a-skill"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "service",
-          "titel": "De servicetoon als skill",
-          "erin": "Vijf goede klantmails van de serviceafdeling en de vraag: “maak hier een skill van”.",
-          "claude": "Maakt er met de ingebouwde skill-creator een SKILL.md van: toon, vaste opbouw, voorbeelden.",
-          "eruit": "Elke servicemail klinkt hetzelfde, wie hem ook laat schrijven."
-        },
-        {
-          "soort": "thuis",
-          "titel": "Koken voor vier",
-          "tekst": "“Ik kook vegetarisch voor vier personen” in je voorkeuren, en elk recept komt voortaan meteen goed omgerekend."
-        }
-      ],
       "valkuil": "Een lap tekst in je voorkeuren zetten. Die ligt in elke chat op zijn bureau, ook als het niet relevant is. Houd voorkeuren kort; de uitgebreide stijl gaat in een .md-bestand of skill.",
       "quiz": [
         {
@@ -2359,13 +2167,6 @@
             }
           }
         ]
-      },
-      "metafoor": "Een project is de inwerkmap op het bureau van de nieuwe collega: elke ochtend ligt hij er weer.",
-      "voorbeeld": {
-        "titel": "Project Inkoop",
-        "erin": "De handleiding inkoop en magazijn, een lijst wie wat doet en de nummerlogica (600xxx is een job order, NCANL15xxxx een PO).",
-        "claude": "Gebruikt die in elke chat van het project.",
-        "eruit": "Je hoeft nooit meer uit te leggen wat een job order of een OB is."
       },
       "valkuil": "Belangrijke afspraken alleen in één chat zetten; zet ze in het project, dan gelden ze in elke chat.",
       "quiz": [
@@ -2631,34 +2432,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Het notitieboekje van de nieuwe collega. Wat hij belangrijk vindt, schrijft hij op, en de volgende dag leest hij het terug. Daardoor hoef je niet alles opnieuw te vertellen.",
-        "Het bijzondere: jij mag meelezen. Staat er iets verkeerds in, dan streep je het door."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Het geheugen van Claude Code",
-          "tekst": "In Claude Code houdt Claude een eigen MEMORY.md bij met wat hij leert, zoals bouwcommando's en valkuilen. De eerste 200 regels leest hij elke sessie; details staan in losse bestanden die hij pakt als het nodig is.",
-          "bron": {
-            "label": "Claude Code Docs: How Claude remembers your project",
-            "url": "https://code.claude.com/docs/en/memory"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "magazijn",
-          "titel": "De wasstraten",
-          "erin": "Eén keer gezegd: “ik beheer de reserveonderdelen voor de wasstraten”.",
-          "claude": "Noteert je rol in zijn geheugen.",
-          "eruit": "Een week later bij “maak een bestellijst” weet hij al voor welke afdeling het is."
-        },
-        {
-          "soort": "thuis",
-          "titel": "Notenallergie",
-          "tekst": "“Ik heb een notenallergie” wordt standaard níet onthouden: gezondheid telt als gevoelig onderwerp. Wil je dat wel, dan zet je dat zelf aan in Settings > Memory."
-        }
-      ],
       "probeer": {
         "prompt": "Wat weet je allemaal over mij? Zet het in een lijstje, en vertel erbij wat ik zelf kan aanpassen of wissen.",
         "tip": "Werkt alleen als memory aan staat. Kijk daarna ook even in Settings > Memory."
@@ -2861,43 +2634,6 @@
           }
         ]
       },
-      "metafoor": [
-        "De kast met werkinstructies. De nieuwe collega hoeft ze niet uit zijn hoofd te kennen. Hij leest de labels, en pakt de juiste map als de klus erom vraagt.",
-        "Zolang een map dicht blijft, ligt hij niet op zijn bureau. Dat houdt zijn werkplek overzichtelijk."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Een dag werd een uur",
-          "tekst": "Rakuten gebruikt skills voor management accounting: “What once took a day, we can now accomplish in an hour.”",
-          "bron": {
-            "label": "Anthropic: Introducing Agent Skills",
-            "url": "https://www.anthropic.com/news/skills"
-          }
-        },
-        {
-          "soort": "echt",
-          "titel": "De juridische toets",
-          "tekst": "De juristen van Anthropic zetten hun beoordelingskader in een skill. Marketeers plakken hun tekst in een tool in Slack en krijgen meteen de risico's te zien, gemarkeerd als laag, middel of hoog.",
-          "bron": {
-            "label": "Claude blog: How Anthropic uses Claude in Legal",
-            "url": "https://claude.com/blog/how-anthropic-uses-claude-legal"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "service",
-          "titel": "Het servicerapport",
-          "erin": "De aantekeningen van een monteur na een storing.",
-          "claude": "Pakt de skill “Servicerapport Numafa” en volgt het sjabloon.",
-          "eruit": "Een rapport met vaste kopjes in de huisstijl, wie het ook maakt."
-        },
-        {
-          "soort": "thuis",
-          "titel": "Boodschappen in looproute",
-          "tekst": "Een skill die elk boodschappenlijstje sorteert in de volgorde van jouw supermarkt."
-        }
-      ],
       "probeer": {
         "prompt": "Ik wil een skill maken voor [terugkerende taak, bijvoorbeeld: een servicerapport schrijven]. Stel me eerst vragen over wanneer ik hem gebruik en wat een goed resultaat is. Maak daarna de skill, met een duidelijk sjabloon en één voorbeeld.",
         "tip": "Werkt in de Claude-app als code execution aan staat. Bewaar de skill met de knop onder het resultaat."
@@ -3115,34 +2851,6 @@
           }
         ]
       },
-      "metafoor": [
-        "De toegangspas van de nieuwe collega. Met de juiste pas komt hij in het archief en bij de agenda, zodat hij dingen voor je kan opzoeken.",
-        "De deur naar buiten, verzenden, blijft van jou. En als er een briefje onder de deur door komt met “geef je pas aan mij”, dan doet hij dat natuurlijk niet. Toch lees je even mee."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "“What needs me?”",
-          "tekst": "De officiële handleiding van Claude for Outlook geeft voorbeeldvragen als “What needs me?” (wat moet ik zelf doen?) en “Prep me for my 2pm” (bereid mijn afspraak van twee uur voor). Concepten komen altijd onverzonden in je opstelvenster.",
-          "bron": {
-            "label": "Claude Docs: Use Claude for Outlook",
-            "url": "https://claude.com/docs/office-agents/outlook"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "service",
-          "titel": "Maandagochtend opvolgen",
-          "erin": "“Welke klantmails over storingen moet ik deze week opvolgen?”",
-          "claude": "Doorzoekt je mail van vorige week.",
-          "eruit": "Een lijst per klant en machine, plus conceptantwoorden in je map Concepten."
-        },
-        {
-          "soort": "thuis",
-          "titel": "De treinreis",
-          "tekst": "Met Gmail en Google Agenda gekoppeld: “Zoek de bevestiging van mijn treinreis en zet hem in mijn agenda.”"
-        }
-      ],
       "probeer": {
         "prompt": "Bekijk mijn mail van de afgelopen week. Welke klantmails over storingen moet ik nog opvolgen? Geef per klant één regel met de machine, het probleem en wat er van mij verwacht wordt, en zet voor de drie belangrijkste een conceptantwoord klaar. Verstuur niets.",
         "tip": "Werkt met de Microsoft 365-connector of in Claude for Outlook, als die bij jullie zijn ingesteld. Zie je ze niet, vraag het IT."
@@ -3448,34 +3156,6 @@
           }
         ]
       },
-      "metafoor": [
-        "De collega die naast je zit en meekijkt op je scherm. Vraag je het, dan neemt hij even de muis over om een stapel gegevens over te typen.",
-        "Maar op Verzenden of Betalen drukt hij niet zonder dat jij meekijkt."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Producten vergelijken",
-          "tekst": "Het officiële voorbeeld: Claude leest de specs van een paar open producttabbladen, maakt de namen gelijk en zet alles in een vergelijkingstabel in Google Sheets.",
-          "bron": {
-            "label": "Claude: Compare products across sites",
-            "url": "https://claude.com/resources/use-cases/compare-products-across-sites"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "inkoop",
-          "titel": "Frequentieregelaars",
-          "erin": "Vier tabbladen met frequentieregelaars van verschillende leveranciers.",
-          "claude": "Leest elk tabblad en haalt vermogen, IP-klasse en levertijd eruit.",
-          "eruit": "Eén vergelijkingstabel. (Werkt alleen in Google Chrome, niet in Edge.)"
-        },
-        {
-          "soort": "thuis",
-          "titel": "Een nieuwe wasmachine",
-          "tekst": "Drie webshops open, en Claude zet energielabel, toerental en prijs naast elkaar."
-        }
-      ],
       "valkuil": "Claude laten klikken op sites waar je eigen account aan hangt, zonder mee te kijken. Laat hem altijd stoppen vóór Verzenden of Betalen.",
       "quiz": [
         {
@@ -3696,13 +3376,6 @@
             }
           }
         ]
-      },
-      "metafoor": "Een artifact is het overzicht dat de nieuwe collega op je bureau legt: het blijft liggen, ook als jullie verder praten.",
-      "voorbeeld": {
-        "titel": "Pickindeling bij een piek",
-        "erin": "De orders die vandaag gepickt moeten worden, en wie er werken.",
-        "claude": "Maakt een artifact dat de orders verdeelt, met een kant-en-klare Teams-tekst.",
-        "eruit": "Een pagina die je in Teams deelt; verandert er iets, dan past Claude hem aan."
       },
       "valkuil": "Gevoelige gegevens invullen in een gedeeld artifact zonder te checken wie ze kan zien.",
       "quiz": [
@@ -3989,34 +3662,6 @@
           }
         ]
       },
-      "metafoor": [
-        "De nieuwe collega blijkt ook te kunnen schetsen, en hij kent het huisstijlhandboek uit zijn hoofd. Geef hem een idee, en hij komt terug met een ontwerp in de juiste kleuren.",
-        "Bevalt het niet? Dan schuif je zelf wat dingen recht, of je zegt het hem."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Van twintig prompts naar twee",
-          "tekst": "Bij Brilliant kostten de ingewikkeldste pagina's in andere tools meer dan 20 prompts, in Claude Design 2. Bij Datadog werd een week aan revisierondes één gesprek.",
-          "bron": {
-            "label": "Anthropic: Introducing Claude Design",
-            "url": "https://www.anthropic.com/news/claude-design-anthropic-labs"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "verkoop",
-          "titel": "De beurs-one-pager",
-          "erin": "Productinformatie en het huisstijlhandboek, plus: “one-pager over onze nieuwe reinigingsmodule voor de beurs”.",
-          "claude": "Maakt een ontwerp in de huisstijl en een variant voor LinkedIn.",
-          "eruit": "Een printklare one-pager die je zelf nog kunt bijschaven."
-        },
-        {
-          "soort": "thuis",
-          "titel": "Uitnodiging",
-          "tekst": "“Maak een uitnodiging voor een verjaardag in de tuin, vrolijk maar niet kinderachtig.” Twee varianten om uit te kiezen."
-        }
-      ],
       "probeer": {
         "prompt": "Maak een one-pager (A4) over [onderwerp, bijvoorbeeld: onze nieuwe reinigingsmodule] voor een beurs. Rustige opmaak, één grote kop, drie voordelen met korte uitleg, en onderaan contactgegevens als placeholder.",
         "tip": "Upload eerst een bestaande presentatie of het huisstijlhandboek, dan neemt Claude kleuren en lettertypen over. Claude Design is in bèta; wat je ziet, verschilt per abonnement."
@@ -4256,38 +3901,6 @@
           }
         ]
       },
-      "metafoor": [
-        "In de chat zit de nieuwe collega naast je aan jouw bureau. Hij denkt mee, schrijft iets uit en geeft het je; jij gaat ermee aan de slag.",
-        "In Claude Code krijgt hij een eigen werkplek met gereedschap. Hij pakt de klus zelf op, probeert, meet na, en meldt zich als het werkt."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "“Ik ben niet degene die codeert”",
-          "tekst": "Mark Pike, jurist bij Anthropic, bouwt tools met Claude Code: “I'm not the one coding. I'm just very good at troubleshooting.”",
-          "bron": {
-            "label": "Claude blog: How Anthropic uses Claude in Legal",
-            "url": "https://claude.com/blog/how-anthropic-uses-claude-legal"
-          }
-        },
-        {
-          "soort": "echt",
-          "titel": "Een plugin in een uur",
-          "tekst": "Austin Lau van marketing, geen programmeur, bouwde in drie kwartier tot een uur een Figma-plugin die hem nu zo'n 30 minuten per batch advertenties scheelt.",
-          "bron": {
-            "label": "Claude blog: How Anthropic uses Claude in Marketing",
-            "url": "https://claude.com/blog/how-anthropic-uses-claude-marketing"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "inkoop en engineering",
-          "titel": "Werkinstructie of tool?",
-          "erin": "Chat: foto's en aantekeningen van een filterwissel. Code: de wekelijkse ERP-export als CSV.",
-          "claude": "De chat schrijft de instructie. Claude Code bouwt en test een script dat de export omzet.",
-          "eruit": "Een Word-document om na te lezen, en een tool die elke week hetzelfde besteladvies maakt."
-        }
-      ],
       "probeer": {
         "prompt": "Ik wil [een terugkerende klus, bijvoorbeeld: de wekelijkse voorraadlijst opschonen] automatiseren. Leg in gewone taal uit of ik dit beter in de Claude-app doe of met Claude Code, wat ik daarvoor nodig heb, en wat de eerste stap is.",
         "tip": "Stel deze vraag gewoon in de Claude-app. Het antwoord helpt je kiezen voordat je begint."
@@ -4529,34 +4142,6 @@
           }
         ]
       },
-      "metafoor": [
-        "De collega die doorwerkt als jij naar huis gaat. Hij appt je als hij iets nodig heeft, en maandagochtend ligt het werk op je bureau.",
-        "Jij bepaalt of hij elke stap even moet vragen (Manual), of zelf doorpakt binnen de veiligheidsregels (Auto)."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Een nachtdienst van 38 uur",
-          "tekst": "Volgens Ramp werkte Fable 5.1 38 uur onbeheerd door, ontdekte een fout in een eerder resultaat en draaide ’s nachts zes experimenten tegelijk.",
-          "bron": {
-            "label": "Anthropic: Claude Fable 5.1 en Mythos 5.1",
-            "url": "https://www.anthropic.com/claude-fable-and-mythos-5-1"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "inkoop",
-          "titel": "Leveranciers zoeken over het weekend",
-          "erin": "Vrijdag 16:00: “Zoek voor deze 25 onderdelen alternatieve leveranciers in de EU, vergelijk levertijd en certificering, zet het in Excel.”",
-          "claude": "Werkt in de cloud door en vraagt op je telefoon toestemming waar nodig.",
-          "eruit": "Maandag een spreadsheet met een samenvatting van vijf regels."
-        },
-        {
-          "soort": "thuis",
-          "titel": "Campings vergelijken",
-          "tekst": "“Vergelijk tien campings in de Ardennen op prijs, honden welkom en zwembad.” Na het eten staat de tabel klaar."
-        }
-      ],
       "probeer": {
         "prompt": "Zoek voor deze onderdelen alternatieve leveranciers in de EU: [plak de lijst]. Vergelijk per leverancier levertijd, certificeringen en minimale bestelhoeveelheid, zet alles in een Excel-bestand en schrijf er een samenvatting van vijf regels bij.",
         "tip": "Geef zo'n klus mee voordat je naar huis gaat en kijk de volgende ochtend. Controleer gevonden gegevens altijd even op de site van de leverancier."
@@ -4813,43 +4398,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Een vaste afspraak in de agenda van de nieuwe collega. Elke maandag om half acht loopt hij de voorraad na, of jij er nu bent of niet.",
-        "Hij werkt in een kantoor in de cloud, dus jouw laptop mag uit."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Het officiële voorbeeld",
-          "tekst": "Uit de handleiding: “Every Monday at 9 AM, summarize last week's messages in my team's Slack channels.” Claude stelt het schema voor, jij klikt op Schedule.",
-          "bron": {
-            "label": "Claude Help Center: Schedule recurring tasks",
-            "url": "https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork"
-          }
-        },
-        {
-          "soort": "echt",
-          "titel": "Ook in de browser",
-          "tekst": "Shortcuts in Claude in Chrome kun je dagelijks, wekelijks, maandelijks of jaarlijks laten draaien via het klokje in het extensiepaneel.",
-          "bron": {
-            "label": "Claude Help Center: Get started with Claude in Chrome",
-            "url": "https://support.claude.com/en/articles/12012173-get-started-with-claude-in-chrome"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "magazijn",
-          "titel": "De nabellijst",
-          "erin": "“Elke maandag om 7:30: lees de voorraadexport op SharePoint, markeer artikelen onder de minimumvoorraad en mail de nabellijst naar inkoop.”",
-          "claude": "Draait de taak elke maandag in de cloud.",
-          "eruit": "De lijst staat in je inbox bij de koffie. (Vereist de Microsoft 365-connector.)"
-        },
-        {
-          "soort": "thuis",
-          "titel": "Weekmenu",
-          "tekst": "Elke vrijdag een weekmenu met boodschappenlijst, rekening houdend met wat er in de aanbieding is."
-        }
-      ],
       "probeer": {
         "prompt": "Elke maandag om 7:30: maak een overzicht van wat er deze week in mijn agenda staat, welke afspraken ik moet voorbereiden en welke mails van vorige week nog op antwoord wachten. Kort, in opsommingen.",
         "tip": "Typ dit in een nieuw gesprek; Claude stelt de geplande taak voor en jij bevestigt. Mail en agenda werken alleen als die connector aan staat."
@@ -5395,45 +4943,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Je kunt de nieuwe collega een klus elke week laten doen, hem een vaste afspraak in zijn agenda geven, of hem één keer een machine laten bouwen die het werk daarna zelf doet.",
-        "Een slimme collega kiest per klus: voor denkwerk doet hij het zelf, voor herhaalwerk bouwt hij liever een machine."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Laten bouwen in plaats van zelf doen",
-          "tekst": "Austin Lau van marketing bij Anthropic, geen programmeur, liet Claude een Figma-plugin bouwen. Die scheelt hem nu zo'n 30 minuten per batch advertenties, zonder dat er elke keer AI aan te pas komt.",
-          "bron": {
-            "label": "Claude blog: How Anthropic uses Claude in Marketing",
-            "url": "https://claude.com/blog/how-anthropic-uses-claude-marketing"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "planning",
-          "titel": "Weekoverzicht in Excel",
-          "erin": "Elke maandag een export van de servicebezoeken.",
-          "claude": "Schrijft één keer een script, dat IT op een server zet. Of, zonder script: een sjabloon met Power Query.",
-          "eruit": "Elke maandag staat het overzicht klaar, gemaakt door gewone code. Geen AI meer nodig."
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "service",
-          "titel": "Storingsmails sorteren",
-          "erin": "Elke ochtend nieuwe mails in de service-inbox, elk anders geschreven.",
-          "claude": "Een geplande taak met de Microsoft 365-connector leest, vat samen en schat de urgentie in.",
-          "eruit": "Een lijst per urgentie. Hier is lezen en oordelen nodig, dus Claude zelf."
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "inkoop",
-          "titel": "Offertes nakijken",
-          "erin": "Een offerte en de inkooporder.",
-          "claude": "Een skill met jullie checklist: prijzen, aantallen, leverdatum, voorwaarden.",
-          "eruit": "Een lijst met verschillen. Jij start hem per offerte."
-        }
-      ],
       "valkuil": "Alles met AI willen doen. Zijn de stappen elke keer precies hetzelfde, dan is een sjabloon, formule of flow sneller, goedkoper en voorspelbaarder. Bewaar Claude voor het werk waar gelezen, geschreven of nagedacht moet worden.",
       "quiz": [
         {
@@ -5802,34 +5311,6 @@
           }
         ]
       },
-      "metafoor": [
-        "De nieuwe collega krijgt een eigen werkplek, en voert daar zelf uit: bestanden openen, iets bouwen, testen, opnieuw proberen.",
-        "Die werkplek kan bij jou op kantoor staan (terminal, desktop-app) of in een gehuurde werkplaats in de cloud (web). Met je telefoon kijk je mee vanaf de bank."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Finance zonder programmeerervaring",
-          "tekst": "Bij Anthropic schrijven mensen van finance hun werkstappen in gewone tekst (“haal dit dashboard op, draai deze queries, maak er een Excel van”), en Claude Code voert de hele workflow uit, inclusief vragen naar de juiste datums.",
-          "bron": {
-            "label": "Anthropic: How Anthropic teams use Claude Code",
-            "url": "https://www.anthropic.com/news/how-anthropic-teams-use-claude-code"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering",
-          "titel": "Besteladvies uit de stuklijst",
-          "erin": "Via claude.ai/code: “Maak een tool die van onze stuklijst-export (CSV) een besteladvies per leverancier maakt.”",
-          "claude": "Bouwt en test het script in de cloud, in een GitHub-repository.",
-          "eruit": "Een werkende tool met handleiding. De kantoor-pc hoeft niets te installeren."
-        },
-        {
-          "soort": "thuis",
-          "titel": "Website voor de club",
-          "tekst": "Een eenvoudige website voor de voetbalclub, met het programma en de uitslagen, gebouwd vanaf je telefoon."
-        }
-      ],
       "valkuil": "Bedrijfsgegevens in een openbare GitHub-repository zetten. Kies altijd een privé-repository, en overleg met IT voordat je echte exports gebruikt.",
       "quiz": [
         {
@@ -6120,29 +5601,6 @@
           }
         ]
       },
-      "metafoor": [
-        "De knoppen op het bedieningspaneel van de werkplek. Je hoeft ze niet allemaal te kennen; je moet weten dat ze er zijn, en waar je ze vindt (typ /).",
-        "Drie heb je het vaakst nodig: /compact om het bureau op te ruimen, /clear voor een schone lei, en /model om een andere collega erbij te halen."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Een eigen commando",
-          "tekst": "Austin Lau (marketing) maakte zijn eigen commando /rsa. Dat vraagt om campagnedata en controleert advertenties tegen skills voor merkstem en productfeiten.",
-          "bron": {
-            "label": "Claude blog: How Anthropic uses Claude in Marketing",
-            "url": "https://claude.com/blog/how-anthropic-uses-claude-marketing"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering",
-          "titel": "Goed beginnen met /init",
-          "erin": "`/init` in je toolproject, en daarna in CLAUDE.md: “metrische eenheden, artikelcodes zijn 8 cijfers, nooit de ERP-export overschrijven”.",
-          "claude": "Leest die afspraken aan het begin van elke sessie.",
-          "eruit": "Elke sessie begint goed ingewerkt, zonder dat je het opnieuw uitlegt."
-        }
-      ],
       "valkuil": "`/clear` gebruiken als je eigenlijk `/compact` bedoelt. /clear begint helemaal opnieuw; /compact vat samen en houdt de draad vast.",
       "quiz": [
         {
@@ -6602,38 +6060,6 @@
           }
         ]
       },
-      "metafoor": [
-        "De USB-C-stekker. Vroeger had elk apparaat zijn eigen kabeltje; nu past één stekker overal.",
-        "Voor de nieuwe collega betekent het: hij hoeft niet voor elk systeem een eigen cursus te volgen. Heeft een systeem een MCP-stekker, dan kan hij erop aansluiten, als jij hem de toegangspas geeft."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Claude bouwt in Blender",
-          "tekst": "Met Blender MCP, een open-sourceproject, bouwt Claude 3D-scènes in Blender op basis van tekst: objecten maken, materialen kiezen, Python uitvoeren.",
-          "bron": {
-            "label": "GitHub: ahujasid/blender-mcp",
-            "url": "https://github.com/ahujasid/blender-mcp"
-          }
-        },
-        {
-          "soort": "echt",
-          "titel": "Een archief vol eerdere analyses",
-          "tekst": "De juristen van Anthropic koppelden Claude via MCP aan een Drive-map met eerdere privacyanalyses, zodat nieuwe analyses op dezelfde manier worden opgebouwd.",
-          "bron": {
-            "label": "Claude blog: How Anthropic uses Claude in Legal",
-            "url": "https://claude.com/blog/how-anthropic-uses-claude-legal"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "inkoop (voorbeeld met een ERP-koppeling)",
-          "titel": "Openstaande orders",
-          "erin": "“Welke inkooporders voor artikel 1234 staan nog open?”",
-          "claude": "Vraagt het ERP direct via een MCP-server (die moet IT dan wel hebben ingericht).",
-          "eruit": "Een antwoord met ordernummers, zonder dat iemand een export hoeft te maken."
-        }
-      ],
       "probeer": {
         "prompt": "Leg in gewone taal uit wat een MCP-server is, en bedenk drie systemen bij een machinebouwer (bijvoorbeeld ERP, tekeningenarchief, servicetickets) waar zo'n koppeling tijd zou schelen. Noem per systeem één voorbeeldvraag en één risico.",
         "tip": "Wil je echt iets koppelen? Kijk in Customize > Connectors welke er al zijn, en overleg met IT."
@@ -6865,29 +6291,6 @@
           }
         ]
       },
-      "metafoor": [
-        "De gereedschapskist voor een rol. Een nieuwe monteur krijgt op dag één een complete kist, in plaats van elk stuk gereedschap los bij elkaar te moeten zoeken.",
-        "Een plugin is precies dat, voor Claude: werkinstructies, toegangspassen, sneltoetsen en hulpjes in één pakket."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Power Automate in Claude Code",
-          "tekst": "Microsoft bracht een Power Automate-plugin voor Claude Code uit: flows maken, aanpassen, draaien en debuggen vanuit Claude Code.",
-          "bron": {
-            "label": "Microsoft Learn: Power Automate plugin for Claude Code",
-            "url": "https://learn.microsoft.com/en-us/power-automate/power-automate-plugin-external-tools"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "service",
-          "titel": "De Numafa Servicekit",
-          "erin": "Een plugin met de skills servicerapport en storingsanalyse, de M365-connector en het commando /rapport.",
-          "claude": "Heeft na één installatie alles bij de hand.",
-          "eruit": "Iedere monteur werkt op dezelfde manier, met dezelfde sjablonen."
-        }
-      ],
       "probeer": {
         "prompt": "Ik wil een plugin voor onze [afdeling] samenstellen. Welke drie skills, welke connectors en welke commando's zouden erin moeten? Beschrijf per onderdeel in één zin wat het doet en waarom het tijd scheelt.",
         "tip": "Dit is een ontwerpvraag. Installeren doe je via Customize > Plugins, of laat het aan je beheerder over."
@@ -7240,38 +6643,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Een workflow is een vaste procedure, zoals de route van een order door de fabriek: altijd dezelfde stations, in dezelfde volgorde.",
-        "Een geplande taak in Claude is meer een collega met een afspraak in zijn agenda. Hij weet wat er moet gebeuren, en bepaalt zelf hoe."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Blogposts uit n8n",
-          "tekst": "Een n8n-sjabloon laat één blok onderzoek verzamelen en een AI Agent met Claude daar een blogpost van schrijven.",
-          "bron": {
-            "label": "n8n: AI blog post journalist (Claude)",
-            "url": "https://n8n.io/workflows/5202-ai-blog-post-journalist-perplexity-for-research-anthropic-claude-for-blog/"
-          }
-        },
-        {
-          "soort": "echt",
-          "titel": "Claude in Power Automate",
-          "tekst": "Power Automate heeft een Anthropic-connector (Premium) met de actie “Create a message”. Je gebruikt je eigen API-sleutel.",
-          "bron": {
-            "label": "Microsoft Learn: Anthropic (Independent Publisher) connector",
-            "url": "https://learn.microsoft.com/en-us/connectors/anthropicip/"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "service",
-          "titel": "Storingsmelding naar de monteur",
-          "erin": "Een nieuwe storingsmelding via het webformulier.",
-          "claude": "Power Automate zet hem in de lijst, een Claude-stap vat samen en schat de urgentie in.",
-          "eruit": "Een Teams-bericht naar de monteur van dienst, met samenvatting en urgentie."
-        }
-      ],
       "probeer": {
         "prompt": "Ik wil deze terugkerende klus automatiseren: [beschrijf de klus, bijvoorbeeld: elke nieuwe storingsmelding van het webformulier samenvatten en naar de monteur van dienst sturen]. Doe ik dit beter met Power Automate, n8n of een geplande taak in Claude? Geef je advies in een tabel met voor- en nadelen, en schets de stappen.",
         "tip": "Bij Numafa ligt Power Automate voor de hand als jullie Microsoft 365 gebruiken. Overleg met IT over koppelingen en API-sleutels."
@@ -7541,29 +6912,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Een eigen kantoortje dat 24 uur per dag open is, ook als jij naar huis gaat. Daar kan software doorwerken die altijd beschikbaar moet zijn.",
-        "Maar een kantoortje moet je ook schoonhouden en op slot doen: updates, beveiliging en back-ups zijn jouw zaak, of die van IT."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "n8n op Hetzner",
-          "tekst": "De officiële n8n-handleiding “Deploy to Hetzner” laat zien hoe je n8n op een gehuurde server zet, met Docker Compose en een automatisch HTTPS-certificaat.",
-          "bron": {
-            "label": "n8n Docs: Deploy to Hetzner",
-            "url": "https://docs.n8n.io/deploy/host-n8n/install-options/use-a-cloud-provider/deploy-to-hetzner"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "kantoor en IT",
-          "titel": "Webshoporders naar het ERP",
-          "erin": "n8n op een VPS in de EU.",
-          "claude": "Haalt elk kwartier nieuwe webshoporders op en zet ze in het ERP.",
-          "eruit": "Orders staan klaar, ook ’s nachts. Tegenvoorbeeld: “elke maandag een rapport” heeft geen VPS nodig, dat is een geplande taak."
-        }
-      ],
       "probeer": {
         "prompt": "Ik overweeg een VPS voor [doel, bijvoorbeeld: n8n zelf hosten]. Zet op een rij: wat ik ermee kan, wat ik zelf moet beheren (updates, back-ups, beveiliging), welke alternatieven zonder eigen server er zijn, en welke vragen ik aan IT moet stellen.",
         "tip": "Een goede voorbereiding voordat je bij IT aanklopt."
@@ -7831,29 +7179,6 @@
           }
         ]
       },
-      "metafoor": [
-        "De collega die niet bij elke stap vraagt “en nu?”, maar zelf doorpakt. Hij maakt een plan, voert het uit, kijkt zijn eigen werk na en gaat terug als het nog niet goed is.",
-        "Hoe meer je hem laat doen, hoe belangrijker een duidelijk eindpunt en een eindcontrole door jou."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Een winkel met een baas",
-          "tekst": "In fase twee van Project Vend kreeg de winkelende Claude een ‘CEO-agent’ als baas, Seymour Cash. De winkel werd beter, al moest de CEO af en toe worden afgeremd in zijn spirituele uitweidingen.",
-          "bron": {
-            "label": "Anthropic: Project Vend, fase 2",
-            "url": "https://www.anthropic.com/research/project-vend-2"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering",
-          "titel": "Zestig werkinstructies",
-          "erin": "“Zorg dat alle 60 werkinstructies het nieuwe sjabloon volgen, en controleer daarna of elk document een veiligheidsparagraaf heeft.”",
-          "claude": "Plant, past aan, controleert, herstelt wat ontbreekt.",
-          "eruit": "60 van 60 in orde, met een lijstje van wat hij heeft aangepast."
-        }
-      ],
       "probeer": {
         "prompt": "Ik wil dat je deze klus agentic aanpakt: [beschrijf de klus]. Maak eerst een plan in stappen, voer daarna stap voor stap uit, controleer na elke stap of het resultaat klopt, en meld pas dat je klaar bent als alles gecontroleerd is. Stop en vraag het me als je twijfelt.",
         "tip": "Werkt in Claude Code en in de Claude-app. In de app kies je in het berichtvak of hij op Manual of Auto werkt."
@@ -8134,29 +7459,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Werkvoorbereiding: eerst de tekening, dan pas de zaag. Op de tekening zie je fouten nog voor er materiaal verspild is.",
-        "Zo werkt /plan: de collega laat eerst zien hoe hij het gaat aanpakken, en jij zet je handtekening."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Plannen hier, uitvoeren daar",
-          "tekst": "De officiële tip: “Plan locally, execute in the cloud.” Maak het plan samen in plan mode, sla het op, en laat een cloudsessie het uitvoeren.",
-          "bron": {
-            "label": "Claude Code Docs: Use Claude Code in the cloud",
-            "url": "https://code.claude.com/docs/en/claude-code-on-the-web"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering",
-          "titel": "Dubbele artikelnummers",
-          "erin": "`/plan bouw een controle op dubbele artikelnummers in de stuklijst-export`",
-          "claude": "Leest de bestanden en schrijft een stappenplan, met de aanname dat -A en -B geen dubbel zijn.",
-          "eruit": "Jij corrigeert één aanname vóór er iets gebouwd is."
-        }
-      ],
       "probeer": {
         "prompt": "/plan Maak een script dat in onze stuklijst-export (CSV) dubbele artikelnummers vindt. Varianten met -A en -B tellen niet als dubbel. Laat in het plan zien welke aannames je doet.",
         "tip": "In Claude Code. Lees het plan kritisch: kloppen de aannames? Pas dan goedkeuren."
@@ -8382,29 +7684,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Je bent pas klaar als de keurmeester tekent. De collega werkt door tot een onafhankelijke controleur zegt: voldoet.",
-        "/loop is meer het vaste rondje over de werkvloer: elk kwartier even kijken of alles loopt."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Het voorbeeld uit de docs",
-          "tekst": "`/goal all tests in test/auth pass and the lint step is clean`. Een voorwaarde die Claude zelf kan aantonen, met een testresultaat in het gesprek.",
-          "bron": {
-            "label": "Claude Code Docs: Keep Claude working toward a goal",
-            "url": "https://code.claude.com/docs/en/goal"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "inkoop",
-          "titel": "De nieuwe prijslijst",
-          "erin": "`/goal alle 40 artikelcodes in de nieuwe prijslijst komen overeen met de stamdata en het controlescript meldt 0 fouten, of stop na 15 beurten`",
-          "claude": "Werkt ronde na ronde, tot de keurmeester tekent.",
-          "eruit": "Een prijslijst die klopt, met een verslag per ronde."
-        }
-      ],
       "probeer": {
         "prompt": "/goal alle artikelcodes in prijslijst.csv komen voor in stamdata.csv en het controlescript meldt 0 fouten, of stop na 15 beurten",
         "tip": "In Claude Code. Schrijf een voorwaarde die Claude kan aantonen, zoals de uitkomst van een script."
@@ -8706,29 +7985,6 @@
           }
         ]
       },
-      "metafoor": [
-        "De collega schakelt zelf hulpjes in en verdeelt het werk. Elk hulpje krijgt een envelop met een opdracht en werkt aan een eigen bureau.",
-        "Terug komen ze niet met hun hele stapel papier, maar met een briefje: dit heb ik gevonden."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Honderden advertenties",
-          "tekst": "Het growth-marketingteam van Anthropic laat twee gespecialiseerde subagents honderden nieuwe advertentievarianten maken, binnen strenge tekenlimieten. In minuten in plaats van uren.",
-          "bron": {
-            "label": "Anthropic: How Anthropic teams use Claude Code",
-            "url": "https://www.anthropic.com/news/how-anthropic-teams-use-claude-code"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering",
-          "titel": "Waarom is het script traag?",
-          "erin": "“Zoek uit waarom het controlescript zo traag is.”",
-          "claude": "Een Explore-hulpje doorzoekt 200 bestanden.",
-          "eruit": "Het hoofdgesprek krijgt vijf regels met de oorzaak, en het bureau blijft leeg."
-        }
-      ],
       "probeer": {
         "prompt": "Gebruik een subagent om alle bestanden in deze map te doorzoeken op plekken waar een vaste btw-waarde in de code staat. Laat hem alleen een lijst terugbrengen met bestand, regel en de gevonden waarde.",
         "tip": "In Claude Code. Of typ /subtask met de opdracht erachter; dan werkt het hulpje op de achtergrond en ga jij verder."
@@ -8926,29 +8182,6 @@
           }
         ]
       },
-      "metafoor": [
-        "/background: de collega neemt zijn klus mee naar de achterkamer, zodat jouw bureau vrij is.",
-        "/fork: hij kopieert zichzelf; de kopie probeert een zijpad terwijl het origineel bij jou blijft. /tasks is het takenbord aan de muur."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Drie klussen tegelijk",
-          "tekst": "De docs laten zien hoe je drie cloudsessies tegelijk start (een test repareren, documentatie bijwerken, een logger ombouwen) die onafhankelijk van elkaar lopen.",
-          "bron": {
-            "label": "Claude Code Docs: Use Claude Code in the cloud",
-            "url": "https://code.claude.com/docs/en/claude-code-on-the-web"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering",
-          "titel": "De handleidinggenerator",
-          "erin": "De handleidinggenerator ombouwen naar het nieuwe sjabloon, en ondertussen een vraag over de prijslijst.",
-          "claude": "Laat de ombouw met /background doorlopen.",
-          "eruit": "Jij gaat verder met de prijslijst; /tasks laat zien wanneer de ombouw klaar is."
-        }
-      ],
       "probeer": {
         "prompt": "/fork Probeer dezelfde opdracht met een andere aanpak: gebruik een tabel in plaats van losse alinea's, en vergelijk daarna welke versie duidelijker is.",
         "tip": "In Claude Code. Met /tasks zie je daarna wat er op de achtergrond loopt."
@@ -9331,29 +8564,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Een heel team hulpjes, met een werkverdeling op papier. Iedereen krijgt een eigen stuk, en aan het eind wordt alles samengevoegd en nagekeken.",
-        "Bij /deep-research zijn het onderzoekers die elkaars bronnen controleren voordat er iets in het rapport komt."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Waar het voor bedoeld is",
-          "tekst": "De officiële voorbeelden: een controle van de hele codebase op dezelfde fout, een migratie van 500 bestanden, en onderzoek waarbij bronnen elkaar moeten bevestigen.",
-          "bron": {
-            "label": "Claude Code Docs: Orchestrate subagents with dynamic workflows",
-            "url": "https://code.claude.com/docs/en/workflows"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering en kwaliteit",
-          "titel": "De nieuwe Machineverordening",
-          "erin": "`/deep-research Wat moeten machinebouwers regelen voor de nieuwe EU-Machineverordening (2023/1230), en wat verandert er ten opzichte van de Machinerichtlijn?`",
-          "claude": "Zoekt breed, controleert de bronnen tegen elkaar.",
-          "eruit": "Een rapport met bronvermelding als startpunt voor engineering en kwaliteit."
-        }
-      ],
       "probeer": {
         "prompt": "/deep-research Wat moeten machinebouwers regelen voor de nieuwe EU-Machineverordening (2023/1230), en wat verandert er ten opzichte van de Machinerichtlijn? Geef een overzicht per onderwerp, met bronnen.",
         "tip": "In Claude Code, op een betaald abonnement. Controleer belangrijke punten altijd in de bron zelf: dit is een startpunt, geen juridisch advies."
@@ -9560,29 +8770,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Even binnenlopen bij de senior. De collega doet het meeste werk zelf, maar bij een lastige keuze of een hardnekkige fout klopt hij aan.",
-        "De senior hoeft niet de hele dag mee te werken; alleen op de momenten dat het telt."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "De standaardcombinatie",
-          "tekst": "De docs noemen “Sonnet main + Opus advisor”: Sonnet doet het routinewerk en roept Opus in bij planning, onduidelijke fouten en de eindcontrole.",
-          "bron": {
-            "label": "Claude Code Docs: Escalate hard decisions with the advisor tool",
-            "url": "https://code.claude.com/docs/en/advisor"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering",
-          "titel": "De rapportagetool",
-          "erin": "Sonnet bouwt een rapportagetool voor de servicecijfers.",
-          "claude": "Vraagt Opus om advies voordat het datamodel vastligt.",
-          "eruit": "Een betere opzet, zonder dat je alles met het duurdere model doet."
-        }
-      ],
       "probeer": {
         "prompt": "/advisor opus",
         "tip": "Typ dit in Claude Code voordat je aan een lange klus begint. Uitzetten met /advisor off."
@@ -9816,29 +9003,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Terug in de tijd. Ongedaan maken, maar dan voor het hele werk: de code én het gesprek.",
-        "Alleen wat de collega met zijn eigen gereedschap aanpaste, kan hij terugdraaien. Wat met de grote schaar is weggeknipt, blijft weg."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Wat niet terug kan",
-          "tekst": "De docs zijn duidelijk: bestanden die via shell-commando's zijn aangepast (zoals rm, mv en cp) kunnen niet met rewind worden teruggezet. Checkpoints zijn voor snel herstel binnen een sessie, git voor de echte geschiedenis.",
-          "bron": {
-            "label": "Claude Code Docs: Checkpointing",
-            "url": "https://code.claude.com/docs/en/checkpointing"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering",
-          "titel": "De verschoven kolommen",
-          "erin": "Claude paste het Excel-exportscript aan en nu klopt de kolomvolgorde niet.",
-          "claude": "`/rewind` naar vóór die prompt.",
-          "eruit": "De oude, goede versie terug. Daarna opnieuw, met een duidelijkere instructie."
-        }
-      ],
       "probeer": {
         "prompt": "/rewind",
         "tip": "In Claude Code. Of druk twee keer op Esc met een leeg invoerveld. Kies dan het punt en wat je wilt terugzetten."
@@ -10061,29 +9225,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Een vaste afspraak in de agenda van de collega, maar dan op een kantoor in de cloud. Hij komt opdagen, ook als jouw pc uit staat.",
-        "/loop is meer: zolang je hier zit, kijk ik elk kwartier even."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Waarvoor teams het gebruiken",
-          "tekst": "De docs noemen ochtendlijke PR-reviews, ’s nachts mislukte builds analyseren en wekelijkse controles van afhankelijkheden.",
-          "bron": {
-            "label": "Claude Code Docs: Overview",
-            "url": "https://code.claude.com/docs/en/overview"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering",
-          "titel": "De ochtendcontrole",
-          "erin": "`/schedule elke werkdag om 6:30: draai het controlescript op de nieuwste stuklijst-export en meld afwijkingen`",
-          "claude": "Draait de routine elke werkdag in de cloud.",
-          "eruit": "Om 7:00 ligt er een lijstje met afwijkingen."
-        }
-      ],
       "probeer": {
         "prompt": "/schedule elke werkdag om 6:30: draai het controlescript op de nieuwste stuklijst-export in deze repository en zet de afwijkingen in een kort overzicht",
         "tip": "In Claude Code (alias /routines). Routines draaien in de cloud en tellen mee in je verbruik."
@@ -10373,29 +9514,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Het spiekbriefje dat naast de werkplek hangt. Niemand kent alles uit zijn hoofd; je moet weten waar het briefje hangt.",
-        "Vuistregel: begin licht (/plan, een hulpje) en pak pas het zware gereedschap (/batch, workflows) als de klus echt groot is."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Vijf manieren om parallel te werken",
-          "tekst": "Anthropic zet ze zelf naast elkaar: subagents, agent view, agent teams, projects en dynamic workflows, met per aanpak wanneer je hem kiest.",
-          "bron": {
-            "label": "Claude Code Docs: Run agents in parallel",
-            "url": "https://code.claude.com/docs/en/agents"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering",
-          "titel": "Welke kies ik?",
-          "erin": "“Ik wil alle 60 werkinstructies controleren op een veiligheidsparagraaf.”",
-          "claude": "Eerst /plan, dan /goal met “60 van 60 in orde”. Pas bij honderden bestanden /batch.",
-          "eruit": "Het lichtste gereedschap dat de klus klaart."
-        }
-      ],
       "probeer": {
         "prompt": "Ik wil deze klus agentic laten doen: [beschrijf de klus]. Welke Claude Code-commando's (/plan, /goal, /loop, /subtask, /background, /fork, /batch, /deep-research, /advisor, /schedule) zou je inzetten, in welke volgorde, en waarom? Kies het lichtste gereedschap dat volstaat.",
         "tip": "Kan in de Claude-app of in Claude Code. Je krijgt een stappenplan met commando's."
@@ -10651,29 +9769,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Claude is de regisseur met het draaiboek. De videotool is de cameraploeg.",
-        "Een goede regisseur zet de echte machine in de spotlight, en verzint er geen nieuwe bij."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Geanimeerde uitleg",
-          "tekst": "Met Motion-artifacts (bèta, Team en Enterprise) maakt Claude geanimeerde uitlegvideo's die je als MP4 exporteert.",
-          "bron": {
-            "label": "Claude Help Center: What are artifacts?",
-            "url": "https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "marketing",
-          "titel": "Video voor LinkedIn",
-          "erin": "“Storyboard van 30 seconden voor LinkedIn over onze nieuwe machine.”",
-          "claude": "Schrijft per shot: wat je ziet, tekst in beeld, voice-over, en welke shots echt gefilmd moeten worden.",
-          "eruit": "Een draaiboek voor de opname in de hal, plus ideeën voor sfeerbeelden."
-        }
-      ],
       "probeer": {
         "prompt": "Schrijf een storyboard voor een video van 30 seconden voor LinkedIn over [onderwerp]. Maak een tabel met per shot: tijd, wat je ziet, tekst in beeld en voice-over. Markeer welke shots met echte opnames moeten.",
         "tip": "Gebruik het storyboard daarna in een videotool, of gewoon met je telefoon in de hal."
@@ -10827,20 +9922,6 @@
           }
         ]
       },
-      "metafoor": [
-        "Een blinde proeverij. Zonder etiket proef je beter wat je echt lekker vindt.",
-        "Zo voorkom je dat je kiest op naam in plaats van op kwaliteit."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "numafa",
-          "afdeling": "alle afdelingen",
-          "titel": "Wie schrijft het beste Nederlands?",
-          "erin": "Dezelfde prompt voor een werkinstructie, zonder bedrijfsgegevens.",
-          "claude": "Twee anonieme modellen antwoorden; jij kiest.",
-          "eruit": "Een beeld van welk model het beste Nederlands schrijft voor dit soort teksten."
-        }
-      ],
       "probeer": {
         "prompt": "Schrijf een korte werkinstructie (maximaal zes stappen) voor het wisselen van een filter in een industriële pomp. Gebruik eenvoudig Nederlands en begin met de veiligheidsstap.",
         "tip": "Plak dit in een arena-site en kies blind het beste antwoord. Of vergelijk zelf: stuur het naar twee Claude-modellen. Nooit bedrijfsinformatie gebruiken."

@@ -47,10 +47,8 @@ for (const t of data.tegels) {
   const where = "tegel " + (t.id || "?");
   if (!t.id || ids.has(t.id)) errors.push(where + ": id ontbreekt of is dubbel");
   ids.add(t.id);
-  for (const f of ["titel", "kort", "uitleg", "visual", "metafoor", "valkuil", "quiz", "stand", "bronnen", "icoon", "minuten"])
+  for (const f of ["titel", "kort", "uitleg", "visual", "valkuil", "quiz", "stand", "bronnen", "icoon", "minuten"])
     if (t[f] == null || t[f] === "") errors.push(where + ": veld '" + f + "' ontbreekt");
-  if (!t.voorbeeld && !t.voorbeelden) errors.push(where + ": veld 'voorbeeld' ontbreekt");
-  if (t.voorbeeld && !(t.voorbeeld.titel && t.voorbeeld.erin && t.voorbeeld.claude && t.voorbeeld.eruit)) errors.push(where + ": voorbeeld heeft titel, erin, claude en eruit nodig");
   if (!levelIds.has(t.niveau)) errors.push(where + ": onbekend niveau " + t.niveau);
   if (t.groep && !(data.groepen || {})[t.groep]) errors.push(where + ": onbekende groep " + t.groep);
   if (t.icoon && !iconNames.has(t.icoon)) errors.push(where + ": onbekend icoon '" + t.icoon + "'");
@@ -58,7 +56,7 @@ for (const t of data.tegels) {
   if (!Array.isArray(t.bronnen) || !t.bronnen.length) errors.push(where + ": minstens één bron nodig");
   (t.bronnen || []).forEach((b) => { if (!b.label || !isUrl(b.url)) errors.push(where + ": bron zonder label of https-url"); });
   const w = words([].concat(t.uitleg || []).join(" "));
-  if (t.voorbeeld) {
+  if (typeof t.uitleg === "string") { // korte vorm
     const c = countTile(t);
     report.push(c);
     if (c.uitleg > 60) warnings.push(where + ": uitleg is " + c.uitleg + " woorden (max 60)");
@@ -137,7 +135,7 @@ for (const t of data.tegels) {
   if (v.type === "table") (v.rijen || []).forEach((r, i) => { if (r.cellen.length !== v.kolommen.length) errors.push(where + ": tabelrij " + (i + 1) + " heeft " + r.cellen.length + " cellen, verwacht " + v.kolommen.length); });
   if (t.tabel) t.tabel.rijen.forEach((r, i) => { if (r.length !== t.tabel.kolommen.length) errors.push(where + ": tabel rij " + (i + 1) + " klopt niet met de kolommen"); });
 }
-data.tegels.forEach((t) => { if (t.voorbeeld) { const m = countTile(t).minuten; if (t.minuten !== m) warnings.push("tegel " + t.id + ": minuten is " + t.minuten + ", leestijd is ~" + m); } });
+data.tegels.forEach((t) => { if (typeof t.uitleg === "string") { const m = countTile(t).minuten; if (t.minuten !== m) warnings.push("tegel " + t.id + ": minuten is " + t.minuten + ", leestijd is ~" + m); } });
 warnings.forEach((w) => console.warn("let op: " + w));
 if (report.length) {
   console.log("Nieuwe opbouw (woorden): tegel | totaal | uitleg | visual | stappen");

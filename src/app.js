@@ -176,8 +176,8 @@
 
   /* ---------- Zoeken ---------- */
   function haystack(t) {
-    var j = function (x) { return Array.isArray(x) ? x.join(" ") : (x || ""); }, v = t.voorbeeld || {};
-    return [t.id, t.titel, t.kort, t.inEenZin, j(t.uitleg), j(t.metafoor), v.titel, v.erin, v.claude, v.eruit, j(t.zoekwoorden), t.valkuil].join(" ").toLowerCase();
+    var j = function (x) { return Array.isArray(x) ? x.join(" ") : (x || ""); };
+    return [t.id, t.titel, t.kort, t.inEenZin, j(t.uitleg), j(t.zoekwoorden), t.valkuil].join(" ").toLowerCase();
   }
   function renderSearch(q) {
     var ql = q.toLowerCase();
@@ -242,18 +242,13 @@
       '<section class="sec wide-sec" aria-labelledby="s-visual"><div style="max-width:760px;margin:0 auto"><p class="sec-kicker">Zie het gebeuren</p><h2 class="sec-title" id="s-visual">' + esc(t.visualTitel || "Zo werkt het") + '</h2></div>' +
         '<div class="stage-card" id="visual"></div></section>' +
       '<div class="article" style="padding-top:0">' +
-      '<section class="sec" aria-labelledby="s-meta"><h2 class="sec-title" id="s-meta">De nieuwe collega</h2><div class="metaphor"><span class="squircle">' + icon("person") + '</span><div class="prose">' + paras(t.metafoor) + '</div></div></section>' +
-      (t.voorbeeld
-        ? '<section class="sec" aria-labelledby="s-cases"><h2 class="sec-title" id="s-cases">Bij inkoop</h2>' + exampleHTML(Object.assign({ soort: "numafa", afdeling: "inkoop" }, t.voorbeeld)) + '</section>'
-        : '</div><section class="sec wide-sec" aria-labelledby="s-cases"><div style="max-width:760px;margin:0 auto"><h2 class="sec-title" id="s-cases">In de praktijk</h2></div><div class="cases">' + (t.voorbeelden || []).map(exampleHTML).join("") + '</div></section><div class="article" style="padding-top:0">') +
       (t.probeer ? '<section class="sec" aria-labelledby="s-try"><h2 class="sec-title" id="s-try">Probeer zelf</h2><div class="prompt">' +
         '<div class="prompt-head"><span class="eyebrow">Kant-en-klare prompt</span><span><span class="copy-status" aria-live="polite"></span><button class="btn btn-primary btn-small" type="button" data-copy>Kopieer</button></span></div>' +
         '<pre class="prompt-text" tabindex="0">' + esc(t.probeer.prompt) + '</pre>' +
         (t.probeer.tip ? '<p class="prompt-tip">' + mdInline(t.probeer.tip) + '</p>' : '') + '</div></section>' : '') +
       '<section class="sec" aria-labelledby="s-pit"><h2 class="sec-title" id="s-pit">Valkuil</h2><div class="pitfall">' + icon("warn") + '<p>' + mdInline(t.valkuil) + '</p></div></section>' +
       '<section class="sec" aria-labelledby="s-quiz"><h2 class="sec-title" id="s-quiz">Mini-quiz<span class="quiz-score" id="quiz-score"></span></h2><form class="quiz" novalidate>' + quizHTML(t) + '</form></section>' +
-      '<footer class="sources" id="end-marker"><p><span class="stand">Stand per ' + esc(fmtDate(t.stand)) + '.</span> Bronnen:</p><ul>' +
-        t.bronnen.map(function (b) { return '<li><a href="' + esc(b.url) + '" target="_blank" rel="noopener noreferrer">' + esc(b.label) + '</a></li>'; }).join("") + '</ul></footer>' +
+      '<div id="end-marker" style="height:1px" aria-hidden="true"></div>' +
       '</div>' +
       '<nav class="next-prev" aria-label="Vorige en volgende tegel">' +
         (prev ? '<a class="np" href="#/tegel/' + prev.id + '"><span>‹ Vorige · ' + prev.id + '</span><strong>' + esc(prev.titel) + '</strong></a>' : '<span></span>') +

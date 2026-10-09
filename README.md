@@ -52,10 +52,7 @@ Velden van een tegel:
 | `tabel` | Optioneel: vaste tabel onder de uitleg (`kolommen`, `rijen`). |
 | `visualTitel`, `visual` | De animatie. Zie hieronder. |
 | `tips` | Optioneel: lijst met korte regels, getoond als **Spiekbriefje** onder de animatie. |
-| `metafoor` | Lijst van alinea's: de nieuwe-collega-metafoor. |
-| `voorbeelden` | 1 tot 4 voorbeelden. `soort` is `"echt"` (met `bron`), `"numafa"` of `"thuis"`. Gebruik `tekst`, of `erin` / `claude` / `eruit`. Minstens één Numafa-voorbeeld. |
 | `probeer` | Optioneel: `prompt` (wordt kopieerbaar) en `tip`. |
-| `voorbeeld` | Korte vorm: één voorbeeld met `titel`, `erin`, `claude`, `eruit` (in plaats van `voorbeelden`). In de korte vorm zijn `uitleg`, `metafoor` en `kort` één tekst; `build.js` telt de woorden (max 250 per tegel). |
 | `valkuil` | Eén alinea. |
 | `quiz` | 1 of 2 vragen: `vraag`, `opties`, `goed` (het nummer van het goede antwoord, tellend vanaf 0), `goedUitleg`, `foutUitleg`. Zo heeft elke vraag precies één goed antwoord. |
 | `stand` | Datum als `"JJJJ-MM-DD"`. |

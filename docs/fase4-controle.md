@@ -55,6 +55,8 @@ Aanvullingen volgens de opmerkingen:
 - **2.4 Memory:** je kunt Claude ook opdragen iets te onthouden (“onthoud dat een OB een orderbevestiging is”); in een project onthoudt hij het voor dat project. Ook als extra stap in de visual.
 - **2.13 Automatiseren:** onder elke route staat een schema: wie doet wat, wanneer, en of er AI aan te pas komt.
 
+Daarna op verzoek weggehaald, uit alle tegels: de blokken **De nieuwe collega** en **In de praktijk** (of **Bij inkoop**), en de **bronnenlijst** onder elke tegel. De bronnen staan nog per tegel in `src/tegels.json`.
+
 Wat voor alle tegels geldt:
 
 - Originele tegels hebben hun eigen tekst, voorbeelden en “Probeer zelf” terug; verwijzingen naar andere tegels zijn omgezet naar de nieuwe nummers.
