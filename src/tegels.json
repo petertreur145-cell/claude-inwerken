@@ -72,606 +72,225 @@
   },
   "tegels": [
     {
-      "id": "1.1",
-      "niveau": 1,
       "titel": "Wat is Claude",
-      "icoon": "badge",
-      "minuten": 2,
-      "kort": "Slimme nieuwe collega die elke chat zijn eerste werkdag heeft.",
-      "inEenZin": "Claude is de AI-assistent van Anthropic die leest, schrijft, rekent en steeds vaker zelf klussen afmaakt: slim, maar elke chat weer zijn eerste werkdag.",
-      "uitleg": [
-        "Claude is een taalmodel van Anthropic. Je praat ermee in gewone taal. Het schrijft teksten, leest documenten, rekent, vertaalt, zoekt op het web en maakt bestanden zoals Word, Excel en PowerPoint. Sinds september 2026 zijn chat en Cowork samengevoegd tot één Claude (eerst voor Pro en Max): jij typt wat je wilt, en Claude kiest zelf of hij snel antwoordt of er een klus van maakt.",
-        "Het belangrijkste om te snappen: Claude weet veel van de wereld, maar niets van Numafa. Elk nieuw gesprek begint hij blanco. Wat jij hem vertelt, bepaalt hoe goed het antwoord wordt."
-      ],
-      "visualTitel": "Een eerste werkdag, elke chat weer",
+      "icoon": "person",
+      "minuten": 1,
+      "kort": "Claude is een slimme nieuwe collega die veel weet, maar niets van jouw werk: wat jij vertelt, bepaalt het antwoord.",
+      "uitleg": "Claude is de AI-assistent van Anthropic. Je typt in gewone taal wat je wilt. Hij schrijft mails, leest pdf's en Excel-bestanden, vergelijkt, rekent en maakt bestanden. Hij weet veel van de wereld, maar niets van Numafa, Ridder of jouw orders. En een nieuwe chat begint blanco; memory en projects helpen (niveau 2).",
+      "visualTitel": "Zonder en met uitleg",
       "visual": {
         "type": "chat",
-        "scenarios": [
+        "steps": [
+          "Zonder uitleg: gaten met [haakjes].",
+          "Met uitleg: PO, artikel, week, reden…",
+          "…kan de mail zo weg.",
+          "Nieuwe chat: alles kwijt."
+        ],
+        "panes": [
           {
-            "label": "Zonder of met uitleg",
-            "caption": "Dezelfde vraag: links zonder uitleg, rechts gebriefd zoals je een nieuwe collega briefen zou. Claude weet veel van de wereld, maar niets van Numafa. Zonder uitleg vult hij de gaten met [haakjes].",
-            "panes": [
+            "label": "Zonder uitleg",
+            "events": [
               {
-                "title": "Nieuwe chat",
-                "events": [
-                  {
-                    "t": "user",
-                    "text": "Schrijf een mail naar de klant over de vertraging."
-                  },
-                  {
-                    "t": "answer",
-                    "text": "Beste [naam],\nHelaas is de levering van [product] vertraagd door [reden].\nWe verwachten te leveren op [datum].\nExcuses voor het ongemak."
-                  },
-                  {
-                    "t": "note",
-                    "tone": "warn",
-                    "text": "Welke klant? Welke vertraging? Welke toon? Claude moet gokken."
-                  }
-                ],
-                "model": "Opus 5.5",
-                "verdict": {
-                  "tone": "warn",
-                  "text": "Een sjabloon vol gaten"
-                },
-                "label": "Zonder uitleg"
+                "t": "user",
+                "text": "Schrijf een rappel.",
+                "s": 1
               },
               {
-                "title": "Nieuwe chat",
-                "events": [
-                  {
-                    "t": "user",
-                    "text": "Schrijf een korte mail aan een vaste klant. Hun nieuwe schrobzuigmachine komt een week later: een onderdeel is niet op tijd binnen. Bied een leenmachine aan. Vriendelijk en zakelijk, je-vorm."
-                  },
-                  {
-                    "t": "answer",
-                    "text": "Beste facilitair team,\nJullie nieuwe schrobzuigmachine komt een week later dan gepland: een onderdeel is niet op tijd binnen.\nZodat je niet stilstaat, brengen we maandag een leenmachine.\nGroet, team Service"
-                  }
-                ],
-                "model": "Opus 5.5",
-                "verdict": {
-                  "tone": "ok",
-                  "text": "Bruikbaar, omdat jij hem bijpraatte"
-                },
-                "label": "Met uitleg"
+                "t": "answer",
+                "text": "Beste [naam],\n[artikel] is te laat. Graag vóór [datum].",
+                "s": 1,
+                "gaps": true
               }
             ]
           },
           {
-            "label": "De volgende dag",
-            "caption": "Nieuwe chat. Het gesprek van gisteren ziet hij niet: elke chat begint blanco. Memory en projects (niveau 2) helpen, maar reken er nooit blind op.",
-            "panes": [
+            "label": "Met uitleg",
+            "events": [
               {
-                "title": "Nieuwe chat",
-                "events": [
-                  {
-                    "t": "user",
-                    "text": "Maak die mail van gisteren iets korter."
-                  },
-                  {
-                    "t": "answer",
-                    "text": "In dit gesprek zie ik geen mail.\nPlak hem hier, dan maak ik hem korter."
-                  }
-                ],
-                "model": "Opus 5.5",
-                "verdict": {
-                  "tone": "warn",
-                  "text": "Eerste werkdag, alweer"
-                }
-              }
-            ]
-          },
-          {
-            "label": "Een klus",
-            "caption": "Claude doet ook zelf werk: hij leest bestanden, rekent met code en levert een bestand op. Jij zegt wat je wilt; hij kiest zelf of het een snel antwoord wordt of een klus.",
-            "panes": [
+                "t": "user",
+                "text": "Rappel PO NCANL150123, motor 12.34.567.890, beloofd week 41, nodig voor 600123.",
+                "s": 2
+              },
               {
-                "title": "Servicebezoeken",
-                "events": [
-                  {
-                    "t": "user",
-                    "text": "Zet de servicebezoeken uit deze export per klanttype op een rij, met een grafiek.",
-                    "files": [
-                      {
-                        "name": "export-servicebezoeken.csv",
-                        "kind": "sheet"
-                      }
-                    ]
-                  },
-                  {
-                    "t": "tool",
-                    "icon": "terminal",
-                    "text": "Code uitvoeren: export inlezen (412 regels)"
-                  },
-                  {
-                    "t": "tool",
-                    "icon": "table",
-                    "text": "Draaitabel per klanttype"
-                  },
-                  {
-                    "t": "tool",
-                    "icon": "levels",
-                    "text": "Grafiek maken"
-                  },
-                  {
-                    "t": "file",
-                    "name": "servicebezoeken-per-klanttype.xlsx",
-                    "kind": "sheet",
-                    "note": "2 tabbladen · 1 grafiek"
-                  },
-                  {
-                    "t": "answer",
-                    "text": "Klaar. Kantoren hebben de meeste bezoeken; zorginstellingen groeien het snelst."
-                  }
-                ],
-                "model": "Opus 5.5",
-                "verdict": {
-                  "tone": "ok",
-                  "text": "Geen antwoord, maar een bestand"
-                }
+                "t": "answer",
+                "text": "Goedemiddag,\nPO NCANL150123 was beloofd voor week 41. Wij hebben de motor nodig voor de bouw. Kunt u vandaag een nieuwe leverdatum geven?",
+                "s": 3
+              },
+              {
+                "t": "divider",
+                "text": "Volgende dag",
+                "dim": true,
+                "s": 4
+              },
+              {
+                "t": "user",
+                "text": "Stuur die rappel nog eens.",
+                "s": 4
+              },
+              {
+                "t": "answer",
+                "text": "Welke rappel? Dit is een nieuw gesprek.",
+                "s": 4
               }
             ]
           }
         ]
       },
-      "metafoor": [
-        "De briljante nieuwe collega op zijn eerste werkdag. Hij heeft alles gelezen wat er te lezen valt, maar jouw klanten, machines en afspraken kent hij nog niet.",
-        "En hij heeft één eigenaardigheid: elke ochtend is hij alles vergeten. Je werkt hem dus elke keer opnieuw in, tenzij je de briefing op papier zet. Hoe dat moet, leer je in niveau 2."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Claude als winkelier",
-          "tekst": "Anthropic liet Claude een maand een winkeltje op kantoor runnen. Hij verzon een betaalrekening, deelde kortingscodes uit, wees $100 voor een sixpack Irn-Bru af en beweerde op 1 april in blazer te komen bezorgen. Met betere hulpmiddelen en een ‘CEO-agent’ ging het in fase twee een stuk beter. Les: slim is nog niet ingewerkt.",
-          "bron": {
-            "label": "Anthropic: Project Vend",
-            "url": "https://www.anthropic.com/research/project-vend-1"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "inkoop",
-          "titel": "Drie offertes naast elkaar",
-          "erin": "Drie offertes van leveranciers voor hetzelfde onderdeel.",
-          "claude": "Zet levertijd, garantie, betalingstermijn en voorwaarden naast elkaar.",
-          "eruit": "Een vergelijkingstabel plus vijf vragen om na te bellen."
-        },
-        {
-          "soort": "thuis",
-          "titel": "Wat eten we vanavond?",
-          "erin": "Prei, eieren en een restje kaas.",
-          "claude": "Bedenkt drie recepten met wat er is.",
-          "eruit": "Een quiche in 40 minuten, met een lijstje voor wat ontbreekt."
-        }
-      ],
-      "probeer": {
-        "prompt": "Ik werk bij Numafa, een machinebouwer, op de afdeling [jouw afdeling]. Mijn taken zijn vooral [noem er drie]. Geef me vijf concrete manieren waarop jij me deze week tijd kunt besparen, met per manier een voorbeeldvraag die ik zo kan stellen.",
-        "tip": "Vul de stukjes tussen haken in. Merk hoeveel beter het antwoord wordt met die twee zinnen context."
+      "metafoor": "Claude is een briljante nieuwe collega die elke ochtend zijn eerste werkdag heeft: hij kan veel, maar jij moet hem bijpraten.",
+      "voorbeeld": {
+        "titel": "Engelse leveranciersmail",
+        "erin": "Een mail van een Deense leverancier: de motor komt als 60 Hz-uitvoering.",
+        "claude": "Legt in één zin uit wat dat betekent en schrijft een antwoord in het Engels.",
+        "eruit": "Een korte mail: wij hebben 50 Hz nodig, graag een aangepaste OB."
       },
-      "valkuil": "Claude behandelen als zoekmachine met één los woord. Hij is een collega: geef context en een duidelijke vraag, dan krijg je bruikbaar werk terug.",
+      "valkuil": "Een vraag van vijf woorden stellen en dan denken dat Claude het niet kan; meestal ontbrak alleen de uitleg.",
       "quiz": [
         {
-          "vraag": "Je begint een nieuwe chat. Wat weet Claude dan over jouw afdeling?",
+          "vraag": "Je vraagt: “Schrijf een rappel.” Waarom krijg je een sjabloon vol [haakjes]?",
           "opties": [
-            "Alles wat je in eerdere chats vertelde",
-            "Niets, tenzij memory, een project of jijzelf het hem vertelt",
-            "Alles wat op het bedrijfsnetwerk staat"
+            "Claude weet niet welke order, welk artikel en welke week je bedoelt",
+            "Claude mag geen mails schrijven",
+            "Rappels zijn te moeilijk voor Claude"
           ],
-          "goed": 1,
-          "goedUitleg": "Elk gesprek begint blanco. Memory en projects kunnen de briefing meegeven; anders vertel je het zelf.",
-          "foutUitleg": "Claude ziet alleen wat in het gesprek zit, plus wat memory, een project of een gekoppelde app meegeeft."
+          "goed": 0,
+          "goedUitleg": "Precies. Geef PO, artikel, beloofde week en de reden mee.",
+          "foutUitleg": "Claude kent jouw orders niet. Met PO, artikel, beloofde week en reden krijg je een mail die zo weg kan."
         },
         {
-          "vraag": "Wat helpt het meest voor een goed antwoord?",
+          "vraag": "Morgen typ je in een nieuwe chat: “Stuur die rappel nog eens.” Wat gebeurt er?",
           "opties": [
-            "Eén kort trefwoord",
-            "Context: wie je bent, wat je wilt en waarom",
-            "De vraag drie keer herhalen"
+            "Hij weet niet welke rappel je bedoelt",
+            "Hij verstuurt de mail zelf opnieuw",
+            "Hij zoekt de order op in Ridder"
           ],
-          "goed": 1,
-          "goedUitleg": "Precies. Een goede briefing is het halve werk.",
-          "foutUitleg": "Claude doet het meest met context: wie je bent, wat je wilt en waarom."
+          "goed": 0,
+          "goedUitleg": "Klopt: een nieuwe chat begint blanco. Memory en projects helpen; dat komt in niveau 2.",
+          "foutUitleg": "Een nieuwe chat begint blanco, en Claude kan niet zelf in Ridder kijken. Plak de gegevens opnieuw."
         }
       ],
-      "stand": "2026-10-08",
+      "stand": "2026-10-09",
       "bronnen": [
         {
           "label": "Claude Docs: Prompting best practices",
           "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
         },
         {
-          "label": "Anthropic: Effective harnesses for long-running agents",
-          "url": "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents"
+          "label": "Claude Help Center: Chat search and memory",
+          "url": "https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-context"
         },
         {
-          "label": "Claude Help Center: Claude Cowork and chat are one Claude",
-          "url": "https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude"
-        },
-        {
-          "label": "Anthropic: Project Vend, fase 1",
-          "url": "https://www.anthropic.com/research/project-vend-1"
-        },
-        {
-          "label": "Anthropic: Project Vend, fase 2",
-          "url": "https://www.anthropic.com/research/project-vend-2"
+          "label": "Claude Help Center: Use skills in Claude",
+          "url": "https://support.claude.com/en/articles/12512180-use-skills-in-claude"
         }
       ],
       "zoekwoorden": [
-        "Anthropic",
-        "assistent",
-        "Cowork",
-        "chat",
-        "nieuwe collega"
-      ]
+        "claude",
+        "anthropic",
+        "rappel",
+        "nieuwe chat",
+        "blanco",
+        "uitleg",
+        "leverancier"
+      ],
+      "id": "1.1",
+      "niveau": 1
     },
     {
-      "id": "1.2",
-      "niveau": 1,
       "titel": "Goed vragen",
       "icoon": "clipboard",
-      "minuten": 2,
-      "kort": "Een goede briefing: rol, doel, context, vorm en een voorbeeld.",
-      "inEenZin": "Een goede instructie is een goede briefing: rol, doel, context, vorm en liefst een voorbeeld.",
-      "uitleg": [
-        "Anthropic heeft er een gouden regel voor: laat je prompt lezen door een collega die niets van de klus weet. Snapt die het niet, dan Claude ook niet. Vijf ingrediënten helpen: wie hij moet zijn (**rol**), wat je wilt bereiken (**doel**), wat hij moet weten (**context**), hoe het eruit moet zien (**vorm**) en een **voorbeeld** van goed.",
-        "Instructies die je vaker nodig hebt, zet je vast neer: in een project (die gelden voor elke chat in dat project) of in Claude Code in `CLAUDE.md`. Houd die algemeen; het specifieke vraag je in de chat zelf."
-      ],
-      "visualTitel": "Van vage vraag naar goede briefing",
+      "minuten": 1,
+      "kort": "Een goede vraag is een goede briefing: rol, doel, context, vorm en een voorbeeld.",
+      "uitleg": "De gouden regel van Anthropic: snapt een collega die niets van de klus weet jouw vraag niet, dan snapt Claude hem ook niet. Vijf ingrediënten helpen: wie hij moet zijn (rol), wat je wilt (doel), wat hij moet weten (context), hoe het eruit moet zien (vorm) en een voorbeeld van goed.",
+      "visualTitel": "Dezelfde OB, vaag of gebriefd",
       "visual": {
         "type": "chat",
-        "scenarios": [
+        "steps": [
+          "Vaag: vals alarm, prijsverschil gemist.",
+          "Gebriefd: vijf ingrediënten.",
+          "Alleen de echte afwijkingen."
+        ],
+        "panes": [
           {
-            "label": "Vijf ingrediënten",
-            "caption": "Eerst de ingrediënten van een goede briefing. Klik ze een voor een aan. Daarna zie je het verschil tussen een vage vraag en een goede briefing.",
-            "explain": {
-              "title": "Een goede briefing: vijf ingrediënten",
-              "items": [
-                {
-                  "name": "Rol",
-                  "text": "Wie moet hij zijn, en voor wie schrijft hij?",
-                  "example": "“Je schrijft voor Numafa, nuchter en concreet.”"
-                },
-                {
-                  "name": "Doel",
-                  "text": "Wat moet het opleveren? Wat moet de lezer daarna doen?",
-                  "example": "“Facilitair managers vragen een proefweek aan.”"
-                },
-                {
-                  "name": "Context",
-                  "text": "Wat moet hij weten dat hij zelf niet kan weten?",
-                  "example": "“De robot reinigt 's nachts de gangen; eigen schoonmakers blijven.”"
-                },
-                {
-                  "name": "Vorm",
-                  "text": "Hoe moet het eruitzien: lengte, toon, opmaak?",
-                  "example": "“80 woorden, je-vorm, geen superlatieven.”"
-                },
-                {
-                  "name": "Voorbeeld",
-                  "text": "Laat zien hoe goed eruitziet. Anthropic raadt 3 tot 5 voorbeelden aan.",
-                  "example": "een eerder stuk dat je goed vond, als bijlage."
-                }
-              ],
-              "foot": "**Gouden regel** van Anthropic: zou een collega die niets van de klus weet je vraag snappen? Zo niet, dan Claude ook niet.",
-              "exampleLabel": "Bijvoorbeeld"
-            }
-          },
-          {
-            "label": "Vaag of gebriefd",
-            "caption": "Links een vage vraag, rechts dezelfde vraag met de vijf ingrediënten. Onder Briefing zie je welke gaten gevuld zijn: nu weet Claude voor wie, waarom en hoe.",
-            "panes": [
+            "label": "Vaag",
+            "events": [
               {
-                "title": "Nieuwe chat",
-                "events": [
+                "t": "user",
+                "text": "Check deze OB.",
+                "s": 1,
+                "files": [
                   {
-                    "t": "user",
-                    "text": "Schrijf een tekst over onze schoonmaakrobot."
-                  },
-                  {
-                    "t": "side-mark",
-                    "index": 0,
-                    "tone": "bad"
-                  },
-                  {
-                    "t": "side-mark",
-                    "index": 1,
-                    "tone": "bad"
-                  },
-                  {
-                    "t": "side-mark",
-                    "index": 2,
-                    "tone": "bad"
-                  },
-                  {
-                    "t": "side-mark",
-                    "index": 3,
-                    "tone": "bad"
-                  },
-                  {
-                    "t": "side-mark",
-                    "index": 4,
-                    "tone": "bad"
-                  },
-                  {
-                    "t": "answer",
-                    "text": "Maak kennis met de toekomst van schoonmaken!\nOnze innovatieve robot maakt uw vloeren moeiteloos schoon, dag en nacht…"
-                  },
-                  {
-                    "t": "note",
-                    "tone": "warn",
-                    "text": "Voor wie? Waarvoor? Hoe lang? Claude moet gokken."
+                    "name": "OB.pdf",
+                    "kind": "pdf"
                   }
-                ],
-                "model": "Opus 5.5",
-                "side": {
-                  "title": "Briefing",
-                  "items": [
-                    {
-                      "text": "Rol",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "Doel",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "Context",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "Vorm",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "Voorbeeld",
-                      "tone": "muted"
-                    }
-                  ]
-                },
-                "verdict": {
-                  "tone": "warn",
-                  "text": "Algemeen, niet te gebruiken"
-                },
-                "label": "Vaag"
+                ]
               },
               {
-                "title": "Nieuwe chat",
-                "events": [
-                  {
-                    "t": "user",
-                    "text": "**Rol:** je schrijft voor Numafa, nuchter en concreet.\n**Doel:** facilitair managers vragen een proefweek aan.\n**Context:** de robot reinigt 's nachts de gangen; eigen schoonmakers blijven.\n**Vorm:** 80 woorden, je-vorm, geen superlatieven.\n**Voorbeeld:** onze toon staat in de bijlage.",
-                    "files": [
-                      {
-                        "name": "nieuwsbrief-voorbeeld.docx",
-                        "kind": "doc"
-                      }
-                    ]
-                  },
-                  {
-                    "t": "side-mark",
-                    "index": 0,
-                    "tone": "ok"
-                  },
-                  {
-                    "t": "side-mark",
-                    "index": 1,
-                    "tone": "ok"
-                  },
-                  {
-                    "t": "side-mark",
-                    "index": 2,
-                    "tone": "ok"
-                  },
-                  {
-                    "t": "side-mark",
-                    "index": 3,
-                    "tone": "ok"
-                  },
-                  {
-                    "t": "side-mark",
-                    "index": 4,
-                    "tone": "ok"
-                  },
-                  {
-                    "t": "answer",
-                    "text": "Elke ochtend schone gangen, zonder extra mensen.\nOnze schoonmaakrobot werkt 's nachts. Je eigen schoonmakers houden overdag tijd over voor de rest.\nProbeer het een week op je eigen locatie: vraag een proefweek aan bij je accountmanager."
-                  }
-                ],
-                "model": "Opus 5.5",
-                "side": {
-                  "title": "Briefing",
-                  "items": [
-                    {
-                      "text": "Rol",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "Doel",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "Context",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "Vorm",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "Voorbeeld",
-                      "tone": "muted"
-                    }
-                  ]
-                },
-                "verdict": {
-                  "tone": "ok",
-                  "text": "In één keer raak"
-                },
-                "label": "Gebriefd"
+                "t": "answer",
+                "text": "24 regels: prijzen in orde.\nLet op: regel 7 heeft een ander artikelnummer!",
+                "s": 1
               }
             ]
           },
           {
-            "label": "Zeg waarom",
-            "caption": "Leg uit waarom je iets wilt. Dan snapt Claude het doel en doet hij ook wat je niet letterlijk noemde. Anthropic raadt dit zelf aan.",
-            "panes": [
+            "label": "Gebriefd",
+            "events": [
               {
-                "title": "Claude",
-                "events": [
+                "t": "user",
+                "text": "**Rol:** je helpt een inkoper bij een machinebouwer.\n**Doel:** check deze OB tegen mijn PO.\n**Context:** een opvolger met andere typecode is goed. Centen verschil wél melden.\n**Vorm:** alleen de afwijkingen.\n**Voorbeeld:** Regel 4: prijs 12,40 → 12,90",
+                "s": 2,
+                "files": [
                   {
-                    "t": "user",
-                    "text": "Schrijf de veiligheidsinstructie zonder afkortingen."
+                    "name": "OB.pdf",
+                    "kind": "pdf"
                   },
                   {
-                    "t": "answer",
-                    "text": "Alvorens de machine in werking te stellen, dient men zich ervan te vergewissen dat de borstelkop correct is bevestigd en de tank niet boven het maximale niveau is gevuld."
+                    "name": "PO.xlsx",
+                    "kind": "sheet"
                   }
-                ],
-                "label": "Alleen de regel",
-                "model": "Opus 5.5",
-                "verdict": {
-                  "tone": "warn",
-                  "text": "Regel gevolgd, doel gemist"
-                }
+                ]
               },
               {
-                "title": "Claude",
-                "events": [
-                  {
-                    "t": "user",
-                    "text": "Schrijf de veiligheidsinstructie zonder afkortingen. Hij komt als sticker op de machine, voor schoonmakers die vaak geen Nederlands als moedertaal hebben."
-                  },
-                  {
-                    "t": "answer",
-                    "text": "1. Zet de machine uit.\n2. Zit de borstel goed vast?\n3. Vul de tank tot de streep. Niet hoger.\n4. Zet de machine aan."
-                  }
-                ],
-                "label": "Regel **plus waarom**",
-                "model": "Opus 5.5",
-                "verdict": {
-                  "tone": "ok",
-                  "text": "Snapt het doel: korte zinnen, stappen"
-                }
-              }
-            ]
-          },
-          {
-            "label": "Mag ‘weet ik niet’ zeggen",
-            "caption": "Geef Claude toestemming om te zeggen dat hij iets niet weet. Volgens Anthropic vermindert dat verzonnen antwoorden flink. Nog beter: geef de bron mee en vraag om een citaat. (De RX-40 is een verzonnen machine.)",
-            "panes": [
-              {
-                "title": "Claude",
-                "events": [
-                  {
-                    "t": "user",
-                    "text": "Hoeveel m² haalt de RX-40 op één acculading?"
-                  },
-                  {
-                    "t": "answer",
-                    "text": "De RX-40 haalt ongeveer 2.400 m² per acculading."
-                  },
-                  {
-                    "t": "note",
-                    "tone": "bad",
-                    "text": "Klinkt stellig, maar is verzonnen."
-                  }
-                ],
-                "label": "Zonder toestemming",
-                "model": "Opus 5.5",
-                "verdict": {
-                  "tone": "bad",
-                  "text": "Een verzonnen antwoord"
-                }
-              },
-              {
-                "title": "Claude",
-                "events": [
-                  {
-                    "t": "user",
-                    "text": "Hoeveel m² haalt de RX-40 op één acculading? Weet je het niet zeker, zeg dat dan."
-                  },
-                  {
-                    "t": "answer",
-                    "text": "Dat weet ik niet zeker: de specificaties van de RX-40 heb ik niet.\nUpload de handleiding, dan zoek ik het op en citeer ik de passage."
-                  }
-                ],
-                "label": "Met toestemming",
-                "model": "Opus 5.5",
-                "verdict": {
-                  "tone": "ok",
-                  "text": "Eerlijk, met een route naar het goede antwoord"
-                }
+                "t": "answer",
+                "text": "Regel 9: prijs 8,15 → 8,65\nRegel 12: levering week 44 → 46",
+                "s": 3
               }
             ]
           }
         ]
       },
-      "metafoor": [
-        "De briefing aan de nieuwe collega. Zeg je alleen “regel jij die mail even?”, dan gaat hij gokken. Vertel je wie hij is, wat het doel is, wat er speelt en hoe het eruit moet zien, dan levert hij in één keer.",
-        "Gebruik de gouden regel: zou een collega die net binnenkomt jouw briefing snappen?"
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "De stagiair op dag één",
-          "tekst": "Anthropic adviseert bedrijven: “Think of Claude as an intern on their first day of the job: provide clear, explicit instructions with all the necessary detail.”",
-          "bron": {
-            "label": "Anthropic: Prompt engineering for business performance",
-            "url": "https://www.anthropic.com/news/prompt-engineering-for-business-performance"
-          }
-        },
-        {
-          "soort": "echt",
-          "titel": "De gouden regel",
-          "tekst": "Uit de officiële promptgids: “Show your prompt to a colleague with minimal context on the task and ask them to follow it. If they'd be confused, Claude will be too.”",
-          "bron": {
-            "label": "Claude Docs: Prompting best practices",
-            "url": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
-          }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "inkoop",
-          "titel": "Van vaag naar precies",
-          "erin": "“Je bent inkoper bij Numafa. Schrijf leverancier X, vriendelijk maar zakelijk, dat de levering van week 42 te laat is. Vraag vóór vrijdag een nieuwe datum. Maximaal 120 woorden.”",
-          "claude": "Weet nu wie hij is, wat het doel is en hoe lang het mag zijn.",
-          "eruit": "Een mail die je met één kleine aanpassing kunt versturen."
-        },
-        {
-          "soort": "thuis",
-          "titel": "Weekendje weg",
-          "tekst": "“Plan een weekend Antwerpen” geeft een folder. Met budget, wie er meegaat en “geen musea” krijg je een plan dat bij jou past."
-        }
-      ],
-      "probeer": {
-        "prompt": "Hier is een vraag die ik aan je wil stellen: [plak je vraag]. Stel me eerst maximaal vijf vragen over rol, doel, context en vorm, zodat je precies begrijpt wat ik nodig heb. Beantwoord hem pas daarna.",
-        "tip": "Handig trucje: laat Claude zelf de ontbrekende briefing ophalen."
+      "metafoor": "Zeg je tegen een nieuwe collega alleen “check even die OB”, dan weet hij niet waar hij op moet letten; Claude ook niet.",
+      "voorbeeld": {
+        "titel": "MOQ of overvoorraad",
+        "erin": "Context erbij: MOQ 500 stuks, verbruik zo'n 120 per jaar, en je wilt geen voorraad voor meer dan twee jaar.",
+        "claude": "Zet de MOQ naast 1, 2 en 3 jaar verbruik en de transportkosten.",
+        "eruit": "Een advies in drie zinnen: wel of niet bestellen, en hoeveel jaar voorraad je dan hebt."
       },
-      "valkuil": "Te veel tegelijk vragen in één prompt. Liever één duidelijke taak per bericht, en daarna bijsturen: “korter”, “formeler”, “zonder opsomming”.",
+      "valkuil": "Alles in één vraag proppen; liever één taak per bericht, en daarna bijsturen met “korter” of “alleen regel 1 tot 20”.",
       "quiz": [
         {
-          "vraag": "Wat is de gouden regel van Anthropic voor een goede prompt?",
+          "vraag": "Wat is de gouden regel van Anthropic voor een goede vraag?",
           "opties": [
+            "Laat je vraag lezen door een collega zonder voorkennis: snapt die het niet, dan Claude ook niet",
             "Schrijf altijd in het Engels",
-            "Laat je prompt lezen door een collega zonder voorkennis: snapt die het niet, dan Claude ook niet",
-            "Hoe korter de prompt, hoe beter"
+            "Hoe korter de vraag, hoe beter"
           ],
-          "goed": 1,
+          "goed": 0,
           "goedUitleg": "Precies. Een collega die net binnenkomt is de beste toets.",
-          "foutUitleg": "De gouden regel: zou een collega zonder voorkennis je prompt snappen?"
+          "foutUitleg": "De gouden regel: zou een collega zonder voorkennis je vraag snappen?"
         },
         {
-          "vraag": "Wat ontbreekt in: “Schrijf een mail aan de leverancier over de late levering, maximaal 100 woorden”?",
+          "vraag": "Wat ontbreekt in: “Check deze OB tegen mijn PO, alleen de afwijkingen”?",
           "opties": [
-            "De lengte",
-            "Wat de mail moet bereiken, zoals een nieuwe leverdatum",
-            "Het onderwerp"
+            "Context, zoals: een opvolger met andere typecode is goed",
+            "Het doel",
+            "De vorm"
           ],
-          "goed": 1,
-          "goedUitleg": "Klopt. Zonder doel weet hij niet wat de mail moet opleveren.",
-          "foutUitleg": "Lengte en onderwerp staan er al in. Het doel ontbreekt: wat moet de mail opleveren?"
+          "goed": 0,
+          "goedUitleg": "Klopt. Zonder die context meldt hij elke opvolger als fout.",
+          "foutUitleg": "Doel (check tegen PO) en vorm (alleen afwijkingen) staan er al. De context ontbreekt: wat is wél goed?"
         }
       ],
-      "stand": "2026-10-08",
+      "stand": "2026-10-09",
       "bronnen": [
         {
           "label": "Claude Docs: Prompting best practices",
@@ -680,42 +299,24 @@
         {
           "label": "Anthropic: Prompt engineering for business performance",
           "url": "https://www.anthropic.com/news/prompt-engineering-for-business-performance"
-        },
-        {
-          "label": "Claude Help Center: What are projects?",
-          "url": "https://support.claude.com/en/articles/9517075-what-are-projects"
-        },
-        {
-          "label": "Claude Code Docs: How Claude remembers your project",
-          "url": "https://code.claude.com/docs/en/memory"
-        },
-        {
-          "label": "Claude Docs: Reduce hallucinations",
-          "url": "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations"
         }
       ],
       "zoekwoorden": [
         "prompt",
+        "prompten",
         "briefing",
         "instructies",
         "gouden regel",
         "rol",
         "doel",
-        "prompten",
-        "voorbeelden",
-        "weet ik niet",
-        "hallucinatie",
-        "verzinnen"
+        "context",
+        "vorm",
+        "voorbeeld",
+        "OB",
+        "orderbevestiging"
       ],
-      "tips": [
-        "**Gouden regel:** zou een collega die niets van de klus weet je vraag snappen? Zo niet, dan Claude ook niet.",
-        "**Rol, doel, context, vorm, voorbeeld.** Niet elke vraag heeft ze alle vijf nodig; een belangrijke klus wel.",
-        "**Zeg waarom.** “Het komt op een sticker voor schoonmakers” werkt beter dan alleen “geen afkortingen”.",
-        "**Zeg wat wél.** “Korte zinnen, je-vorm” werkt beter dan “niet te lang, niet te formeel”.",
-        "**Geef voorbeelden.** Anthropic raadt er 3 tot 5 aan. Zet lange documenten bovenaan en je vraag eronder.",
-        "**Ruimte voor ‘weet ik niet’.** Gaat het om feiten, geef dan de bron mee en vraag om citaten.",
-        "**Geen hoofdletters of ‘ABSOLUUT’ nodig.** Nieuwe modellen volgen rustige instructies goed; te fel maakt ze juist overijverig."
-      ]
+      "id": "1.2",
+      "niveau": 1
     },
     {
       "id": "1.3",
@@ -1028,10 +629,6 @@
           "eruit": "Een nieuwe kolom voor Excel, in een paar minuten."
         }
       ],
-      "probeer": {
-        "prompt": "Schrijf een korte, vriendelijke mail aan een leverancier: de levering van week 42 is te laat en we willen vóór vrijdag een nieuwe datum. Maximaal 100 woorden.",
-        "tip": "Stuur deze prompt één keer met Haiku en één keer met Opus (kies het model naast de verzendknop). Voor zo'n mail is de snelle versie vaak al prima."
-      },
       "valkuil": "Altijd het zwaarste model kiezen ‘voor de zekerheid’. Fable en Opus zijn trager en gaan harder van je limiet af. Op een Pro- of standaard Team-abonnement betaal je Fable zelfs apart, met usage credits.",
       "quiz": [
         {
@@ -1464,10 +1061,6 @@
           "tekst": "Low: “Hoeveel gram is 3 cups bloem?” High: “Plan een moestuin met wisselteelt voor vier jaar.”"
         }
       ],
-      "probeer": {
-        "prompt": "Bedenk drie mogelijke oorzaken waarom een transportband af en toe stilvalt terwijl de motor gewoon draait, en zet ze op volgorde van waarschijnlijkheid.",
-        "tip": "Stuur deze vraag op Low en daarna op High (klik op het model naast de verzendknop, dan Effort). Klap de denkstappen uit en vergelijk."
-      },
       "valkuil": "Alles op Max (of in Claude Code op ultracode) zetten. Voor simpel werk wordt het antwoord niet beter: het duurt langer, hij doet vaak meer dan je vroeg en je limiet is sneller op. Begin bij de standaard en schroef alleen op als het antwoord te oppervlakkig is.",
       "quiz": [
         {
@@ -1531,118 +1124,259 @@
         "max",
         "ultracode",
         "overdenken"
-      ],
-      "tips": [
-        "**Laat de standaard staan** voor het meeste werk. Schroef pas op als het antwoord te oppervlakkig is.",
-        "**Low** voor kleine, duidelijke klussen: een kop aanpassen, een mail inkorten, iets omzetten. Hoe lager, hoe meer hij zich houdt aan precies wat je vroeg.",
-        "**High** voor lastig denkwerk: vergelijken, fouten zoeken, opties afwegen.",
-        "**Extra high en Max** alleen voor het zwaarste werk. Volgens Anthropic kost Max meestal veel voor weinig extra kwaliteit, en kan het tot overdenken leiden.",
-        "**Fast mode** (alleen Claude Code) als tijd echt geld waard is, zoals bij een haastklus."
       ]
     },
     {
-      "id": "1.5",
-      "niveau": 1,
       "titel": "Context window",
       "icoon": "desk",
-      "minuten": 2,
-      "kort": "Zijn bureau: wat erop ligt ziet hij, te vol en hij raakt het overzicht kwijt.",
-      "inEenZin": "Het context window is het werkgeheugen van één gesprek: alles wat erin zit ziet Claude, maar hoe voller het is, hoe slechter hij dingen terugvindt.",
-      "uitleg": [
-        "Alles in een gesprek telt mee: jouw vragen, zijn antwoorden, geplakte mails en geüploade pdf's. Claude meet dat in **tokens**; een token is ongeveer een half woord. De huidige modellen kunnen 1 miljoen tokens aan, zo'n 555.000 woorden.",
-        "Dat is veel, maar vol is niet hetzelfde als handig. Hoe meer er ligt, hoe slechter hij losse details terugvindt. Anthropic noemt dat *context rot*. Raakt het vol, dan vat Claude oudere berichten automatisch samen. Dat werkt, maar details kunnen sneuvelen. Dus: één onderwerp per gesprek, en voor iets nieuws een nieuwe chat."
-      ],
-      "visualTitel": "Het bureau dat volloopt",
+      "minuten": 1,
+      "kort": "Alles wat je in één chat plakt, ligt op Claudes bureau; hoe voller het is, hoe slechter hij details terugvindt.",
+      "uitleg": "Alles in een gesprek telt mee: je vragen, zijn antwoorden en elke pdf of export die je plakt. Op betaalde abonnementen past er veel in: tot 1 miljoen tokens, zo'n 555.000 woorden. Maar hoe voller, hoe slechter hij losse afspraken terugvindt. Raakt het vol, dan vat hij oudere berichten samen, en dan kunnen details sneuvelen.",
+      "visualTitel": "Het bureau loopt vol",
       "visual": {
-        "type": "desk"
-      },
-      "metafoor": [
-        "Zie het als zijn bureau. Wat erop ligt, ziet hij meteen. Leg je er een handleiding van 300 pagina's, drie mailthreads en een Excel-export bij, dan ligt alles er nog wel, maar zoekt hij zich suf naar dat ene briefje van vanochtend.",
-        "Een nieuwe chat is een schoon bureau. Zijn notitieboekje (memory) en de projectmap neemt hij wel mee."
-      ],
-      "voorbeelden": [
-        {
-          "soort": "echt",
-          "titel": "Claude speelt Pokémon",
-          "tekst": "Een potje Pokémon duurt veel langer dan in één context past. Claude begon uit zichzelf notities bij te houden: kaarten van verkende gebieden, behaalde mijlpalen, welke aanval tegen welke tegenstander werkt. Niemand had erom gevraagd.",
-          "bron": {
-            "label": "Anthropic: Effective context engineering",
-            "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+        "type": "scene",
+        "alt": "Een bureau met een meter. Er komen documenten bij; de afspraak van het begin raakt ondergesneeuwd.",
+        "items": [
+          {
+            "id": "bar",
+            "type": "bar",
+            "x": 30,
+            "y": 13,
+            "w": 290,
+            "h": 8,
+            "value": 0.03
+          },
+          {
+            "id": "pct",
+            "type": "text",
+            "x": 332,
+            "y": 5,
+            "w": 70,
+            "h": 22,
+            "text": "3% vol",
+            "tone": "muted",
+            "bold": true
+          },
+          {
+            "id": "desk",
+            "type": "zone",
+            "x": 14,
+            "y": 34,
+            "w": 392,
+            "h": 182
+          },
+          {
+            "id": "afspraak",
+            "type": "card",
+            "x": 30,
+            "y": 48,
+            "w": 176,
+            "h": 44,
+            "label": "Afspraak: opvolger is goed",
+            "icon": "check",
+            "tone": "soft"
+          },
+          {
+            "id": "po",
+            "type": "card",
+            "x": 214,
+            "y": 38,
+            "w": 176,
+            "h": 44,
+            "label": "PO-export",
+            "icon": "sheet",
+            "opacity": 0
+          },
+          {
+            "id": "ob",
+            "type": "card",
+            "x": 30,
+            "y": 92,
+            "w": 176,
+            "h": 44,
+            "label": "OB.pdf",
+            "icon": "doc",
+            "opacity": 0
+          },
+          {
+            "id": "zip",
+            "type": "card",
+            "x": 214,
+            "y": 92,
+            "w": 176,
+            "h": 44,
+            "label": "Tekeningen.zip",
+            "icon": "folder",
+            "opacity": 0
+          },
+          {
+            "id": "mail",
+            "type": "card",
+            "x": 30,
+            "y": 146,
+            "w": 360,
+            "h": 44,
+            "label": "Mailwisseling",
+            "icon": "mail",
+            "opacity": 0
+          },
+          {
+            "id": "fout",
+            "type": "card",
+            "x": 70,
+            "y": 224,
+            "w": 280,
+            "h": 32,
+            "label": "Regel 7: ander artikel!",
+            "icon": "warn",
+            "tone": "bad",
+            "opacity": 0
           }
-        },
-        {
-          "soort": "numafa",
-          "afdeling": "engineering",
-          "titel": "De handleiding van 300 pagina's",
-          "erin": "De machinehandleiding (pdf) en de vraag: “Welk aanhaalmoment geldt voor de pompflens?”",
-          "claude": "Zoekt het juiste hoofdstuk op het volle bureau.",
-          "eruit": "De waarde mét paginanummer, zodat je het zelf nakijkt."
-        },
-        {
-          "soort": "thuis",
-          "titel": "De vakantiechat van twee weken",
-          "erin": "Twee weken heen-en-weer over de zomervakantie.",
-          "claude": "Begint te vergeten dat de hond mee moet.",
-          "eruit": "Laat een samenvatting maken, plak die in een nieuwe chat, en hij is weer scherp."
-        }
-      ],
-      "probeer": {
-        "prompt": "Vat ons gesprek tot nu toe samen in maximaal 10 punten: wat is besloten, wat staat nog open, en welke getallen en namen zijn belangrijk. Schrijf het zo dat ik het in een nieuwe chat kan plakken en daar meteen verder kan.",
-        "tip": "Plak dit aan het eind van een lang gesprek. Open daarna een nieuwe chat en plak de samenvatting erin. In Claude Code doet `/compact` iets vergelijkbaars."
+        ],
+        "steps": [
+          {
+            "caption": "Afspraak: een opvolger is goed."
+          },
+          {
+            "caption": "PO-export en OB erbij.",
+            "set": {
+              "po": {
+                "opacity": 1,
+                "y": 48
+              },
+              "ob": {
+                "opacity": 1,
+                "y": 102
+              },
+              "bar": {
+                "value": 0.3
+              },
+              "pct": {
+                "text": "30% vol"
+              }
+            }
+          },
+          {
+            "caption": "Tekeningen en mails erbij: bijna vol.",
+            "set": {
+              "zip": {
+                "opacity": 1,
+                "y": 102
+              },
+              "mail": {
+                "opacity": 1,
+                "y": 156
+              },
+              "bar": {
+                "value": 0.9,
+                "tone": "warn"
+              },
+              "pct": {
+                "text": "90% vol",
+                "tone": "warn"
+              },
+              "afspraak": {
+                "opacity": 0.3
+              }
+            }
+          },
+          {
+            "caption": "Hij meldt de opvolger toch: afspraak kwijt.",
+            "set": {
+              "fout": {
+                "opacity": 1
+              }
+            }
+          },
+          {
+            "caption": "Oplossing: nieuwe chat, afspraak in een project.",
+            "set": {
+              "po": {
+                "opacity": 0
+              },
+              "ob": {
+                "opacity": 0
+              },
+              "zip": {
+                "opacity": 0
+              },
+              "mail": {
+                "opacity": 0
+              },
+              "fout": {
+                "opacity": 0
+              },
+              "bar": {
+                "value": 0.03,
+                "tone": "ok"
+              },
+              "pct": {
+                "text": "3% vol",
+                "tone": "ok"
+              },
+              "afspraak": {
+                "opacity": 1,
+                "tone": "ok",
+                "label": "Project: opvolger is goed"
+              }
+            }
+          }
+        ]
       },
-      "valkuil": "Eén eindeloze chat ‘omdat alles er toch in staat’. Juist daardoor gaat hij details missen of door elkaar halen. Nieuw onderwerp? Nieuwe chat.",
+      "metafoor": "Een bureau waarop steeds meer stapels komen: het briefje met jullie afspraak raakt eronder bedolven.",
+      "voorbeeld": {
+        "titel": "Plaatwerk-OB aan het eind van de dag",
+        "erin": "Een plaatwerk-OB van 100+ regels, aan het eind van een lange chat vol tekeningen en mails.",
+        "claude": "Vindt de afspraak van vanochtend slecht terug en meldt opvolgers weer als fout.",
+        "eruit": "Beter: een nieuwe chat in het project Inkoop, waar de afspraak vast in staat."
+      },
+      "valkuil": "Eén chat de hele week openhouden voor alles; begin voor een nieuwe klus een nieuwe chat.",
       "quiz": [
         {
-          "vraag": "Je chat al drie weken in één gesprek over een project en Claude haalt oude afspraken door elkaar. Wat helpt het meest?",
+          "vraag": "Na een lange chat met exports, tekeningen en mails meldt Claude opvolgers ineens weer als fout. Waarom?",
           "opties": [
-            "Effort op Max zetten",
-            "Een samenvatting laten maken en verder in een nieuwe chat",
-            "Alle documenten nog een keer plakken",
-            "Overstappen op Haiku"
+            "Het bureau is zo vol dat hij de afspraak van het begin slechter terugvindt",
+            "Hij negeert afspraken na een uur",
+            "De leverancier heeft de OB aangepast"
           ],
-          "goed": 1,
-          "goedUitleg": "Een samenvatting in een nieuwe chat geeft hem een schoon bureau met alleen wat telt.",
-          "foutUitleg": "Meer denkkracht of meer papier helpt niet als het bureau al te vol ligt. Begin schoon met een samenvatting."
+          "goed": 0,
+          "goedUitleg": "Precies. Anthropic noemt dat context rot.",
+          "foutUitleg": "Hoe voller het bureau, hoe slechter hij details van het begin terugvindt."
         },
         {
-          "vraag": "Wat telt mee in het context window?",
+          "vraag": "Wat is dan de beste oplossing?",
           "opties": [
-            "Alleen jouw vragen",
-            "Alleen geüploade bestanden",
-            "Alles in het gesprek: vragen, antwoorden en bestanden"
+            "Een nieuwe chat, met vaste afspraken in een project",
+            "Alles nog een keer plakken in dezelfde chat",
+            "Een langere vraag stellen"
           ],
-          "goed": 2,
-          "goedUitleg": "Klopt. Ook zijn eigen antwoorden liggen op het bureau.",
-          "foutUitleg": "Bijna. Alles in het gesprek telt mee, ook zijn eigen antwoorden."
+          "goed": 0,
+          "goedUitleg": "Klopt. Een schoon bureau, en de afspraak staat vast.",
+          "foutUitleg": "Meer plakken maakt het bureau voller. Begin een nieuwe chat, met de afspraak in een project."
         }
       ],
-      "stand": "2026-10-08",
+      "stand": "2026-10-09",
       "bronnen": [
         {
           "label": "Claude Help Center: How large is the context window on paid Claude plans?",
           "url": "https://support.claude.com/en/articles/8606394-how-large-is-the-context-window-on-paid-claude-plans"
         },
         {
-          "label": "Claude Docs: Models overview (1M tokens ≈ 555.000 woorden)",
-          "url": "https://platform.claude.com/docs/en/about-claude/models/overview"
-        },
-        {
           "label": "Anthropic: Effective context engineering for AI agents",
           "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
-        },
-        {
-          "label": "Claude Code Docs: Explore the context window",
-          "url": "https://code.claude.com/docs/en/context-window"
         }
       ],
       "zoekwoorden": [
+        "context window",
         "tokens",
         "context rot",
-        "/compact",
-        "/context",
-        "samenvatten",
-        "geheugen"
-      ]
+        "bureau",
+        "vol",
+        "nieuwe chat",
+        "vergeten"
+      ],
+      "id": "1.5",
+      "niveau": 1
     },
     {
       "id": "1.6",
@@ -1883,12 +1617,6 @@
           }
         ]
       },
-      "tips": [
-        "**Eenmalig?** Gewoon vragen in een chat.",
-        "**Komt het terug?** Schrijf één keer op wat erin moet, hoe het eruitziet en wat goed is, met een voorbeeld.",
-        "**Altijd precies dezelfde stappen?** Laat Claude één keer een script schrijven. Daarna doet gewone code het werk, zonder AI. Scripts draaien via IT, niet op je werkplek.",
-        "**Weet je het niet?** Vraag het Claude: “Ik doe dit elke week. Wat is de beste manier om dit vast te leggen?”"
-      ],
       "metafoor": [
         "Vraag je een nieuwe collega elke week mondeling “maak even dat overzicht”, dan krijg je elke week iets anders. Geef je hem één keer een werkinstructie met een voorbeeld, dan is het elke week hetzelfde.",
         "En soms is het slimmer om hem één keer een machine te laten bouwen die het werk daarna zelf doet. Dan heb je hem voor dat klusje niet meer nodig."
@@ -1917,10 +1645,6 @@
           "tekst": "Elke week opnieuw bedenken wat je nodig hebt, of een vaste basislijst die je alleen aanvult. Het tweede is sneller, en je vergeet minder."
         }
       ],
-      "probeer": {
-        "prompt": "Ik doe deze klus regelmatig: [beschrijf de klus, bijvoorbeeld: elke maandag een overzicht van de servicebezoeken maken]. Help me hem vast te leggen. Stel me eerst vragen over wat erin moet, hoe het eruit moet zien en wat ‘goed’ is. Schrijf daarna richtlijnen van maximaal tien regels die ik in een project of skill kan zetten.",
-        "tip": "Plak de richtlijnen in een project (2.3) of laat Claude er een skill van maken (2.5)."
-      },
       "valkuil": "Elke week dezelfde korte vraag in een nieuwe chat, en dan elke week de verschillen verbeteren. Dat kost meer tijd dan één keer de richtlijnen vastleggen.",
       "quiz": [
         {
@@ -2178,10 +1902,6 @@
           "eruit": "Rapporten in vaste vorm, antwoorden met artikelnummer, en maandag om 7:30 een lijst met open tickets."
         }
       ],
-      "probeer": {
-        "prompt": "Ik werk op de afdeling [afdeling] bij een machinebouwer. Welke dingen zou ik in mijn voorkeuren zetten, welke in een project, en voor welke terugkerende taak loont een skill? Geef per bouwsteen twee concrete voorbeelden voor mijn werk.",
-        "tip": "Een goed begin voor niveau 2: je krijgt meteen een plan om Claude voor jouw werk in te richten."
-      },
       "valkuil": "Alles in je voorkeuren proppen. Die liggen in elke chat op zijn bureau, ook als ze niet relevant zijn. Een lange werkwijze voor één taak hoort in een skill.",
       "quiz": [
         {
@@ -2472,10 +2192,6 @@
           "tekst": "“Ik kook vegetarisch voor vier personen” in je voorkeuren, en elk recept komt voortaan meteen goed omgerekend."
         }
       ],
-      "probeer": {
-        "prompt": "Hier zijn drie teksten die ik goed vind: [plak ze]. Beschrijf mijn schrijfstijl in een kort stijlbestand (schrijfstijl.md) met: toon, zinslengte, woorden die ik wel en niet gebruik, en één goed en één fout voorbeeld.",
-        "tip": "Zet het resultaat in de kennis van een project, of vraag daarna: “maak hier een skill van”."
-      },
       "valkuil": "Een lap tekst in je voorkeuren zetten. Die ligt in elke chat op zijn bureau, ook als het niet relevant is. Houd voorkeuren kort; de uitgebreide stijl gaat in een .md-bestand of skill.",
       "quiz": [
         {
@@ -2755,10 +2471,6 @@
           "tekst": "Een project met offertes, de plattegrond en je budget. Elke vraag over tegels of planning begint dan met alle feiten op tafel."
         }
       ],
-      "probeer": {
-        "prompt": "Ik wil een project inrichten voor [onderwerp, bijvoorbeeld: offertes beoordelen]. Schrijf korte projectinstructies (maximaal tien regels: rol, regels, vorm van de antwoorden) en noem welke documenten ik als projectkennis moet toevoegen.",
-        "tip": "Maak daarna een project aan via Projects in de zijbalk en plak de instructies erin."
-      },
       "valkuil": "Denken dat chats in hetzelfde project elkaar vanzelf kennen. Alleen de instructies en de kennis gaan altijd mee. Belangrijke uitkomst? Zet hem als document in de projectkennis.",
       "quiz": [
         {
@@ -3013,10 +2725,6 @@
           "tekst": "“Ik heb een notenallergie” wordt standaard níet onthouden: gezondheid telt als gevoelig onderwerp. Wil je dat wel, dan zet je dat zelf aan in Settings > Memory."
         }
       ],
-      "probeer": {
-        "prompt": "Wat weet je allemaal over mij? Zet het in een lijstje, en vertel erbij wat ik zelf kan aanpassen of wissen.",
-        "tip": "Werkt alleen als memory aan staat. Kijk daarna ook even in Settings > Memory."
-      },
       "valkuil": "Denken dat een gesprek verwijderen ook de notities wist. Die blijven staan tot je ze zelf wist in Settings > Memory.",
       "quiz": [
         {
@@ -3327,10 +3035,6 @@
           "tekst": "Een skill die elk boodschappenlijstje sorteert in de volgorde van jouw supermarkt."
         }
       ],
-      "probeer": {
-        "prompt": "Ik wil een skill maken voor [terugkerende taak, bijvoorbeeld: een servicerapport schrijven]. Stel me eerst vragen over wanneer ik hem gebruik en wat een goed resultaat is. Maak daarna de skill, met een duidelijk sjabloon en één voorbeeld.",
-        "tip": "Werkt in de Claude-app als code execution aan staat. Bewaar de skill met de knop onder het resultaat."
-      },
       "valkuil": "Een vage beschrijving. Aan de beschrijving ziet Claude wanneer hij de skill moet pakken. Schrijf er dus precies in wanneer hij van toepassing is, bijvoorbeeld: “gebruik bij servicerapporten na een storing”.",
       "quiz": [
         {
@@ -3392,13 +3096,6 @@
         "beschrijving",
         "etiket",
         "Using"
-      ],
-      "tips": [
-        "**Maak een skill** als je steeds dezelfde uitleg, checklist of werkwijze in de chat plakt.",
-        "**Het etiket is alles.** Zet in de beschrijving wat de skill doet én wanneer Claude hem moet pakken, met de belangrijkste situatie voorop.",
-        "**Doe voorbeelden en sjablonen in het mapje.** Eén goed voorbeeld zegt meer dan een lange uitleg.",
-        "**Lang mag.** Alleen het etiket ligt altijd op zijn bureau; de rest leest hij pas als hij de skill gebruikt.",
-        "**Test hem.** Vraag iets wat bij de skill hoort en kijk of je “Using …” met de naam van je skill ziet."
       ],
       "groep": "gereedschap"
     },
@@ -3650,10 +3347,6 @@
           "tekst": "Met Gmail en Google Agenda gekoppeld: “Zoek de bevestiging van mijn treinreis en zet hem in mijn agenda.”"
         }
       ],
-      "probeer": {
-        "prompt": "Bekijk mijn mail van de afgelopen week. Welke klantmails over storingen moet ik nog opvolgen? Geef per klant één regel met de machine, het probleem en wat er van mij verwacht wordt, en zet voor de drie belangrijkste een conceptantwoord klaar. Verstuur niets.",
-        "tip": "Werkt met de Microsoft 365-connector of in Claude for Outlook, als die bij jullie zijn ingesteld. Zie je ze niet, vraag het IT."
-      },
       "valkuil": "Concepten ongelezen versturen. Mails van buiten kunnen verborgen instructies bevatten die Claude op het verkeerde been zetten. Lees altijd na, en kijk vooral naar de ontvangers.",
       "quiz": [
         {
@@ -3983,10 +3676,6 @@
           "tekst": "Drie webshops open, en Claude zet energielabel, toerental en prijs naast elkaar."
         }
       ],
-      "probeer": {
-        "prompt": "Ik heb drie tabbladen open met [product, bijvoorbeeld: frequentieregelaars] van verschillende leveranciers. Maak een vergelijkingstabel met vermogen, IP-klasse, levertijd en prijs als die vermeld staat. Klik niets aan en vul niets in.",
-        "tip": "Alleen met de extensie Claude in Chrome, in Google Chrome, op een betaald abonnement."
-      },
       "valkuil": "Claude laten klikken op sites waar je eigen account aan hangt, zonder mee te kijken. Laat hem altijd stoppen vóór Verzenden of Betalen.",
       "quiz": [
         {
@@ -4198,10 +3887,6 @@
           "tekst": "“Maak een quiz van tien vragen over oma's 80 jaar, met een scorebord.” Klaar om te delen in de familie-app."
         }
       ],
-      "probeer": {
-        "prompt": "Maak een interactieve checklist voor [een controle die jij vaak doet, bijvoorbeeld: de eindcontrole van een machine], met afvinkvakjes, een opmerkingenveld en een teller die laat zien hoeveel punten nog openstaan.",
-        "tip": "Het resultaat verschijnt als artifact naast het gesprek. Vraag daarna gewoon om aanpassingen."
-      },
       "valkuil": "Gevoelige gegevens invullen in een gedeeld artifact zonder te checken hoe het opslaat. Een artifact kan gegevens delen met iedereen die hem gebruikt.",
       "quiz": [
         {
@@ -4517,10 +4202,6 @@
           "tekst": "“Maak een uitnodiging voor een verjaardag in de tuin, vrolijk maar niet kinderachtig.” Twee varianten om uit te kiezen."
         }
       ],
-      "probeer": {
-        "prompt": "Maak een one-pager (A4) over [onderwerp, bijvoorbeeld: onze nieuwe reinigingsmodule] voor een beurs. Rustige opmaak, één grote kop, drie voordelen met korte uitleg, en onderaan contactgegevens als placeholder.",
-        "tip": "Upload eerst een bestaande presentatie of het huisstijlhandboek, dan neemt Claude kleuren en lettertypen over. Claude Design is in bèta; wat je ziet, verschilt per abonnement."
-      },
       "valkuil": "Productbeelden laten verzinnen. Gebruik echte foto's van jullie machines; een mooie maar niet-bestaande machine op een folder is misleidend.",
       "quiz": [
         {
@@ -4750,10 +4431,6 @@
           "eruit": "Een Word-document om na te lezen, en een tool die elke week hetzelfde besteladvies maakt."
         }
       ],
-      "probeer": {
-        "prompt": "Ik wil [een terugkerende klus, bijvoorbeeld: de wekelijkse voorraadlijst opschonen] automatiseren. Leg in gewone taal uit of ik dit beter in de Claude-app doe of met Claude Code, wat ik daarvoor nodig heb, en wat de eerste stap is.",
-        "tip": "Stel deze vraag gewoon in de Claude-app. Het antwoord helpt je kiezen voordat je begint."
-      },
       "valkuil": "Elke week dezelfde klus opnieuw in de chat laten doen. Terugkerend werk met bestanden laat je één keer bouwen met Claude Code; een eenmalige tekst doe je in de app.",
       "quiz": [
         {
@@ -5014,10 +4691,6 @@
           "tekst": "“Vergelijk tien campings in de Ardennen op prijs, honden welkom en zwembad.” Na het eten staat de tabel klaar."
         }
       ],
-      "probeer": {
-        "prompt": "Zoek voor deze onderdelen alternatieve leveranciers in de EU: [plak de lijst]. Vergelijk per leverancier levertijd, certificeringen en minimale bestelhoeveelheid, zet alles in een Excel-bestand en schrijf er een samenvatting van vijf regels bij.",
-        "tip": "Geef zo'n klus mee voordat je naar huis gaat en kijk de volgende ochtend. Controleer gevonden gegevens altijd even op de site van de leverancier."
-      },
       "valkuil": "Auto aanzetten voor een klus met mail of bestellingen zonder dat je weet wat hij gaat doen. Begin op Manual, kijk mee, en kies Auto pas als je de klus vertrouwt.",
       "quiz": [
         {
@@ -5219,10 +4892,6 @@
           "tekst": "Elke vrijdag een weekmenu met boodschappenlijst, rekening houdend met wat er in de aanbieding is."
         }
       ],
-      "probeer": {
-        "prompt": "Elke maandag om 7:30: maak een overzicht van wat er deze week in mijn agenda staat, welke afspraken ik moet voorbereiden en welke mails van vorige week nog op antwoord wachten. Kort, in opsommingen.",
-        "tip": "Typ dit in een nieuw gesprek; Claude stelt de geplande taak voor en jij bevestigt. Mail en agenda werken alleen als die connector aan staat."
-      },
       "valkuil": "Een geplande taak maken en nooit meer kijken. Controleer de eerste runs, en pauzeer taken die je niet meer nodig hebt: ze gebruiken je limiet.",
       "quiz": [
         {
@@ -5664,14 +5333,6 @@
           }
         ]
       },
-      "tips": [
-        "**Eenmalig?** Gewoon een chat.",
-        "**Komt het terug, met lezen, schrijven of oordelen?** Een project of skill, met richtlijnen en een voorbeeld.",
-        "**Moet het zonder jou lopen?** Een geplande taak (Claude kiest de aanpak) of een flow (vaste stappen).",
-        "**Elke keer precies dezelfde stappen?** Laat Claude één keer een script, formules of Power Query maken. Daarna doet gewone code het werk, zonder AI.",
-        "**Vaak is het een mix:** formules voor de getallen, Claude voor de toelichting erbij.",
-        "**Twijfel?** Beschrijf de klus aan Claude en vraag welke route past, met voor- en nadelen."
-      ],
       "metafoor": [
         "Je kunt de nieuwe collega een klus elke week laten doen, hem een vaste afspraak in zijn agenda geven, of hem één keer een machine laten bouwen die het werk daarna zelf doet.",
         "Een slimme collega kiest per klus: voor denkwerk doet hij het zelf, voor herhaalwerk bouwt hij liever een machine."
@@ -5711,10 +5372,6 @@
           "eruit": "Een lijst met verschillen. Jij start hem per offerte."
         }
       ],
-      "probeer": {
-        "prompt": "Ik wil deze klus automatiseren: [beschrijf de klus, hoe vaak hij voorkomt, waar de gegevens staan en wat eruit moet komen]. Zet de mogelijke routes naast elkaar: Claude elke keer (project of skill), een geplande taak, formules of Power Query, een script, een flow in Power Automate of een agent. Geef per route voor- en nadelen en wat ik nodig heb. Houd er rekening mee dat op onze werkplekken geen scripts mogen draaien. Adviseer daarna één route.",
-        "tip": "Neem het advies mee naar IT als er een script, koppeling of flow nodig is."
-      },
       "valkuil": "Alles met AI willen doen. Zijn de stappen elke keer precies hetzelfde, dan is een sjabloon, formule of flow sneller, goedkoper en voorspelbaarder. Bewaar Claude voor het werk waar gelezen, geschreven of nagedacht moet worden.",
       "quiz": [
         {
@@ -6111,10 +5768,6 @@
           "tekst": "Een eenvoudige website voor de voetbalclub, met het programma en de uitslagen, gebouwd vanaf je telefoon."
         }
       ],
-      "probeer": {
-        "prompt": "Maak een klein script dat een CSV-bestand met artikelnummers en voorraad inleest en een lijst maakt van alles onder de minimumvoorraad. Schrijf er een korte README bij voor iemand die niet programmeert, en test het met een voorbeeldbestand dat je zelf maakt.",
-        "tip": "Open claude.ai/code, koppel GitHub en kies een (lege, privé) repository. Vraag eerst IT of dat bij Numafa mag."
-      },
       "valkuil": "Bedrijfsgegevens in een openbare GitHub-repository zetten. Kies altijd een privé-repository, en overleg met IT voordat je echte exports gebruikt.",
       "quiz": [
         {
@@ -6428,10 +6081,6 @@
           "eruit": "Elke sessie begint goed ingewerkt, zonder dat je het opnieuw uitlegt."
         }
       ],
-      "probeer": {
-        "prompt": "/powerup",
-        "tip": "Typ dit in Claude Code. Je krijgt korte interactieve lessen met geanimeerde demo's."
-      },
       "valkuil": "`/clear` gebruiken als je eigenlijk `/compact` bedoelt. /clear begint helemaal opnieuw; /compact vat samen en houdt de draad vast.",
       "quiz": [
         {
@@ -6923,10 +6572,6 @@
           "eruit": "Een antwoord met ordernummers, zonder dat iemand een export hoeft te maken."
         }
       ],
-      "probeer": {
-        "prompt": "Leg in gewone taal uit wat een MCP-server is, en bedenk drie systemen bij een machinebouwer (bijvoorbeeld ERP, tekeningenarchief, servicetickets) waar zo'n koppeling tijd zou schelen. Noem per systeem één voorbeeldvraag en één risico.",
-        "tip": "Wil je echt iets koppelen? Kijk in Customize > Connectors welke er al zijn, en overleg met IT."
-      },
       "valkuil": "Zomaar een MCP-server van internet koppelen. Een server kan acties uitvoeren met jouw rechten. Alleen bekende bronnen, en bij twijfel IT vragen.",
       "quiz": [
         {
@@ -7177,10 +6822,6 @@
           "eruit": "Iedere monteur werkt op dezelfde manier, met dezelfde sjablonen."
         }
       ],
-      "probeer": {
-        "prompt": "Ik wil een plugin voor onze [afdeling] samenstellen. Welke drie skills, welke connectors en welke commando's zouden erin moeten? Beschrijf per onderdeel in één zin wat het doet en waarom het tijd scheelt.",
-        "tip": "Dit is een ontwerpvraag. Installeren doe je via Customize > Plugins, of laat het aan je beheerder over."
-      },
       "valkuil": "Een plugin van een onbekende bron installeren. Agents en hooks in een plugin kunnen commando's op je computer uitvoeren.",
       "quiz": [
         {
@@ -7561,10 +7202,6 @@
           "eruit": "Een Teams-bericht naar de monteur van dienst, met samenvatting en urgentie."
         }
       ],
-      "probeer": {
-        "prompt": "Ik wil deze terugkerende klus automatiseren: [beschrijf de klus, bijvoorbeeld: elke nieuwe storingsmelding van het webformulier samenvatten en naar de monteur van dienst sturen]. Doe ik dit beter met Power Automate, n8n of een geplande taak in Claude? Geef je advies in een tabel met voor- en nadelen, en schets de stappen.",
-        "tip": "Bij Numafa ligt Power Automate voor de hand als jullie Microsoft 365 gebruiken. Overleg met IT over koppelingen en API-sleutels."
-      },
       "valkuil": "Claude laten beslissen waar een vaste regel volstaat. Als de stappen altijd hetzelfde zijn, is een flow voorspelbaarder, goedkoper en makkelijker te controleren.",
       "quiz": [
         {
@@ -7853,10 +7490,6 @@
           "eruit": "Orders staan klaar, ook ’s nachts. Tegenvoorbeeld: “elke maandag een rapport” heeft geen VPS nodig, dat is een geplande taak."
         }
       ],
-      "probeer": {
-        "prompt": "Ik overweeg een VPS voor [doel, bijvoorbeeld: n8n zelf hosten]. Zet op een rij: wat ik ermee kan, wat ik zelf moet beheren (updates, back-ups, beveiliging), welke alternatieven zonder eigen server er zijn, en welke vragen ik aan IT moet stellen.",
-        "tip": "Een goede voorbereiding voordat je bij IT aanklopt."
-      },
       "valkuil": "Een VPS huren voor iets wat Claude al in de cloud doet, zoals een wekelijks rapport. Dan beheer je een server voor niks.",
       "quiz": [
         {
@@ -8143,10 +7776,6 @@
           "eruit": "60 van 60 in orde, met een lijstje van wat hij heeft aangepast."
         }
       ],
-      "probeer": {
-        "prompt": "Ik wil dat je deze klus agentic aanpakt: [beschrijf de klus]. Maak eerst een plan in stappen, voer daarna stap voor stap uit, controleer na elke stap of het resultaat klopt, en meld pas dat je klaar bent als alles gecontroleerd is. Stop en vraag het me als je twijfelt.",
-        "tip": "Werkt in Claude Code en in de Claude-app. In de app kies je in het berichtvak of hij op Manual of Auto werkt."
-      },
       "valkuil": "Een agent laten werken zonder duidelijk eindpunt. Dan gaat hij eindeloos door of stopt hij te vroeg. Zeg wanneer het klaar is: “alle 60 documenten hebben een veiligheidsparagraaf”.",
       "quiz": [
         {
@@ -8446,10 +8075,6 @@
           "eruit": "Jij corrigeert één aanname vóór er iets gebouwd is."
         }
       ],
-      "probeer": {
-        "prompt": "/plan Maak een script dat in onze stuklijst-export (CSV) dubbele artikelnummers vindt. Varianten met -A en -B tellen niet als dubbel. Laat in het plan zien welke aannames je doet.",
-        "tip": "In Claude Code. Lees het plan kritisch: kloppen de aannames? Pas dan goedkeuren."
-      },
       "valkuil": "Het plan zonder lezen goedkeuren. Juist de aannames in het plan bepalen of het resultaat klopt.",
       "quiz": [
         {
@@ -8694,10 +8319,6 @@
           "eruit": "Een prijslijst die klopt, met een verslag per ronde."
         }
       ],
-      "probeer": {
-        "prompt": "/goal alle artikelcodes in prijslijst.csv komen voor in stamdata.csv en het controlescript meldt 0 fouten, of stop na 15 beurten",
-        "tip": "In Claude Code. Schrijf een voorwaarde die Claude kan aantonen, zoals de uitkomst van een script."
-      },
       "valkuil": "Een vage voorwaarde als “maak het beter”. De keurmeester kan dat niet beoordelen. Kies iets meetbaars: een testresultaat, een aantal, een lege lijst.",
       "quiz": [
         {
@@ -9018,10 +8639,6 @@
           "eruit": "Het hoofdgesprek krijgt vijf regels met de oorzaak, en het bureau blijft leeg."
         }
       ],
-      "probeer": {
-        "prompt": "Gebruik een subagent om alle bestanden in deze map te doorzoeken op plekken waar een vaste btw-waarde in de code staat. Laat hem alleen een lijst terugbrengen met bestand, regel en de gevonden waarde.",
-        "tip": "In Claude Code. Of typ /subtask met de opdracht erachter; dan werkt het hulpje op de achtergrond en ga jij verder."
-      },
       "valkuil": "Voor elk klein dingetje hulpjes inzetten. Elk hulpje kost tokens. Gebruik ze voor zoekwerk dat anders je bureau zou volgooien.",
       "quiz": [
         {
@@ -9238,10 +8855,6 @@
           "eruit": "Jij gaat verder met de prijslijst; /tasks laat zien wanneer de ombouw klaar is."
         }
       ],
-      "probeer": {
-        "prompt": "/fork Probeer dezelfde opdracht met een andere aanpak: gebruik een tabel in plaats van losse alinea's, en vergelijk daarna welke versie duidelijker is.",
-        "tip": "In Claude Code. Met /tasks zie je daarna wat er op de achtergrond loopt."
-      },
       "valkuil": "Vijf dingen tegelijk laten lopen en dan niet meer weten wat waar gebeurt. Gebruik /tasks, en maak werk af voordat je nieuwe klussen start.",
       "quiz": [
         {
@@ -9643,10 +9256,6 @@
           "eruit": "Een rapport met bronvermelding als startpunt voor engineering en kwaliteit."
         }
       ],
-      "probeer": {
-        "prompt": "/deep-research Wat moeten machinebouwers regelen voor de nieuwe EU-Machineverordening (2023/1230), en wat verandert er ten opzichte van de Machinerichtlijn? Geef een overzicht per onderwerp, met bronnen.",
-        "tip": "In Claude Code, op een betaald abonnement. Controleer belangrijke punten altijd in de bron zelf: dit is een startpunt, geen juridisch advies."
-      },
       "valkuil": "Een workflow starten voor iets kleins. Tientallen hulpjes kosten tientallen keren zoveel tokens. Probeer het eerst op een klein stukje.",
       "quiz": [
         {
@@ -9872,10 +9481,6 @@
           "eruit": "Een betere opzet, zonder dat je alles met het duurdere model doet."
         }
       ],
-      "probeer": {
-        "prompt": "/advisor opus",
-        "tip": "Typ dit in Claude Code voordat je aan een lange klus begint. Uitzetten met /advisor off."
-      },
       "valkuil": "De adviseur aanzetten voor korte klusjes. Dan betaal je voor advies dat je niet nodig hebt.",
       "quiz": [
         {
@@ -10128,10 +9733,6 @@
           "eruit": "De oude, goede versie terug. Daarna opnieuw, met een duidelijkere instructie."
         }
       ],
-      "probeer": {
-        "prompt": "/rewind",
-        "tip": "In Claude Code. Of druk twee keer op Esc met een leeg invoerveld. Kies dan het punt en wat je wilt terugzetten."
-      },
       "valkuil": "Vertrouwen op /rewind in plaats van git. Wat via commando's is gewijzigd of verwijderd, komt niet terug. Laat Claude regelmatig committen.",
       "quiz": [
         {
@@ -10373,10 +9974,6 @@
           "eruit": "Om 7:00 ligt er een lijstje met afwijkingen."
         }
       ],
-      "probeer": {
-        "prompt": "/schedule elke werkdag om 6:30: draai het controlescript op de nieuwste stuklijst-export in deze repository en zet de afwijkingen in een kort overzicht",
-        "tip": "In Claude Code (alias /routines). Routines draaien in de cloud en tellen mee in je verbruik."
-      },
       "valkuil": "Een routine maken die zelf dingen verandert zonder dat iemand meekijkt. Laat hem liever melden dan aanpassen, zeker in het begin.",
       "quiz": [
         {
@@ -10686,10 +10283,6 @@
           "eruit": "Het lichtste gereedschap dat de klus klaart."
         }
       ],
-      "probeer": {
-        "prompt": "Ik wil deze klus agentic laten doen: [beschrijf de klus]. Welke Claude Code-commando's (/plan, /goal, /loop, /subtask, /background, /fork, /batch, /deep-research, /advisor, /schedule) zou je inzetten, in welke volgorde, en waarom? Kies het lichtste gereedschap dat volstaat.",
-        "tip": "Kan in de Claude-app of in Claude Code. Je krijgt een stappenplan met commando's."
-      },
       "valkuil": "Meteen het zwaarste gereedschap pakken. Workflows en /batch zijn indrukwekkend, maar kosten veel tokens. Een plan en één hulpje is vaak genoeg.",
       "quiz": [
         {
@@ -10963,10 +10556,6 @@
           "eruit": "Een draaiboek voor de opname in de hal, plus ideeën voor sfeerbeelden."
         }
       ],
-      "probeer": {
-        "prompt": "Schrijf een storyboard voor een video van 30 seconden voor LinkedIn over [onderwerp]. Maak een tabel met per shot: tijd, wat je ziet, tekst in beeld en voice-over. Markeer welke shots met echte opnames moeten.",
-        "tip": "Gebruik het storyboard daarna in een videotool, of gewoon met je telefoon in de hal."
-      },
       "valkuil": "AI-beelden gebruiken alsof het echte foto's zijn. Vermeld het als een beeld met AI is gemaakt, en gebruik geen herkenbare personen zonder toestemming.",
       "quiz": [
         {
@@ -11130,10 +10719,6 @@
           "eruit": "Een beeld van welk model het beste Nederlands schrijft voor dit soort teksten."
         }
       ],
-      "probeer": {
-        "prompt": "Schrijf een korte werkinstructie (maximaal zes stappen) voor het wisselen van een filter in een industriële pomp. Gebruik eenvoudig Nederlands en begin met de veiligheidsstap.",
-        "tip": "Plak dit in een arena-site en kies blind het beste antwoord. Of vergelijk zelf: stuur het naar twee Claude-modellen. Nooit bedrijfsinformatie gebruiken."
-      },
       "valkuil": "Bedrijfsinformatie in een publieke arena zetten. Alles wat je daar typt, is niet meer van jou.",
       "quiz": [
         {

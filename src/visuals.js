@@ -31,6 +31,59 @@
   function getMeet() { try { return window.localStorage.getItem(MEET_KEY) === "1"; } catch (e) { return false; } }
   function setMeet(on) { try { window.localStorage.setItem(MEET_KEY, on ? "1" : "0"); } catch (e) {} }
 
+  /* ================= Stapbediening (voor elke visual) =================
+     Niets loopt vanzelf. Volgende stap: klik of rechtsklik in de visual, pijl rechts, spatie of PageDown.
+     Vorige stap: pijl links of PageUp. Home of "Opnieuw": terug naar stap 1. Geen timers. */
+  function stepBarHTML() {
+    return '<div class="step-bar">' +
+      '<span class="step-count" aria-hidden="true"></span>' +
+      '<p class="stage-text" aria-live="polite"></p>' +
+      '<span class="step-btns">' +
+        '<button class="btn btn-small btn-icon" type="button" data-act="prev" aria-label="Vorige stap">‹</button>' +
+        '<button class="btn btn-small btn-icon" type="button" data-act="next" aria-label="Volgende stap">›</button>' +
+        '<button class="btn btn-small" type="button" data-act="restart">Opnieuw</button>' +
+      '</span></div><p class="step-hint"></p>';
+  }
+  function stepper(root, n, show, captions) {
+    var cur = 0;
+    var count = root.querySelector(".step-count"), text = root.querySelector(".step-bar .stage-text"), hint = root.querySelector(".step-hint");
+    var prevB = root.querySelector('[data-act="prev"]'), nextB = root.querySelector('[data-act="next"]'), restartB = root.querySelector('[data-act="restart"]');
+    root.tabIndex = 0;
+    root.setAttribute("role", "group");
+    root.classList.add("stepper");
+    function go(k) {
+      cur = Math.max(0, Math.min(n - 1, k));
+      show(cur);
+      count.textContent = (cur + 1) + "/" + n;
+      text.innerHTML = md(captions[cur] || "");
+      prevB.disabled = cur === 0; nextB.disabled = cur === n - 1; restartB.disabled = cur === 0;
+      hint.textContent = cur < n - 1 ? "Klik in het beeld of druk op → voor de volgende stap." : (n > 1 ? "Laatste stap. Met Opnieuw begin je bij stap 1." : "");
+      root.setAttribute("aria-label", "Animatie, stap " + (cur + 1) + " van " + n + ". Klik of pijl rechts: volgende stap. Pijl links: vorige stap.");
+    }
+    function interactive(t) { return t.closest && t.closest("button, a, input, label, select, textarea, summary, .step-btns, .stage-choices"); }
+    function focusRoot() { try { root.focus({ preventScroll: true }); } catch (e) { root.focus(); } }
+    root.addEventListener("click", function (e) { if (interactive(e.target)) return; go(cur + 1); focusRoot(); });
+    root.addEventListener("contextmenu", function (e) { if (interactive(e.target)) return; e.preventDefault(); go(cur + 1); focusRoot(); });
+    root.addEventListener("keydown", function (e) {
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      var k = e.key, onBtn = interactive(e.target);
+      if ((k === " " || k === "Enter") && onBtn) return;
+      var to = null;
+      if (k === "ArrowRight" || k === "PageDown" || k === " " || k === "Spacebar") to = cur + 1;
+      else if (k === "ArrowLeft" || k === "PageUp") to = cur - 1;
+      else if (k === "Home") to = 0;
+      if (to === null) return;
+      e.preventDefault(); e.stopPropagation();
+      go(to);
+    });
+    function btn(b, fn) { b.addEventListener("click", function () { fn(); if (b.disabled) focusRoot(); }); }
+    btn(prevB, function () { go(cur - 1); });
+    btn(nextB, function () { go(cur + 1); });
+    btn(restartB, function () { go(0); });
+    go(0);
+    return { go: go };
+  }
+
   /* ================= Scene ================= */
   function mountScene(root, def) {
     var W = def.w || 420, H = def.h || 260;
@@ -40,9 +93,7 @@
     root.innerHTML =
       '<div class="stage-wrap"><div class="stage-box"><div class="stage" style="width:' + W + 'px;height:' + H + 'px"></div></div></div>' +
       (choices ? '<div class="stage-choices" role="group" aria-label="Kies een situatie">' + choices.map(function (c, i) { return '<button type="button" class="choice" data-choice="' + i + '" aria-pressed="false">' + esc(c.label) + '</button>'; }).join("") + '</div>' : '') +
-      '<div class="stage-caption"><span class="stage-step"></span><p class="stage-text" aria-live="polite"></p></div>' +
-      '<ol class="stage-steps" hidden>' + steps.map(function (s) { return '<li>' + md(s.caption || "") + '</li>'; }).join("") + '</ol>' +
-      controlsHTML("scene");
+      stepBarHTML();
     var box = root.querySelector(".stage-box"), stage = root.querySelector(".stage");
     var svg = document.createElementNS(NS, "svg");
     svg.setAttribute("class", "s-svg"); svg.setAttribute("width", W); svg.setAttribute("height", H); svg.setAttribute("viewBox", "0 0 " + W + " " + H);
@@ -82,6 +133,11 @@
       var op = p.opacity == null ? 1 : p.opacity;
       if (t === "line") {
         var d = p.d || ("M" + p.x1 + " " + p.y1 + " L" + p.x2 + " " + p.y2);
+        if (p.arrow && !p.d) { // pijlpunt aan het eind
+          var ang = Math.atan2(p.y2 - p.y1, p.x2 - p.x1), al = 9;
+          d += " M" + (p.x2 + al * Math.cos(ang + 2.6)).toFixed(1) + " " + (p.y2 + al * Math.sin(ang + 2.6)).toFixed(1) + " L" + p.x2 + " " + p.y2 +
+            " L" + (p.x2 + al * Math.cos(ang - 2.6)).toFixed(1) + " " + (p.y2 + al * Math.sin(ang - 2.6)).toFixed(1);
+        }
         e.setAttribute("d", d);
         e.setAttribute("class", "s-line" + tone(p) + (p.dash ? " dash" : ""));
         if (!p.dash) { e.style.strokeDasharray = "1"; e.style.strokeDashoffset = String(1 - (p.draw == null ? 1 : p.draw)); }
@@ -129,35 +185,14 @@
         e.style.fontSize = size + "px";
       }
     }
-    var cur = -1, timer = null;
-    var capStep = root.querySelector(".stage-step"), capText = root.querySelector(".stage-text");
-    var playBtn = root.querySelector('[data-act="play"]'), prevBtn = root.querySelector('[data-act="prev"]'), nextBtn = root.querySelector('[data-act="next"]');
-    var dots = root.querySelector(".dots");
-    dots.innerHTML = steps.map(function () { return "<i></i>"; }).join("");
-    function show(k, instant) {
-      cur = Math.max(0, Math.min(steps.length - 1, k));
-      if (instant) stage.classList.add("no-anim");
-      var st = stateAt(cur);
+    var first = true;
+    function show(k) {
+      if (first) stage.classList.add("no-anim");
+      var st = stateAt(k);
       for (var id in st) apply(id, st[id]);
-      if (instant) { stage.getBoundingClientRect(); stage.classList.remove("no-anim"); }
-      capStep.textContent = (cur + 1) + "/" + steps.length;
-      capText.innerHTML = md(steps[cur].caption || "");
-      prevBtn.disabled = cur === 0;
-      nextBtn.disabled = cur === steps.length - 1;
-      Array.prototype.forEach.call(dots.children, function (d, i) { d.className = i < cur ? "on" : (i === cur ? "now" : ""); });
-      if (choices) Array.prototype.forEach.call(root.querySelectorAll(".choice"), function (b) { b.setAttribute("aria-pressed", String(choices[+b.getAttribute("data-choice")].step === cur)); });
-      setLabel();
+      if (first) { stage.getBoundingClientRect(); stage.classList.remove("no-anim"); first = false; }
+      if (choices) Array.prototype.forEach.call(root.querySelectorAll(".choice"), function (b) { b.setAttribute("aria-pressed", String(choices[+b.getAttribute("data-choice")].step === k)); });
     }
-    function stop() { if (timer) { clearTimeout(timer); timer = null; } }
-    function setLabel() { playBtn.disabled = cur === 0; }
-    var inst = reduced();
-    playBtn.addEventListener("click", function () { show(0, true); });
-    prevBtn.addEventListener("click", function () { show(cur - 1, inst); });
-    nextBtn.addEventListener("click", function () { show(cur + 1, inst); });
-    if (choices) root.querySelector(".stage-choices").addEventListener("click", function (e) {
-      var b = e.target.closest(".choice"); if (!b) return;
-      show(choices[+b.getAttribute("data-choice")].step, inst);
-    });
     // schalen naar de breedte, tekst blijft leesbaar
     function fit() {
       var bw = box.clientWidth || W;
@@ -169,9 +204,12 @@
     fit();
     var ro = null;
     if (window.ResizeObserver) { ro = new ResizeObserver(fit); ro.observe(box); } else window.addEventListener("resize", fit);
-    if (reduced()) root.querySelector(".stage-steps").hidden = false;
-    show(0, true);
-    return { stop: function () { stop(); if (ro) ro.disconnect(); else window.removeEventListener("resize", fit); } };
+    var nav = stepper(root, steps.length, show, steps.map(function (x) { return x.caption || ""; }));
+    if (choices) root.querySelector(".stage-choices").addEventListener("click", function (e) {
+      var b = e.target.closest(".choice"); if (!b) return;
+      nav.go(choices[+b.getAttribute("data-choice")].step);
+    });
+    return { stop: function () { if (ro) ro.disconnect(); else window.removeEventListener("resize", fit); } };
   }
 
   /* ================= Bureau (1.4) ================= */
@@ -616,12 +654,59 @@
     return { stop: clearTimers };
   }
 
+  /* ================= Chat in stappen =================
+     def: { type: "chat", steps: ["bijschrift stap 1", ...], panes: [{ label, title, events: [{ t, s, ... }], verdict: { tone, text, s } }] }
+     Elk bericht verschijnt bij stap s (1 = eerste stap). Soorten: user (text, files), answer (text, gaps), note (tone, text),
+     file (name, note), divider (text, dim: eerdere berichten worden vaag). */
+  function gaps(html) { return html.replace(/\[([^\]<]+)\](?!\()/g, '<mark class="cw-gap">[$1]</mark>'); }
+  function mountChatSteps(root, def) {
+    var panes = def.panes || [], n = (def.steps || []).length || 1;
+    function ev(e, pi, k) {
+      var a = ' class="cw-el cw-hide ', d = ' data-s="' + (e.s || 1) + '" data-k="' + k + '"';
+      switch (e.t) {
+        case "user":
+          return '<div' + a + 'cw-user-wrap"' + d + '>' + (e.files ? '<div class="cw-files">' + e.files.map(function (f) { return '<span class="cw-filechip">' + window.iconSVG(FILEICON[f.kind] || "doc") + esc(f.name) + '</span>'; }).join("") + '</div>' : '') +
+            '<div class="cw-user">' + md(e.text) + '</div></div>';
+        case "answer":
+          var h = String(e.text).split("\n").map(function (l) { return l === "" ? '<div class="cw-gap"></div>' : '<p>' + md(l) + '</p>'; }).join("");
+          return '<div' + a + 'cw-answer"' + d + '>' + (e.gaps ? gaps(h) : h) + '</div>';
+        case "note":
+          return '<div' + a + 'cw-note t-' + (e.tone || "warn") + '"' + d + '>' + window.iconSVG(e.tone === "ok" ? "check" : e.tone === "info" ? "eye" : "warn") + '<span>' + md(e.text) + '</span></div>';
+        case "file":
+          return '<div' + a + 'cw-file"' + d + '>' + window.iconSVG(FILEICON[e.kind] || "doc") + '<span><strong>' + esc(e.name) + '</strong>' + (e.note ? '<small>' + md(e.note) + '</small>' : '') + '</span></div>';
+        case "divider":
+          return '<div' + a + 'cw-divider"' + d + (e.dim ? ' data-dim="1"' : '') + '><span>' + md(e.text) + '</span></div>';
+        default: return "";
+      }
+    }
+    root.innerHTML = '<div class="cw-wrap' + (panes.length > 1 ? " compare" : "") + '">' + panes.map(function (p, pi) {
+      return '<div class="cw-pane">' + (p.label ? '<div class="cw-label">' + md(p.label) + '</div>' : '') +
+        '<div class="cw"><div class="cw-bar"><span class="cw-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="cw-title">' + esc(p.title || "Claude") + '</span></div>' +
+        '<div class="cw-body"><div class="cw-msgs">' + (p.events || []).map(function (e, k) { return ev(e, pi, k); }).join("") + '</div></div></div>' +
+        (p.verdict ? '<div class="cw-verdict cw-el cw-hide t-' + (p.verdict.tone || "ok") + '" data-s="' + (p.verdict.s || n) + '">' + window.iconSVG(p.verdict.tone === "ok" ? "check" : "warn") + '<span>' + md(p.verdict.text) + '</span></div>' : '') +
+        '</div>';
+    }).join("") + '</div>' + stepBarHTML();
+    var wrap = root.querySelector(".cw-wrap"), first = true;
+    function show(k) {
+      if (first) wrap.classList.add("cw-instant");
+      Array.prototype.forEach.call(root.querySelectorAll("[data-s]"), function (el) { el.classList.toggle("cw-hide", +el.getAttribute("data-s") > k + 1); });
+      Array.prototype.forEach.call(root.querySelectorAll(".cw-msgs"), function (box) {
+        var dimFrom = -1;
+        Array.prototype.forEach.call(box.querySelectorAll("[data-dim]"), function (dv) { if (!dv.classList.contains("cw-hide")) dimFrom = +dv.getAttribute("data-k"); });
+        Array.prototype.forEach.call(box.children, function (el) { el.classList.toggle("cw-dim", dimFrom >= 0 && +el.getAttribute("data-k") < dimFrom); });
+      });
+      if (first) { wrap.getBoundingClientRect(); wrap.classList.remove("cw-instant"); first = false; }
+    }
+    stepper(root, n, show, def.steps || []);
+    return { stop: function () {} };
+  }
+
   window.Visuals = {
     mount: function (root, def) {
       if (!def) return { stop: function () {} };
       if (def.type === "desk") return mountDesk(root, def);
       if (def.type === "table") return mountTable(root, def);
-      if (def.type === "chat") return mountChat(root, def);
+      if (def.type === "chat") return def.steps ? mountChatSteps(root, def) : mountChat(root, def);
       return mountScene(root, def);
     }
   };

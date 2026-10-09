@@ -176,7 +176,8 @@
 
   /* ---------- Zoeken ---------- */
   function haystack(t) {
-    return [t.id, t.titel, t.kort, t.inEenZin, (t.uitleg || []).join(" "), (t.metafoor || []).join(" "), (t.tips || []).join(" "), (t.zoekwoorden || []).join(" "), t.valkuil].join(" ").toLowerCase();
+    var j = function (x) { return Array.isArray(x) ? x.join(" ") : (x || ""); }, v = t.voorbeeld || {};
+    return [t.id, t.titel, t.kort, t.inEenZin, j(t.uitleg), j(t.metafoor), v.titel, v.erin, v.claude, v.eruit, j(t.zoekwoorden), t.valkuil].join(" ").toLowerCase();
   }
   function renderSearch(q) {
     var ql = q.toLowerCase();
@@ -201,6 +202,7 @@
         '<a class="btn btn-small" ' + (next ? 'href="#/tegel/' + next.id + '"' : 'aria-disabled="true"') + ' aria-label="Volgende tegel' + (next ? ": " + esc(next.titel) : "") + '"><span>Volgende&nbsp;</span>›</a>' +
       '</span></div></div>';
   }
+  function paras(x) { return (Array.isArray(x) ? x : [x]).map(function (p) { return '<p>' + mdInline(p) + '</p>'; }).join(""); }
   function exampleHTML(v) {
     var kinds = { echt: "Echt gebeurd", numafa: "Bij Numafa" + (v.afdeling ? " · " + v.afdeling : ""), thuis: "Thuis" };
     var body = v.erin
@@ -232,23 +234,18 @@
         '<span class="squircle" data-vt="' + t.id + '">' + icon(t.icoon) + '</span>' +
         '<p class="article-eyebrow">' + t.id + ' · ' + esc(l.naam) + (t.groep ? ' · ' + esc(GROUPS[t.groep].naam) : '') + '</p>' +
         '<h1 id="tile-title">' + esc(t.titel) + '</h1>' +
-        '<p class="oneliner">' + mdInline(t.inEenZin) + '</p>' +
+        '<p class="oneliner">' + mdInline(t.inEenZin || t.kort) + '</p>' +
         '<div class="chips"><span class="chip">' + t.minuten + ' min lezen</span><span class="chip">Stand per ' + esc(fmtDate(t.stand)) + '</span><span class="chip' + (isRead(t.id) ? " ok" : "") + '" id="read-chip">' + (isRead(t.id) ? CHECK + "Gelezen" : "Nog niet gelezen") + '</span></div>' +
       '</header>' +
-      '<section class="sec" aria-labelledby="s-uitleg"><h2 class="sec-title" id="s-uitleg">Hoe het werkt</h2><div class="prose">' + t.uitleg.map(function (p) { return '<p>' + mdInline(p) + '</p>'; }).join("") + '</div>' +
+      '<section class="sec" aria-labelledby="s-uitleg"><h2 class="sec-title" id="s-uitleg">Hoe het werkt</h2><div class="prose">' + paras(t.uitleg) + '</div>' +
         (t.tabel ? staticTable(t.tabel) : '') + '</section></div>' +
       '<section class="sec wide-sec" aria-labelledby="s-visual"><div style="max-width:760px;margin:0 auto"><p class="sec-kicker">Zie het gebeuren</p><h2 class="sec-title" id="s-visual">' + esc(t.visualTitel || "Zo werkt het") + '</h2></div>' +
         '<div class="stage-card" id="visual"></div></section>' +
       '<div class="article" style="padding-top:0">' +
-      (t.tips ? '<section class="sec" aria-labelledby="s-tips"><h2 class="sec-title" id="s-tips">Spiekbriefje</h2><ul class="tips">' + t.tips.map(function (x) { return '<li><span aria-hidden="true">' + CHECK + '</span><div>' + mdInline(x) + '</div></li>'; }).join("") + '</ul></section>' : '') +
-      '<section class="sec" aria-labelledby="s-meta"><h2 class="sec-title" id="s-meta">De nieuwe collega</h2><div class="metaphor"><span class="squircle">' + icon("person") + '</span><div class="prose">' + t.metafoor.map(function (p) { return '<p>' + mdInline(p) + '</p>'; }).join("") + '</div></div></section>' +
-      '</div>' +
-      '<section class="sec wide-sec" aria-labelledby="s-cases"><div style="max-width:760px;margin:0 auto"><h2 class="sec-title" id="s-cases">In de praktijk</h2></div><div class="cases">' + t.voorbeelden.map(exampleHTML).join("") + '</div></section>' +
-      '<div class="article" style="padding-top:0">' +
-      '<section class="sec" aria-labelledby="s-try"><h2 class="sec-title" id="s-try">Probeer zelf</h2><div class="prompt">' +
-        '<div class="prompt-head"><span class="eyebrow">Kant-en-klare prompt</span><span><span class="copy-status" aria-live="polite"></span><button class="btn btn-primary btn-small" type="button" data-copy>Kopieer</button></span></div>' +
-        '<pre class="prompt-text" tabindex="0">' + esc(t.probeer.prompt) + '</pre>' +
-        (t.probeer.tip ? '<p class="prompt-tip">' + mdInline(t.probeer.tip) + '</p>' : '') + '</div></section>' +
+      '<section class="sec" aria-labelledby="s-meta"><h2 class="sec-title" id="s-meta">De nieuwe collega</h2><div class="metaphor"><span class="squircle">' + icon("person") + '</span><div class="prose">' + paras(t.metafoor) + '</div></div></section>' +
+      (t.voorbeeld
+        ? '<section class="sec" aria-labelledby="s-cases"><h2 class="sec-title" id="s-cases">Bij inkoop</h2>' + exampleHTML(Object.assign({ soort: "numafa", afdeling: "inkoop" }, t.voorbeeld)) + '</section>'
+        : '</div><section class="sec wide-sec" aria-labelledby="s-cases"><div style="max-width:760px;margin:0 auto"><h2 class="sec-title" id="s-cases">In de praktijk</h2></div><div class="cases">' + (t.voorbeelden || []).map(exampleHTML).join("") + '</div></section><div class="article" style="padding-top:0">') +
       '<section class="sec" aria-labelledby="s-pit"><h2 class="sec-title" id="s-pit">Valkuil</h2><div class="pitfall">' + icon("warn") + '<p>' + mdInline(t.valkuil) + '</p></div></section>' +
       '<section class="sec" aria-labelledby="s-quiz"><h2 class="sec-title" id="s-quiz">Mini-quiz<span class="quiz-score" id="quiz-score"></span></h2><form class="quiz" novalidate>' + quizHTML(t) + '</form></section>' +
       '<footer class="sources" id="end-marker"><p><span class="stand">Stand per ' + esc(fmtDate(t.stand)) + '.</span> Bronnen:</p><ul>' +
@@ -261,7 +258,6 @@
     main.innerHTML = h;
     try { active.push(window.Visuals.mount(document.getElementById("visual"), t.visual)); }
     catch (e) { document.getElementById("visual").innerHTML = '<p class="stage-caption">Deze animatie kon niet starten. De uitleg hierboven en hieronder is compleet.</p>'; if (window.console) console.error(e); }
-    setupCopy(main.querySelector(".prompt"));
     setupQuiz(t);
     observeEnd(t);
   }
