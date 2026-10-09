@@ -1,8 +1,9 @@
 /* Claude inwerken — interactieve visuals.
-   Drie soorten, gekozen met visual.type in tegels.json:
+   Vier soorten, gekozen met visual.type in tegels.json:
    - "scene": declaratieve animatie in stappen (elementen + stappen die eigenschappen wijzigen)
    - "desk":  het bureau dat volloopt (tegel 1.4)
    - "table": interactieve tabel met filters en uitleg per rij
+   - "chat":  een nagespeeld gesprek in een Claude-venster, eventueel twee naast elkaar om te vergelijken
    Alle animaties lopen één keer, hebben "Opnieuw afspelen" en staan stil bij prefers-reduced-motion. */
 (function () {
   "use strict";
@@ -349,11 +350,191 @@
     return { stop: function () {} };
   }
 
+
+  /* ================= Chat (nagebootst Claude-venster) =================
+     def.scenarios: [{ label, caption, panes: [pane, pane?] }]
+     pane: { label, title, model, chips: [{text, off}], side: {title, items: [{text, tone, hidden}]},
+             events: [...], meter: {sec, usage, extra}, verdict: {tone, text} }
+     events: user, thinking, tool, answer, file, diff, code, approve, note, memory, card, status, side-add, side-mark */
+  function fmtDur(sec) {
+    sec = Math.round(sec);
+    if (sec < 60) return sec + " s";
+    var m = Math.floor(sec / 60), r = sec % 60;
+    if (m < 60) return m + " min" + (r ? " " + r + " s" : "");
+    var h = Math.floor(m / 60); m = m % 60;
+    return h + " u" + (m ? " " + m + " min" : "");
+  }
+  var FILEICON = { doc: "doc", sheet: "sheet", slides: "slides", pdf: "doc", md: "doc", code: "terminal", img: "camera", mail: "mail", artifact: "artifact", web: "globe" };
+  var TICK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
+  function mountChat(root, def) {
+    var scen = def.scenarios || [];
+    root.innerHTML =
+      '<div class="cw-wrap"></div>' +
+      (scen.length > 1 ? '<div class="stage-choices" role="group" aria-label="Kies een situatie">' + scen.map(function (s, i) { return '<button type="button" class="choice" data-choice="' + i + '" aria-pressed="false">' + esc(s.label) + '</button>'; }).join("") + '</div>' : '') +
+      '<div class="stage-caption"><span class="stage-step"></span><p class="stage-text" aria-live="polite"></p></div>' +
+      '<ol class="stage-steps" hidden>' + scen.map(function (s) { return '<li><strong>' + esc(s.label) + '.</strong> ' + md(s.caption || "") + '</li>'; }).join("") + '</ol>' +
+      controlsHTML(true) +
+      '<p class="cw-foot">Nagespeeld voorbeeld. Tijden en verbruik zijn een indicatie.</p>';
+    var host = root.querySelector(".cw-wrap");
+    var capStep = root.querySelector(".stage-step"), capText = root.querySelector(".stage-text");
+    var playBtn = root.querySelector('[data-act="play"]'), prevBtn = root.querySelector('[data-act="prev"]'), nextBtn = root.querySelector('[data-act="next"]');
+    var dots = root.querySelector(".dots");
+    dots.innerHTML = scen.map(function () { return "<i></i>"; }).join("");
+    var cur = -1, timers = [], chain = false;
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+    function evHTML(e, k) {
+      var c = ' class="cw-el cw-hide ';
+      var a = ' data-k="' + k + '"';
+      switch (e.t) {
+        case "user":
+          return '<div' + c + 'cw-user-wrap"' + a + '>' +
+            (e.files ? '<div class="cw-files">' + e.files.map(function (f) { return '<span class="cw-filechip">' + window.iconSVG(FILEICON[f.kind] || "doc") + esc(f.name) + '</span>'; }).join("") + '</div>' : '') +
+            '<div class="cw-user">' + md(e.text) + '</div></div>';
+        case "thinking":
+          return '<div' + c + 'cw-think"' + a + '><div class="cw-think-head">' + window.iconSVG("thought") + '<span>Denkt na…</span></div>' +
+            (e.lines || []).map(function (l) { return '<div class="cw-think-line cw-hide">' + md(l) + '</div>'; }).join("") + '</div>';
+        case "tool":
+          return '<div' + c + 'cw-tool' + (e.tone ? " t-" + e.tone : "") + '"' + a + '><span class="cw-spin"></span>' + (e.icon ? window.iconSVG(e.icon) : "") + '<span>' + md(e.text) + '</span></div>';
+        case "answer":
+          return '<div' + c + 'cw-answer"' + a + '>' + String(e.text).split("\n").map(function (l) { return l === "" ? '<div class="cw-gap"></div>' : '<p class="cw-hide">' + md(l) + '</p>'; }).join("") + '</div>';
+        case "file":
+          return '<div' + c + 'cw-file"' + a + '>' + window.iconSVG(FILEICON[e.kind] || "doc") + '<span><strong>' + esc(e.name) + '</strong>' + (e.note ? '<small>' + md(e.note) + '</small>' : '') + '</span></div>';
+        case "diff":
+          return '<div' + c + 'cw-diff"' + a + '>' + (e.title ? '<div class="cw-blocktitle">' + md(e.title) + '</div>' : '') +
+            e.lines.map(function (l) { return '<div class="cw-dl ' + (l[0] === "+" ? "add" : l[0] === "-" ? "del" : "") + '">' + esc((l[0] === "+" || l[0] === "-") ? l[0] + " " + l[1] : "  " + l[1]) + '</div>'; }).join("") + '</div>';
+        case "code":
+          return '<div' + c + 'cw-code"' + a + '>' + (e.title ? '<div class="cw-blocktitle">' + window.iconSVG("doc") + esc(e.title) + '</div>' : '') + '<pre>' + esc(e.text) + '</pre></div>';
+        case "approve":
+          return '<div' + c + 'cw-approve"' + a + '><div>' + md(e.text) + '</div><div class="cw-btns"><span class="cw-btn">' + esc(e.no || "Weigeren") + '</span><span class="cw-btn primary">' + esc(e.yes || "Toestaan") + '</span></div></div>';
+        case "note":
+          return '<div' + c + 'cw-note t-' + (e.tone || "warn") + '"' + a + '>' + window.iconSVG(e.tone === "ok" ? "check" : e.tone === "info" ? "eye" : "warn") + '<span>' + md(e.text) + '</span></div>';
+        case "memory":
+          return '<div' + c + 'cw-memory' + (e.tone ? " t-" + e.tone : "") + '"' + a + '>' + window.iconSVG("notebook") + '<span>' + md(e.text) + '</span></div>';
+        case "card":
+          return '<div' + c + 'cw-card"' + a + '><div class="cw-card-title">' + esc(e.title) + '</div><dl>' + (e.rows || []).map(function (r) { return '<div><dt>' + esc(r[0]) + '</dt><dd>' + md(r[1]) + '</dd></div>'; }).join("") + '</dl>' + (e.button ? '<span class="cw-btn primary">' + esc(e.button) + '</span>' : '') + '</div>';
+        case "status":
+          return '<div' + c + 'cw-status' + (e.tone ? " t-" + e.tone : "") + '"' + a + '>' + (e.icon ? window.iconSVG(e.icon) : "") + '<span>' + md(e.text) + '</span></div>';
+        default: return "";
+      }
+    }
+    function paneHTML(p, pi) {
+      var side = p.side ? (function () {
+        var items = (p.side.items || []).slice();
+        (p.events || []).forEach(function (e, k) { if (e.t === "side-add") items.push({ text: e.text, tone: e.tone, add: k }); });
+        return '<aside class="cw-side"><h4>' + esc(p.side.title || "") + '</h4><ul>' + items.map(function (it, i) {
+          return '<li data-si="' + i + '"' + (it.add != null ? ' data-add="' + it.add + '"' : '') + ' class="' + (it.tone ? "t-" + it.tone : "") + (it.add != null ? " cw-hide" : "") + (it.strike ? " strike" : "") + '">' + md(it.text) + '</li>';
+        }).join("") + '</ul></aside>';
+      })() : "";
+      var meter = p.meter ? '<div class="cw-meter"><span>' + window.iconSVG("clock") + '<b class="cw-time">0 s</b></span><span class="cw-use-wrap">Verbruik <i class="cw-use"><i></i></i></span>' + (p.meter.extra ? '<span class="cw-extra cw-hide">' + md(p.meter.extra) + '</span>' : '') + '</div>' : "";
+      return '<div class="cw-pane">' +
+        (p.label ? '<div class="cw-label">' + md(p.label) + '</div>' : '') +
+        '<div class="cw">' +
+          '<div class="cw-bar"><span class="cw-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="cw-title">' + esc(p.title || "Claude") + '</span>' + (p.model ? '<span class="cw-model">' + esc(p.model) + '</span>' : '') + '</div>' +
+          (p.chips && p.chips.length ? '<div class="cw-chips">' + p.chips.map(function (ch) { return '<span class="cw-chip' + (ch.off ? " off" : "") + (ch.tone ? " t-" + ch.tone : "") + '">' + (ch.icon ? window.iconSVG(ch.icon) : "") + esc(ch.text) + '</span>'; }).join("") + '</div>' : '') +
+          '<div class="cw-body' + (p.side ? " has-side" : "") + '"><div class="cw-msgs">' + (p.events || []).map(evHTML).join("") + '</div>' + side + '</div>' +
+          meter +
+        '</div>' +
+        (p.verdict ? '<div class="cw-verdict cw-el cw-hide t-' + (p.verdict.tone || "ok") + '">' + window.iconSVG(p.verdict.tone === "warn" || p.verdict.tone === "bad" ? "warn" : "check") + '<span>' + md(p.verdict.text) + '</span></div>' : '') +
+      '</div>';
+    }
+    function dur(e) {
+      if (e.ms) return e.ms;
+      switch (e.t) {
+        case "user": return 900;
+        case "thinking": return 500 + 800 * (e.lines || []).length;
+        case "tool": return 1000;
+        case "answer": return 500 + 420 * String(e.text).split("\n").filter(Boolean).length;
+        case "diff": return 500 + 140 * e.lines.length;
+        case "code": return 1500;
+        case "approve": case "card": return 1700;
+        case "side-add": case "side-mark": return 450;
+        default: return 800;
+      }
+    }
+    function show(el) { if (el) el.classList.remove("cw-hide"); }
+    function runPane(paneEl, p, instant) {
+      var evs = p.events || [], t = 0, total = 0;
+      evs.forEach(function (e) { total += dur(e); });
+      var timeEl = paneEl.querySelector(".cw-time"), useEl = paneEl.querySelector(".cw-use > i");
+      function meterAt(frac) {
+        if (!p.meter) return;
+        timeEl.textContent = fmtDur((p.meter.sec || 0) * frac);
+        useEl.style.width = Math.min(1, (p.meter.usage || 0) * frac) * 100 + "%";
+      }
+      var at = instant ? function (fn) { fn(); } : function (fn, ms) { later(fn, ms); };
+      evs.forEach(function (e, k) {
+        var d = dur(e), start = t;
+        var el = paneEl.querySelector('[data-k="' + k + '"]');
+        at(function () {
+          show(el);
+          if (e.t === "side-add") show(paneEl.querySelector('.cw-side [data-add="' + k + '"]'));
+          if (e.t === "side-mark") {
+            var li = paneEl.querySelectorAll(".cw-side li")[e.index];
+            if (li) { if (e.tone) li.className = "t-" + e.tone; if (e.strike) li.classList.add("strike"); if (e.text) li.innerHTML = md(e.text); }
+          }
+          if (!instant) meterAt((start + d * 0.5) / total);
+        }, start);
+        if (e.t === "thinking") {
+          var lines = el.querySelectorAll(".cw-think-line"), head = el.querySelector(".cw-think-head span");
+          Array.prototype.forEach.call(lines, function (ln, i) { at(function () { show(ln); }, start + 400 + i * 800); });
+          at(function () { head.textContent = "Dacht " + (e.label || fmtDur(e.secs || 2)) + " na"; el.classList.add("done"); }, start + d - 200);
+        }
+        if (e.t === "answer") {
+          Array.prototype.forEach.call(el.querySelectorAll("p"), function (ln, i) { at(function () { show(ln); }, start + 250 + i * 420); });
+        }
+        if (e.t === "tool") at(function () { el.classList.add("done"); }, start + d * 0.75);
+        if (e.t === "approve" || e.t === "card") at(function () {
+          var b = el.querySelector(".cw-btn.primary");
+          if (b) { b.classList.add("pressed"); b.innerHTML = TICK + esc(e.done || (e.t === "card" ? "Ingepland" : "Toegestaan")); }
+          var n = el.querySelector(".cw-btn:not(.primary)"); if (n) n.classList.add("gone");
+        }, start + d * 0.7);
+        t += d;
+      });
+      at(function () {
+        meterAt(1);
+        show(paneEl.querySelector(".cw-extra"));
+        show(paneEl.querySelector(".cw-verdict"));
+      }, total);
+      return total;
+    }
+    function render(k, opts) {
+      opts = opts || {};
+      clearTimers();
+      cur = Math.max(0, Math.min(scen.length - 1, k));
+      var s = scen[cur];
+      host.className = "cw-wrap" + (s.panes.length > 1 ? " compare" : "") + (opts.instant ? " cw-instant" : "");
+      host.innerHTML = s.panes.map(paneHTML).join("");
+      capStep.textContent = (cur + 1) + "/" + scen.length;
+      capText.innerHTML = "<strong>" + esc(s.label) + ".</strong> " + md(s.caption || "");
+      prevBtn.disabled = cur === 0;
+      nextBtn.disabled = cur === scen.length - 1;
+      Array.prototype.forEach.call(dots.children, function (d, i) { d.className = i < cur ? "on" : (i === cur ? "now" : ""); });
+      Array.prototype.forEach.call(root.querySelectorAll(".choice"), function (b) { b.setAttribute("aria-pressed", String(+b.getAttribute("data-choice") === cur)); });
+      var paneEls = host.querySelectorAll(".cw-pane"), end = 0;
+      if (!opts.idle) s.panes.forEach(function (p, i) { end = Math.max(end, runPane(paneEls[i], p, !!opts.instant)); });
+      playBtn.textContent = (chain || cur > 0) ? "Opnieuw afspelen" : "Afspelen";
+      if (opts.chain && cur < scen.length - 1) later(function () { render(cur + 1, { chain: true }); }, end + 2800);
+      else if (opts.chain) later(function () { chain = false; playBtn.textContent = "Opnieuw afspelen"; }, end);
+    }
+    function play() { chain = !reduced(); render(0, { chain: chain, instant: reduced() }); }
+    playBtn.addEventListener("click", play);
+    prevBtn.addEventListener("click", function () { chain = false; render(cur - 1, { instant: reduced() }); });
+    nextBtn.addEventListener("click", function () { chain = false; render(cur + 1, { instant: reduced() }); });
+    var ch = root.querySelector(".stage-choices");
+    if (ch) ch.addEventListener("click", function (e) { var b = e.target.closest(".choice"); if (!b) return; chain = false; render(+b.getAttribute("data-choice"), { instant: reduced() }); });
+    if (reduced()) { root.querySelector(".stage-steps").hidden = false; render(0, { instant: true }); }
+    else { render(0, { idle: true }); timers.push(setTimeout(play, 500)); }
+    return { stop: function () { clearTimers(); chain = false; } };
+  }
+
   window.Visuals = {
     mount: function (root, def) {
       if (!def) return { stop: function () {} };
       if (def.type === "desk") return mountDesk(root, def);
       if (def.type === "table") return mountTable(root, def);
+      if (def.type === "chat") return mountChat(root, def);
       return mountScene(root, def);
     }
   };

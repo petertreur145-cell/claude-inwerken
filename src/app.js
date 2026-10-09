@@ -176,7 +176,7 @@
 
   /* ---------- Zoeken ---------- */
   function haystack(t) {
-    return [t.id, t.titel, t.kort, t.inEenZin, (t.uitleg || []).join(" "), (t.metafoor || []).join(" "), (t.zoekwoorden || []).join(" "), t.valkuil].join(" ").toLowerCase();
+    return [t.id, t.titel, t.kort, t.inEenZin, (t.uitleg || []).join(" "), (t.metafoor || []).join(" "), (t.tips || []).join(" "), (t.zoekwoorden || []).join(" "), t.valkuil].join(" ").toLowerCase();
   }
   function renderSearch(q) {
     var ql = q.toLowerCase();
@@ -240,6 +240,7 @@
       '<section class="sec wide-sec" aria-labelledby="s-visual"><div style="max-width:760px;margin:0 auto"><p class="sec-kicker">Zie het gebeuren</p><h2 class="sec-title" id="s-visual">' + esc(t.visualTitel || "Zo werkt het") + '</h2></div>' +
         '<div class="stage-card" id="visual"></div></section>' +
       '<div class="article" style="padding-top:0">' +
+      (t.tips ? '<section class="sec" aria-labelledby="s-tips"><h2 class="sec-title" id="s-tips">Spiekbriefje</h2><ul class="tips">' + t.tips.map(function (x) { return '<li><span aria-hidden="true">' + CHECK + '</span><div>' + mdInline(x) + '</div></li>'; }).join("") + '</ul></section>' : '') +
       '<section class="sec" aria-labelledby="s-meta"><h2 class="sec-title" id="s-meta">De nieuwe collega</h2><div class="metaphor"><span class="squircle">' + icon("person") + '</span><div class="prose">' + t.metafoor.map(function (p) { return '<p>' + mdInline(p) + '</p>'; }).join("") + '</div></div></section>' +
       '</div>' +
       '<section class="sec wide-sec" aria-labelledby="s-cases"><div style="max-width:760px;margin:0 auto"><h2 class="sec-title" id="s-cases">In de praktijk</h2></div><div class="cases">' + t.voorbeelden.map(exampleHTML).join("") + '</div></section>' +

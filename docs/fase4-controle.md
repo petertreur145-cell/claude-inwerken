@@ -1,6 +1,6 @@
 # Fase 4: controle vóór oplevering
 
-Stand per 8 oktober 2026. Gecontroleerd bestand: `dist/claude-inwerken.html` (305 kB, 35 tegels).
+Stand per 9 oktober 2026. Gecontroleerd bestand: `dist/claude-inwerken.html` (366 kB, 37 tegels).
 
 ## Wat er is getest
 
@@ -8,20 +8,30 @@ Met `tests/check.js` (Playwright, headless Chromium, geopend via `file://`):
 
 | Controle | Resultaat |
 |---|---|
-| Elke tegel geopend, elke animatiestap doorlopen (160 stappen), eerste quizvraag beantwoord | Geen consolefouten |
+| Elke tegel geopend, elke animatiestap en elk chatscenario doorlopen (88 stappen, 49 scenario's), eerste quizvraag beantwoord | Geen consolefouten |
 | Op 1440 px licht, 375 px donker, 1440 px donker met *reduced motion*, 375 px licht met *reduced motion* | Overal in orde |
 | Externe aanvragen (scripts, lettertypen, afbeeldingen, analytics) | Geen. Een Content-Security-Policy in het bestand blokkeert ze bovendien. Alleen bronlinks openen, en pas als je erop klikt |
 | Horizontaal scrollen van de pagina | Nergens. Brede tabellen scrollen binnen hun eigen kader |
 | Tekst die niet in een animatievakje past | Geen (de tekst krimpt automatisch waar nodig) |
-| Voortgang: alle 35 tegels gelezen, drie stempels “Ingewerkt” | Klopt |
+| Voortgang: alle 37 tegels gelezen, drie stempels “Ingewerkt” | Klopt |
 | Opslag geblokkeerd (localStorage gooit een fout) | App werkt, zonder voortgang |
 | Zoeken (“goal”, “outlook”) | Vindt de juiste tegels |
 | Toetsenbord: Tab naar tegels, Enter, ← →, Esc, / | Werkt, met zichtbare focusrand |
 | Kopieerknop | Kopieert; valt anders terug op selecteren + Ctrl+C |
-| Elke quizvraag heeft precies één goed antwoord | Ja (65 vragen; afgedwongen door het dataformaat en gecontroleerd bij het bouwen) |
-| Elke tegel heeft een “stand per”-datum en minstens één bron | Ja (78 unieke bronnen) |
-| Uitleg per tegel ±120 woorden | Ja (maximaal 99, gemiddeld 88) |
-| Bestandsgrootte onder 3 MB | 305 kB |
+| Elke quizvraag heeft precies één goed antwoord | Ja (69 vragen; afgedwongen door het dataformaat en gecontroleerd bij het bouwen) |
+| Elke tegel heeft een “stand per”-datum en minstens één bron | Ja (82 unieke bronnen) |
+| Uitleg per tegel ±120 woorden | Ja (maximaal 110, gemiddeld 92) |
+| Bestandsgrootte onder 3 MB | 366 kB |
+
+## Tweede ronde (9 oktober): niveau 1 en 2 concreter
+
+Na feedback (“visuals beter, niet per se langer”) zijn de animaties van niveau 1 en 2 vervangen door nagespeelde gesprekken in een Claude-venster, vaak twee naast elkaar. Voorbeelden: dezelfde kleine vraag op effort Low en Max (Max gaat overdenken, doet er lang over en past veel meer aan dan gevraagd), een vage vraag tegenover een goede briefing, een skill die wel of niet gepakt wordt door zijn beschrijving.
+
+- Nieuw veld `tips` (Spiekbriefje) bij 1.3, 1.7, 2.2, 2.5 en 2.12.
+- Nieuwe tegels: **1.7 Losse vraag of vaste route** en **2.12 Automatiseren: kies je route** (losse chat, project of skill, geplande taak, formules of Power Query, script, flow, agent).
+- Nieuw gecontroleerd en toegevoegd als bron: de pagina’s over effort (Max “can lead to overthinking”, lagere effort doet niet meer dan gevraagd), ultracode, het verminderen van hallucinaties (laat Claude “ik weet het niet” zeggen) en skills (alleen de beschrijving staat altijd klaar; de rest laadt pas bij gebruik).
+- Correctie in 2.3: chats in een project delen niet vanzelf hun inhoud, maar op betaalde abonnementen kan Claude eerdere chats in het project doorzoeken als je ernaar vraagt.
+- De gesprekken zijn nagespeeld. Tijden, verbruik, bestandsnamen en machinetypes (zoals de RX-40) zijn verzonnen ter illustratie; dat staat onder elke animatie.
 
 ## Wat ik niet kon testen
 

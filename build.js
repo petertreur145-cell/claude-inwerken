@@ -53,7 +53,7 @@ for (const t of data.tegels) {
   if (!(t.voorbeelden || []).some((v) => v.soort === "numafa")) errors.push(where + ": minstens één Numafa-voorbeeld nodig");
   if (!(t.voorbeelden || []).some((v) => v.soort === "echt")) warnings.push(where + ": geen echt voorbeeld met bron");
   const v = t.visual || {};
-  if (!["scene", "desk", "table"].includes(v.type)) errors.push(where + ": onbekend visual-type '" + v.type + "'");
+  if (!["scene", "desk", "table", "chat"].includes(v.type)) errors.push(where + ": onbekend visual-type '" + v.type + "'");
   if (v.type === "scene") {
     const itemIds = new Set((v.items || []).map((it) => it.id));
     (v.items || []).forEach((it) => { if (it.icon && !iconNames.has(it.icon)) errors.push(where + ": scene-icoon '" + it.icon + "' bestaat niet"); });
@@ -66,6 +66,25 @@ for (const t of data.tegels) {
     });
     (v.choices || []).forEach((c) => { if (!(c.step >= 0 && c.step < (v.steps || []).length)) errors.push(where + ": keuze '" + c.label + "' wijst naar een stap die niet bestaat"); });
   }
+  if (v.type === "chat") {
+    const EV = ["user", "thinking", "tool", "answer", "file", "diff", "code", "approve", "note", "memory", "card", "status", "side-add", "side-mark"];
+    if (!Array.isArray(v.scenarios) || !v.scenarios.length) errors.push(where + ": chat heeft minstens één scenario nodig");
+    (v.scenarios || []).forEach((s, i) => {
+      const sw = where + " scenario " + (i + 1);
+      if (!s.label || !s.caption) errors.push(sw + ": label en caption nodig");
+      if (!Array.isArray(s.panes) || s.panes.length < 1 || s.panes.length > 2) errors.push(sw + ": 1 of 2 vensters (panes) nodig");
+      (s.panes || []).forEach((p) => {
+        const icons = (p.chips || []).map((c) => c.icon).concat((p.events || []).map((e) => e.icon));
+        icons.forEach((ic) => { if (ic && !iconNames.has(ic)) errors.push(sw + ": icoon '" + ic + "' bestaat niet"); });
+        (p.events || []).forEach((e, k) => {
+          if (!EV.includes(e.t)) errors.push(sw + ": onbekende gebeurtenis '" + e.t + "'");
+          if (e.t === "side-mark" && !(p.side && e.index >= 0 && e.index < (p.side.items || []).length + p.events.filter((x) => x.t === "side-add").length)) errors.push(sw + ": side-mark " + k + " wijst naar een onbekend item");
+          if (e.t === "diff" && !(Array.isArray(e.lines) && e.lines.every((l) => Array.isArray(l) && l.length === 2))) errors.push(sw + ": diff-regels moeten [teken, tekst] zijn");
+        });
+      });
+    });
+  }
+  if (t.tips && !(Array.isArray(t.tips) && t.tips.length && t.tips.every((x) => typeof x === "string" && x))) errors.push(where + ": tips moet een lijst met teksten zijn");
   if (v.type === "table") (v.rijen || []).forEach((r, i) => { if (r.cellen.length !== v.kolommen.length) errors.push(where + ": tabelrij " + (i + 1) + " heeft " + r.cellen.length + " cellen, verwacht " + v.kolommen.length); });
   if (t.tabel) t.tabel.rijen.forEach((r, i) => { if (r.length !== t.tabel.kolommen.length) errors.push(where + ": tabel rij " + (i + 1) + " klopt niet met de kolommen"); });
 }

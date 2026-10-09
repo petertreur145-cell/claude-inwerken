@@ -1,8 +1,8 @@
 # Claude inwerken
 
-Interactieve leerapp voor collega's van Numafa Cleaning & Automation B.V. In 35 tegels van ±2 minuten leer je wat Claude kan, waarvoor je het gebruikt en hoe je het zelf probeert. Rode draad: Claude is een briljante nieuwe collega die elke chat zijn eerste werkdag heeft.
+Interactieve leerapp voor collega's van Numafa Cleaning & Automation B.V. In 37 tegels van ±2 minuten leer je wat Claude kan, waarvoor je het gebruikt en hoe je het zelf probeert. Rode draad: Claude is een briljante nieuwe collega die elke chat zijn eerste werkdag heeft.
 
-Stand per 8 oktober 2026.
+Stand per 9 oktober 2026.
 
 ## Gebruiken
 
@@ -17,12 +17,12 @@ Stand per 8 oktober 2026.
 
 | Map of bestand | Wat |
 |---|---|
-| `dist/claude-inwerken.html` | Het gebundelde bestand (±300 kB). Dit deel je. |
+| `dist/claude-inwerken.html` | Het gebundelde bestand (±370 kB). Dit deel je. |
 | `src/tegels.json` | **Alle inhoud**: tegels, niveaus, teksten van de pagina Over. |
 | `src/index.html` | Het sjabloon van de pagina. |
 | `src/styles.css` | De stijl. Kleuren staan bovenaan. |
 | `src/app.js` | Navigatie, zoeken, voortgang, quiz, kopiëren. |
-| `src/visuals.js` | De animaties (scene, bureau, tabel). |
+| `src/visuals.js` | De animaties (chatvenster, scene, bureau, tabel). |
 | `src/icons.js` | De iconen (inline SVG). |
 | `build.js` | Maakt van `src/` het ene bestand in `dist/`, en controleert de inhoud. |
 | `tests/check.js` | Klikt in een browser alle tegels door en controleert alles (fase 4). |
@@ -51,6 +51,7 @@ Velden van een tegel:
 | `uitleg` | Lijst van alinea's, samen ±120 woorden. |
 | `tabel` | Optioneel: vaste tabel onder de uitleg (`kolommen`, `rijen`). |
 | `visualTitel`, `visual` | De animatie. Zie hieronder. |
+| `tips` | Optioneel: lijst met korte regels, getoond als **Spiekbriefje** onder de animatie. |
 | `metafoor` | Lijst van alinea's: de nieuwe-collega-metafoor. |
 | `voorbeelden` | 1 tot 4 voorbeelden. `soort` is `"echt"` (met `bron`), `"numafa"` of `"thuis"`. Gebruik `tekst`, of `erin` / `claude` / `eruit`. Minstens één Numafa-voorbeeld. |
 | `probeer` | `prompt` (wordt kopieerbaar) en `tip`. |
@@ -64,6 +65,11 @@ Opmaak in teksten: `**vet**`, `*schuin*`, `` `code` `` en `[linktekst](https://�
 
 ### Animaties (`visual`)
 
+- `{ "type": "chat", "scenarios": [...] }`: een nagespeeld gesprek in een Claude-venster. Zo zie je concreet wat er gebeurt: wat je vraagt, hoe lang hij nadenkt, wat hij aanpast. Gebruikt in de meeste tegels van niveau 1 en 2.
+  - Elk scenario heeft een `label` (de knop), een `caption` (de uitleg eronder) en `panes`: één venster, of twee naast elkaar om te vergelijken (bijvoorbeeld effort Low tegenover Max).
+  - Een venster (`pane`) heeft `title`, `model`, optioneel `label` (kopje erboven), `chips` (bijvoorbeeld een connector), `side` (zijpaneel met `title` en `items`, zoals memory of skills), `meter` (`sec` en `usage` van 0 tot 1, plus `extra`) en `verdict` (`tone` `ok`, `warn` of `bad`, en `text`).
+  - `events` speelt het gesprek af, in volgorde. Soorten (`t`): `user` (met optioneel `files`), `thinking` (`lines`, `secs`), `tool`, `answer` (regels gescheiden door `\n`), `file`, `diff` (`lines` als `["+", "tekst"]`), `code`, `approve`, `card`, `note`, `memory`, `status`, `side-add` en `side-mark` (`index` van een item in het zijpaneel).
+  - Met `ms` bij een gebeurtenis bepaal je zelf hoe lang die duurt.
 - `{ "type": "desk" }`: het bureau dat volloopt (tegel 1.4).
 - `{ "type": "table", "kolommen": [...], "rijen": [{ "cellen": [...], "tags": [...], "uitleg": "..." }], "filters": [{ "label": "...", "tag": "..." }] }`: interactieve tabel.
 - `{ "type": "scene", "items": [...], "steps": [...], "choices": [...] }`: animatie in stappen op een canvas van 420 × 260.
@@ -102,4 +108,4 @@ Opent het gebouwde bestand via `file://` in headless Chromium en klikt alle tege
 
 ## Bronnen en actualiteit
 
-Alle feiten over Claude komen uit de officiële bronnen van Anthropic (platform.claude.com, code.claude.com/docs, support.claude.com, claude.com, anthropic.com), opgezocht op 8 oktober 2026. Wat niet bevestigd kon worden, staat in `docs/fase4-controle.md` onder *Niet kunnen verifiëren*.
+Alle feiten over Claude komen uit de officiële bronnen van Anthropic (platform.claude.com, code.claude.com/docs, support.claude.com, claude.com, anthropic.com), opgezocht op 8 en 9 oktober 2026. Wat niet bevestigd kon worden, staat in `docs/fase4-controle.md` onder *Niet kunnen verifiëren*.
