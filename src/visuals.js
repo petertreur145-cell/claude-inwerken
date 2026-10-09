@@ -402,6 +402,14 @@
   var FILEICON = { doc: "doc", sheet: "sheet", slides: "slides", pdf: "doc", md: "doc", code: "terminal", img: "camera", mail: "mail", artifact: "artifact", web: "globe" };
   var TICK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>';
   function dot(s) { return /[.?!:]$/.test(s) ? s : s + "."; }
+  // Schema onder een scenario: blokjes met pijlen. Soorten: you (jij), ai (Claude), once (Claude, één keer), code (zonder AI), time (moment), out (resultaat)
+  var FLOWICON = { you: "person", ai: "chat", once: "pen", code: "gear", time: "clock", out: "check" };
+  function flowHTML(f) {
+    if (!f || !f.length) return "";
+    return '<div class="flow-strip"><p class="flow-title">Schema</p><ol class="flow">' + f.map(function (b) {
+      return '<li class="fl-' + esc(b.kind) + '">' + window.iconSVG(FLOWICON[b.kind] || "doc") + '<span>' + md(b.text) + '</span></li>';
+    }).join("") + '</ol><p class="flow-legend"><span class="fl-key fl-ai"></span>Claude (AI) <span class="fl-key fl-once"></span>Claude, één keer <span class="fl-key fl-code"></span>zonder AI</p></div>';
+  }
   function mountChat(root, def) {
     var scen = def.scenarios || [];
     root.innerHTML =
@@ -583,7 +591,7 @@
       playBtn.hidden = !!opts.meet;
       var instant = opts.instant || reduced();
       host.className = "cw-wrap" + (s.panes.length > 1 ? " compare" : "") + (instant ? " cw-instant" : "");
-      host.innerHTML = s.panes.map(paneHTML).join("");
+      host.innerHTML = s.panes.map(paneHTML).join("") + flowHTML(s.flow);
       var paneEls = host.querySelectorAll(".cw-pane");
       // beginstand: tot en met de eerste vraag (of alleen het eerste bericht)
       var starts = s.panes.map(function (p) { var u = (p.events || []).map(function (e) { return e.t; }).indexOf("user"); return u < 0 ? 0 : u; });
@@ -598,6 +606,10 @@
       if (opts.idle && !instant) {
         s.panes.forEach(function (p, i) { runPane(paneEls[i], p, true, 0, starts[i]); });
         host.insertAdjacentHTML("beforeend", '<button class="cw-bigplay" type="button" data-act="bigplay">▶ Afspelen</button>');
+        // midden op de chatvensters, niet op het schema eronder
+        var bp = host.querySelector(".cw-bigplay"), hr = host.getBoundingClientRect(), top = Infinity, bot = -Infinity;
+        Array.prototype.forEach.call(paneEls, function (pe) { var r = pe.getBoundingClientRect(); top = Math.min(top, r.top); bot = Math.max(bot, r.bottom); });
+        if (bot > top && hr.height) bp.style.top = Math.round((top + bot) / 2 - hr.top) + "px";
         playBtn.innerHTML = "▶ Afspelen";
         return;
       }

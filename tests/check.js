@@ -58,7 +58,11 @@ const runs = [
       const ok = await page.evaluate((id) => !!document.getElementById("tile-title") && document.querySelector(".article-eyebrow").textContent.startsWith(id), id);
       if (!ok) problems.push(`${r.name}: tegel ${id} opent niet goed`);
       // speel door alle stappen van de animatie en check telkens
-      const steps = await page.evaluate(() => { const d = document.querySelectorAll("#visual .dots i"); return d.length; });
+      const steps = await page.evaluate(() => {
+        const d = document.querySelectorAll("#visual .dots i").length;
+        const c = document.querySelector("#visual .step-count");
+        return d || (c ? +c.textContent.split("/")[1] : 0);
+      });
       for (let s = 0; s < steps; s++) {
         await page.evaluate((s) => { const b = document.querySelectorAll("#visual .dots i"); const next = document.querySelector('#visual [data-act="next"]'); const prev = document.querySelector('#visual [data-act="prev"]'); if (s === 0) { for (let i = 0; i < 12; i++) prev && !prev.disabled && prev.click(); } else next && next.click(); }, s);
         await page.waitForTimeout(r.reducedMotion === "reduce" ? 30 : 650);

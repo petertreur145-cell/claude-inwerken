@@ -1,6 +1,6 @@
 # Fase 4: controle vóór oplevering
 
-Stand per 9 oktober 2026. Gecontroleerd bestand: `dist/claude-inwerken.html` (383 kB, 37 tegels).
+Stand per 9 oktober 2026. Gecontroleerd bestand: `dist/claude-inwerken.html` (365 kB, 37 tegels).
 
 ## Wat er is getest
 
@@ -19,9 +19,9 @@ Met `tests/check.js` (Playwright, headless Chromium, geopend via `file://`):
 | Toetsenbord: Tab naar tegels, Enter, ← →, Esc, / | Werkt, met zichtbare focusrand |
 | Kopieerknop | Kopieert; valt anders terug op selecteren + Ctrl+C |
 | Elke quizvraag heeft precies één goed antwoord | Ja (69 vragen; afgedwongen door het dataformaat en gecontroleerd bij het bouwen) |
-| Elke tegel heeft een “stand per”-datum en minstens één bron | Ja (82 unieke bronnen) |
-| Uitleg per tegel ±120 woorden | Ja (maximaal 110, gemiddeld 92) |
-| Bestandsgrootte onder 3 MB | 383 kB |
+| Elke tegel heeft een “stand per”-datum en minstens één bron | Ja (75 unieke bronnen) |
+| Uitleg per tegel | Originele tegels ±120 woorden; tegels in de korte vorm maximaal 60 |
+| Bestandsgrootte onder 3 MB | 365 kB |
 
 ## Tweede ronde (9 oktober): niveau 1 en 2 concreter
 
@@ -38,6 +38,29 @@ Na feedback (“visuals beter, niet per se langer”, “simpel houden”, “te
 - **Nieuw gecontroleerd** en als bron toegevoegd: effort (Max “can lead to overthinking”, lagere effort doet niet meer dan gevraagd), ultracode, hallucinaties verminderen (laat Claude “ik weet het niet” zeggen) en skills (alleen de beschrijving staat altijd klaar; de rest laadt pas bij gebruik).
 - **Correctie in 2.3:** chats in een project delen niet vanzelf hun inhoud, maar op betaalde abonnementen kan Claude eerdere chats in het project doorzoeken als je ernaar vraagt.
 - De gesprekken zijn nagespeeld. Tijden, verbruik, bestandsnamen en machinetypes (zoals de RX-40) zijn verzonnen ter illustratie; dat staat onder elke animatie.
+
+## Eindversie (9 oktober): jouw keuzes
+
+Met `dist/vergelijken.html` is per onderwerp gekozen tussen het origineel (versie 1) en de nieuwe versie. De eindversie volgt die keuzes:
+
+| Keuze | Tegels |
+|---|---|
+| Nieuw | Startscherm en volgorde, 1.1 Wat is Claude, 1.2 Goed vragen, 1.6 Losse vraag of vaste route, 2.1 Bouwstenen, 2.2 Voorkeuren en stijl, 2.7 Claude in Chrome, 2.13 Automatiseren, 3.1 Claude Code, 3.2 Handige commando's |
+| Origineel | 1.3 Modellen, 1.4 Thinking en effort, 1.5 Context window, 2.4 Memory, 2.5 Skills, 2.6 Connectors, 2.9 Ontwerpen, 2.11 Langere taken, 2.12 Geplande taken, de rest van niveau 3, pagina Over |
+| Versie uit ronde 2 | 2.10 Chat of Claude Code (opmerking: “versie 2 was beter”) |
+| Opnieuw geschreven | 2.3 Projects en 2.8 Artifacts (“allebei slecht”): korte vorm, simpel schema in 4 stappen, voorbeeld uit de inkoop |
+
+Aanvullingen volgens de opmerkingen:
+
+- **2.4 Memory:** je kunt Claude ook opdragen iets te onthouden (“onthoud dat een OB een orderbevestiging is”); in een project onthoudt hij het voor dat project. Ook als extra stap in de visual.
+- **2.13 Automatiseren:** onder elke route staat een schema: wie doet wat, wanneer, en of er AI aan te pas komt.
+
+Wat voor alle tegels geldt:
+
+- Originele tegels hebben hun eigen tekst, voorbeelden en “Probeer zelf” terug; verwijzingen naar andere tegels zijn omgezet naar de nieuwe nummers.
+- **Niets speelt vanzelf af**, ook niet in de originele tegels: stappen gaan op klik (of rechtsklik, pijl rechts, spatie), gesprekken starten met Afspelen. Dit volgt je eerdere wens; het origineel speelde automatisch.
+
+Gecontroleerd: `tests/check.js` (alle 37 tegels, elke stap, 375 en 1440 px, licht en donker, met en zonder *reduced motion*, opslag geblokkeerd): geen consolefouten, geen externe aanvragen. De nieuwe visuals zijn ook doorgeklikt met klik, rechtsklik, pijltjes en spatie; zonder klik beweegt er niets.
 
 ## Wat ik niet kon testen
 

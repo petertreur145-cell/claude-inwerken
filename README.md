@@ -2,7 +2,7 @@
 
 Interactieve leerapp voor collega's van Numafa Cleaning & Automation B.V. In 37 tegels van ±2 minuten leer je wat Claude kan, waarvoor je het gebruikt en hoe je het zelf probeert. Rode draad: Claude is een briljante nieuwe collega die elke chat zijn eerste werkdag heeft.
 
-Stand per 9 oktober 2026.
+Stand per 9 oktober 2026. Samengesteld volgens de keuzes in `docs/fase4-controle.md` (origineel of nieuw per tegel).
 
 ## Gebruiken
 
@@ -47,14 +47,15 @@ Velden van een tegel:
 | `icoon` | Naam van een icoon uit `src/icons.js`, bijvoorbeeld `"folder"`. |
 | `minuten` | Leestijd. |
 | `breed` | Optioneel `true`: tegel over de hele breedte (voor tabellen). |
-| `inEenZin` | “In één zin” bovenaan het detailscherm. |
+| `inEenZin` | “In één zin” bovenaan het detailscherm. In de korte vorm weglaten; dan staat `kort` er. |
 | `uitleg` | Lijst van alinea's, samen ±120 woorden. |
 | `tabel` | Optioneel: vaste tabel onder de uitleg (`kolommen`, `rijen`). |
 | `visualTitel`, `visual` | De animatie. Zie hieronder. |
 | `tips` | Optioneel: lijst met korte regels, getoond als **Spiekbriefje** onder de animatie. |
 | `metafoor` | Lijst van alinea's: de nieuwe-collega-metafoor. |
 | `voorbeelden` | 1 tot 4 voorbeelden. `soort` is `"echt"` (met `bron`), `"numafa"` of `"thuis"`. Gebruik `tekst`, of `erin` / `claude` / `eruit`. Minstens één Numafa-voorbeeld. |
-| `probeer` | `prompt` (wordt kopieerbaar) en `tip`. |
+| `probeer` | Optioneel: `prompt` (wordt kopieerbaar) en `tip`. |
+| `voorbeeld` | Korte vorm: één voorbeeld met `titel`, `erin`, `claude`, `eruit` (in plaats van `voorbeelden`). In de korte vorm zijn `uitleg`, `metafoor` en `kort` één tekst; `build.js` telt de woorden (max 250 per tegel). |
 | `valkuil` | Eén alinea. |
 | `quiz` | 1 of 2 vragen: `vraag`, `opties`, `goed` (het nummer van het goede antwoord, tellend vanaf 0), `goedUitleg`, `foutUitleg`. Zo heeft elke vraag precies één goed antwoord. |
 | `stand` | Datum als `"JJJJ-MM-DD"`. |
@@ -71,7 +72,9 @@ Opmaak in teksten: `**vet**`, `*schuin*`, `` `code` `` en `[linktekst](https://�
   - `events` speelt het gesprek af, in volgorde. Soorten (`t`): `user` (met optioneel `files`), `thinking` (`lines`, `secs`), `tool`, `answer` (regels gescheiden door `\n`), `file`, `diff` (`lines` als `["+", "tekst"]`), `code`, `approve`, `card`, `note`, `memory`, `status`, `side-add` en `side-mark` (`index` van een item in het zijpaneel).
   - Met `ms` bij een gebeurtenis bepaal je zelf hoe lang die duurt.
   - In plaats van `panes` kan een scenario een `explain` hebben: een klikbare uitlegkaart, bijvoorbeeld de vijf effort-standen. Velden: `title`, `items` (elk met `name`, en optioneel `sub`, `text`, `bars`, `example`, `use`), `bars` (namen van de balkjes, zoals `["Nadenken", "Tijd", "Verbruik"]`), `foot`. Zet zo'n kaart vóór de vergelijkingen: eerst uitleggen, dan laten zien.
-- Niets speelt vanzelf af. Een gesprek start pas na een klik op **Afspelen**; **Volgende** gaat naar het volgende scenario of de volgende stap.
+- Niets speelt vanzelf af. Bij animaties in stappen ga je verder met een klik of rechtsklik in het beeld, pijl rechts of spatie; pijl links gaat terug, **Opnieuw** begint bij stap 1. Een gesprek start pas na een klik op **Afspelen**; **Volgende** gaat naar het volgende scenario.
+- Gesprek in stappen (korte vorm): `{ "type": "chat", "steps": ["bijschrift stap 1", ...], "panes": [{ "label": "...", "events": [{ "t": "user", "text": "...", "s": 1 }, ...] }] }`. Elk bericht verschijnt bij stap `s`.
+- Schema onder een scenario: `"flow": [{ "kind": "you" | "ai" | "once" | "code" | "time" | "out", "text": "..." }]` (zie tegel 2.13).
 - **Meetingmodus** (knop bij elk gesprek): elke klik toont het volgende bericht, zodat je er rustig bij kunt vertellen. De keuze blijft bewaard in de browser.
 - `{ "type": "desk" }`: het bureau dat volloopt (tegel 1.5).
 - `{ "type": "table", "kolommen": [...], "rijen": [{ "cellen": [...], "tags": [...], "uitleg": "..." }], "filters": [{ "label": "...", "tag": "..." }] }`: interactieve tabel.

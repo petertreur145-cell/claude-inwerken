@@ -246,6 +246,10 @@
       (t.voorbeeld
         ? '<section class="sec" aria-labelledby="s-cases"><h2 class="sec-title" id="s-cases">Bij inkoop</h2>' + exampleHTML(Object.assign({ soort: "numafa", afdeling: "inkoop" }, t.voorbeeld)) + '</section>'
         : '</div><section class="sec wide-sec" aria-labelledby="s-cases"><div style="max-width:760px;margin:0 auto"><h2 class="sec-title" id="s-cases">In de praktijk</h2></div><div class="cases">' + (t.voorbeelden || []).map(exampleHTML).join("") + '</div></section><div class="article" style="padding-top:0">') +
+      (t.probeer ? '<section class="sec" aria-labelledby="s-try"><h2 class="sec-title" id="s-try">Probeer zelf</h2><div class="prompt">' +
+        '<div class="prompt-head"><span class="eyebrow">Kant-en-klare prompt</span><span><span class="copy-status" aria-live="polite"></span><button class="btn btn-primary btn-small" type="button" data-copy>Kopieer</button></span></div>' +
+        '<pre class="prompt-text" tabindex="0">' + esc(t.probeer.prompt) + '</pre>' +
+        (t.probeer.tip ? '<p class="prompt-tip">' + mdInline(t.probeer.tip) + '</p>' : '') + '</div></section>' : '') +
       '<section class="sec" aria-labelledby="s-pit"><h2 class="sec-title" id="s-pit">Valkuil</h2><div class="pitfall">' + icon("warn") + '<p>' + mdInline(t.valkuil) + '</p></div></section>' +
       '<section class="sec" aria-labelledby="s-quiz"><h2 class="sec-title" id="s-quiz">Mini-quiz<span class="quiz-score" id="quiz-score"></span></h2><form class="quiz" novalidate>' + quizHTML(t) + '</form></section>' +
       '<footer class="sources" id="end-marker"><p><span class="stand">Stand per ' + esc(fmtDate(t.stand)) + '.</span> Bronnen:</p><ul>' +
@@ -258,6 +262,7 @@
     main.innerHTML = h;
     try { active.push(window.Visuals.mount(document.getElementById("visual"), t.visual)); }
     catch (e) { document.getElementById("visual").innerHTML = '<p class="stage-caption">Deze animatie kon niet starten. De uitleg hierboven en hieronder is compleet.</p>'; if (window.console) console.error(e); }
+    if (t.probeer) setupCopy(main.querySelector(".prompt"));
     setupQuiz(t);
     observeEnd(t);
   }

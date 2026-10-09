@@ -50,7 +50,6 @@ for (const t of data.tegels) {
   for (const f of ["titel", "kort", "uitleg", "visual", "metafoor", "valkuil", "quiz", "stand", "bronnen", "icoon", "minuten"])
     if (t[f] == null || t[f] === "") errors.push(where + ": veld '" + f + "' ontbreekt");
   if (!t.voorbeeld && !t.voorbeelden) errors.push(where + ": veld 'voorbeeld' ontbreekt");
-  for (const f of ["probeer", "tips"]) if (t[f] != null) errors.push(where + ": veld '" + f + "' bestaat niet meer; haal het weg");
   if (t.voorbeeld && !(t.voorbeeld.titel && t.voorbeeld.erin && t.voorbeeld.claude && t.voorbeeld.eruit)) errors.push(where + ": voorbeeld heeft titel, erin, claude en eruit nodig");
   if (!levelIds.has(t.niveau)) errors.push(where + ": onbekend niveau " + t.niveau);
   if (t.groep && !(data.groepen || {})[t.groep]) errors.push(where + ": onbekende groep " + t.groep);
