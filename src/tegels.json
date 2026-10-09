@@ -92,7 +92,7 @@
             "events": [
               {
                 "t": "user",
-                "text": "Schrijf een rappel.",
+                "text": "Schrijf een mail.",
                 "s": 1
               },
               {
@@ -108,7 +108,7 @@
             "events": [
               {
                 "t": "user",
-                "text": "Rappel PO NCANL150123, motor 12.34.567.890, beloofd week 41, nodig voor 600123.",
+                "text": "Mail over PO NCANL150123, motor 12.34.567.890, beloofd week 41, nodig voor 600123.",
                 "s": 2
               },
               {
@@ -124,12 +124,12 @@
               },
               {
                 "t": "user",
-                "text": "Stuur die rappel nog eens.",
+                "text": "Stuur die mail nog eens.",
                 "s": 4
               },
               {
                 "t": "answer",
-                "text": "Welke rappel? Dit is een nieuw gesprek.",
+                "text": "Welke mail? Dit is een nieuw gesprek.",
                 "s": 4
               }
             ]
@@ -146,20 +146,20 @@
       "valkuil": "Een vraag van vijf woorden stellen en dan denken dat Claude het niet kan; meestal ontbrak alleen de uitleg.",
       "quiz": [
         {
-          "vraag": "Je vraagt: “Schrijf een rappel.” Waarom krijg je een sjabloon vol [haakjes]?",
+          "vraag": "Je vraagt: “Schrijf een mail.” Waarom krijg je een sjabloon vol [haakjes]?",
           "opties": [
             "Claude weet niet welke order, welk artikel en welke week je bedoelt",
             "Claude mag geen mails schrijven",
-            "Rappels zijn te moeilijk voor Claude"
+            "Mails zijn te moeilijk voor Claude"
           ],
           "goed": 0,
           "goedUitleg": "Precies. Geef PO, artikel, beloofde week en de reden mee.",
           "foutUitleg": "Claude kent jouw orders niet. Met PO, artikel, beloofde week en reden krijg je een mail die zo weg kan."
         },
         {
-          "vraag": "Morgen typ je in een nieuwe chat: “Stuur die rappel nog eens.” Wat gebeurt er?",
+          "vraag": "Morgen typ je in een nieuwe chat: “Stuur die mail nog eens.” Wat gebeurt er?",
           "opties": [
-            "Hij weet niet welke rappel je bedoelt",
+            "Hij weet niet welke mail je bedoelt",
             "Hij verstuurt de mail zelf opnieuw",
             "Hij zoekt de order op in Ridder"
           ],
@@ -2238,7 +2238,7 @@
             "y": 30,
             "w": 150,
             "h": 38,
-            "label": "Chat: rappel",
+            "label": "Chat: mail",
             "icon": "chat",
             "opacity": 0
           },
